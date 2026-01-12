@@ -601,70 +601,69 @@ const WordSwipeQuiz = () => {
                         </div>
                     </div>
                 ) : !isGameStarted && (
-                    <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-12 text-center">
-                        <div className="text-6xl mb-6">📚</div>
-                        <h2 className="text-2xl sm:text-4xl font-bold text-gray-800 mb-4 leading-tight break-words">영어 단어 퀴즈에 오신 것을 환영합니다!</h2>
-                        <p className="text-xl text-gray-600 mb-8">
-                            재미있게 영어 단어를 배워보세요
+                    <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-12 text-center border-4 border-indigo-200">
+                        <div className="text-8xl mb-6 animate-bounce">🐻</div>
+                        <h2 className="text-3xl sm:text-5xl font-extrabold text-indigo-600 mb-4 leading-tight break-words tracking-tight">
+                            영어 단어 퀴즈 놀이!
+                        </h2>
+                        <p className="text-xl text-gray-600 mb-8 font-medium">
+                            친구들과 함께 재미있게 영어를 배워봐요 🎈
                         </p>
-                        <div className="space-y-4 text-left max-w-md mx-auto mb-8">
-                            <div className="flex items-start gap-3">
-                                <div className="text-2xl">👆</div>
-                                <div>
-                                    <div className="font-semibold text-gray-800">스와이프로 답 선택</div>
-                                    <div className="text-gray-600 text-sm">카드를 상하좌우로 드래그하세요</div>
+                        
+                        <div className="bg-indigo-50 rounded-2xl p-6 mb-8 text-left max-w-md mx-auto border-2 border-indigo-100">
+                            <h3 className="text-lg font-bold text-indigo-800 mb-4 text-center">🎮 게임 방법</h3>
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-4 bg-white p-3 rounded-xl shadow-sm">
+                                    <div className="text-3xl">👆</div>
+                                    <div>
+                                        <div className="font-bold text-gray-800">쓱~ 밀어서 정답!</div>
+                                        <div className="text-gray-500 text-sm">카드를 정답 쪽으로 밀어주세요</div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="flex items-start gap-3">
-                                <div className="text-2xl">🔊</div>
-                                <div>
-                                    <div className="font-semibold text-gray-800">음성 발음</div>
-                                    <div className="text-gray-600 text-sm">스피커 버튼을 눌러 발음을 들어보세요</div>
+                                <div className="flex items-center gap-4 bg-white p-3 rounded-xl shadow-sm">
+                                    <div className="text-3xl">🔊</div>
+                                    <div>
+                                        <div className="font-bold text-gray-800">소리를 들어봐요</div>
+                                        <div className="text-gray-500 text-sm">스피커를 누르면 발음이 나와요</div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="flex items-start gap-3">
-                                <div className="text-2xl">⏱️</div>
-                                <div>
-                                    <div className="font-semibold text-gray-800">타이머 모드</div>
-                                    <div className="text-gray-600 text-sm">10초 안에 답을 맞춰보세요</div>
-                                </div>
-                            </div>
-                            <div className="flex items-start gap-3">
-                                <div className="text-2xl">🎯</div>
-                                <div>
-                                    <div className="font-semibold text-gray-800">난이도 선택</div>
-                                    <div className="text-gray-600 text-sm">쉬움, 보통, 어려움 중 선택하세요</div>
+                                <div className="flex items-center gap-4 bg-white p-3 rounded-xl shadow-sm">
+                                    <div className="text-3xl">⏰</div>
+                                    <div>
+                                        <div className="font-bold text-gray-800">시간은 10초!</div>
+                                        <div className="text-gray-500 text-sm">째깍째깍! 서둘러야 해요</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <div className="mb-6">
-                            <p className="text-lg font-semibold text-gray-700 mb-4">난이도를 선택하세요</p>
+                            <p className="text-xl font-bold text-indigo-800 mb-6">도전할 레벨을 골라보세요!</p>
                             <div className="flex flex-wrap gap-4 justify-center">
                                 <button
                                     onClick={() => startGame('easy')}
                                     disabled={isLoading}
-                                    className="px-6 py-3 sm:px-8 sm:py-4 bg-green-500 text-white text-lg sm:text-xl font-bold rounded-full hover:bg-green-600 transition shadow-lg transform hover:scale-105 disabled:opacity-50"
+                                    className="px-6 py-4 bg-green-400 text-white text-xl font-bold rounded-2xl hover:bg-green-500 transition shadow-[0_4px_0_rgb(34,197,94)] active:shadow-none active:translate-y-[4px] disabled:opacity-50 w-full sm:w-auto"
                                 >
-                                    쉬움 🌱
+                                    병아리반 🐣
                                 </button>
                                 <button
                                     onClick={() => startGame('medium')}
                                     disabled={isLoading}
-                                    className="px-6 py-3 sm:px-8 sm:py-4 bg-yellow-500 text-white text-lg sm:text-xl font-bold rounded-full hover:bg-yellow-600 transition shadow-lg transform hover:scale-105 disabled:opacity-50"
+                                    className="px-6 py-4 bg-yellow-400 text-white text-xl font-bold rounded-2xl hover:bg-yellow-500 transition shadow-[0_4px_0_rgb(234,179,8)] active:shadow-none active:translate-y-[4px] disabled:opacity-50 w-full sm:w-auto"
                                 >
-                                    보통 🔥
+                                    토끼반 🐰
                                 </button>
                                 <button
                                     onClick={() => startGame('hard')}
                                     disabled={isLoading}
-                                    className="px-6 py-3 sm:px-8 sm:py-4 bg-red-500 text-white text-lg sm:text-xl font-bold rounded-full hover:bg-red-600 transition shadow-lg transform hover:scale-105 disabled:opacity-50"
+                                    className="px-6 py-4 bg-red-400 text-white text-xl font-bold rounded-2xl hover:bg-red-500 transition shadow-[0_4px_0_rgb(239,68,68)] active:shadow-none active:translate-y-[4px] disabled:opacity-50 w-full sm:w-auto"
                                 >
-                                    어려움 ⚡
+                                    호랑이반 🐯
                                 </button>
                             </div>
                             {isLoading && (
-                                <p className="text-gray-600 mt-4">단어 파일을 불러오는 중...</p>
+                                <p className="text-indigo-400 mt-4 font-medium animate-pulse">단어 카드를 가져오고 있어요...</p>
                             )}
                         </div>
                     </div>
