@@ -62,6 +62,11 @@ const WordSwipeQuiz = () => {
 
     useEffect(() => {
         if (timerMode && !isTimerPaused && timeLeft > 0 && !feedback && isGameStarted) {
+            // 3초 이하일 때 경고음 발생
+            if (timeLeft <= 3 && timeLeft > 0) {
+                playWarningSound();
+            }
+            
             timerRef.current = setTimeout(() => {
                 setTimeLeft(timeLeft - 1);
             }, 1000);
@@ -96,6 +101,7 @@ const WordSwipeQuiz = () => {
     const handleTimeout = () => {
         setTotal(total + 1);
         setFeedback('timeout');
+        playTimeoutBuzzer();
 
         setTimeout(() => {
             setFeedback(null);
@@ -110,12 +116,70 @@ const WordSwipeQuiz = () => {
 
     const speakWord = (word) => {
         if ('speechSynthesis' in window) {
-            const utterance = new SpeechSynthesisUtterance(word);
-            utterance.lang = 'en-US';
-            utterance.rate = 0.8;
             window.speechSynthesis.cancel();
-            window.speechSynthesis.speak(utterance);
+            
+            const speak = (count = 0) => {
+                if (count < 3) {
+                    const utterance = new SpeechSynthesisUtterance(word);
+                    utterance.lang = 'en-US';
+                    utterance.rate = 0.8;
+                    utterance.onend = () => {
+                        setTimeout(() => speak(count + 1), 1000);
+                    };
+                    window.speechSynthesis.speak(utterance);
+                }
+            };
+            
+            speak();
         }
+    };
+
+    const playWarningSound = () => {
+        // Web Audio API를 사용하여 경고음 생성
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 800; // 주파수 설정 (Hz)
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.1);
+    };
+
+    const playTimeoutBuzzer = () => {
+        // 부저음을 두 번 재생
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        const playBeep = (delayTime) => {
+            setTimeout(() => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 600; // 부저음 주파수
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.2);
+            }, delayTime);
+        };
+        
+        // 첫 번째 부저음
+        playBeep(0);
+        // 두 번째 부저음 (300ms 후)
+        playBeep(300);
     };
 
     const generateOptions = () => {
@@ -418,7 +482,7 @@ const WordSwipeQuiz = () => {
                         </div>
 
                         {/* 조이스틱 영역 */}
-                        <div className="relative h-[400px] bg-white rounded-2xl shadow-lg p-8">
+                        <div className="relative h-[400px] bg-white rounded-2xl shadow-lg px-4 py-8">
                             {/* 위쪽 답안 */}
                             <div className="absolute left-1/2 -translate-x-1/2" style={{ top: '2rem' }}>
                                 <div className="bg-gradient-to-b from-blue-500 to-blue-600 text-white rounded-2xl px-8 py-4 shadow-lg">
@@ -451,7 +515,7 @@ const WordSwipeQuiz = () => {
                             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
                                 <div
                                     ref={cardRef}
-                                    className="relative w-32 h-32 cursor-grab active:cursor-grabbing select-none"
+                                    className="relative w-20 h-20 cursor-grab active:cursor-grabbing select-none"
                                     style={{
                                         transform: getDragTransform(),
                                         transition: isDragging ? 'none' : 'transform 0.3s ease',
@@ -471,8 +535,7 @@ const WordSwipeQuiz = () => {
                                     {/* 내부 원 */}
                                     <div className="absolute inset-2 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full shadow-inner flex items-center justify-center">
                                         <div className="text-center">
-                                            <div className="text-3xl mb-1">🕹️</div>
-                                            <div className="text-xs text-gray-600 font-semibold">드래그</div>
+                                            <div className="text-lg mb-1">🕹️</div>
                                         </div>
                                     </div>
 
