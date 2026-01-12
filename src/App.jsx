@@ -418,16 +418,16 @@ const WordSwipeQuiz = () => {
                         </div>
 
                         {/* 조이스틱 영역 */}
-                        <div className="relative h-[500px] bg-white rounded-2xl shadow-lg p-8">
+                        <div className="relative h-[400px] bg-white rounded-2xl shadow-lg p-8">
                             {/* 위쪽 답안 */}
-                            <div className="absolute top-8 left-1/2 -translate-x-1/2">
+                            <div className="absolute left-1/2 -translate-x-1/2" style={{ top: '2rem' }}>
                                 <div className="bg-gradient-to-b from-blue-500 to-blue-600 text-white rounded-2xl px-8 py-4 shadow-lg">
                                     <div className="text-xl font-bold">{options[0]}</div>
                                 </div>
                             </div>
 
                             {/* 아래쪽 답안 */}
-                            <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
+                            <div className="absolute left-1/2 -translate-x-1/2" style={{ bottom: '2rem' }}>
                                 <div className="bg-gradient-to-b from-green-500 to-green-600 text-white rounded-2xl px-8 py-4 shadow-lg">
                                     <div className="text-xl font-bold">{options[1]}</div>
                                 </div>
