@@ -25,7 +25,7 @@ const WordSwipeQuiz = () => {
     const [dragStart, setDragStart] = useState(null);
     const [dragCurrent, setDragCurrent] = useState(null);
     const [isDragging, setIsDragging] = useState(false);
-    const [timerMode, setTimerMode] = useState(false);
+    const [timerMode, setTimerMode] = useState(true);
     const [timeLeft, setTimeLeft] = useState(10);
     const [isTimerPaused, setIsTimerPaused] = useState(false);
     const [isGameStarted, setIsGameStarted] = useState(false);
@@ -309,7 +309,6 @@ const WordSwipeQuiz = () => {
                                 title="시작 화면으로"
                             >
                                 <ArrowLeft size={24} />
-                                <span className="text-sm font-semibold">뒤로가기</span>
                             </button>
                             <div className="flex gap-2">
                                 <button
@@ -355,22 +354,6 @@ const WordSwipeQuiz = () => {
                                 >
                                     <Clock size={24} />
                                 </button>
-                                {timerMode && (
-                                    <button
-                                        onClick={togglePause}
-                                        className="p-3 bg-blue-100 rounded-full hover:bg-blue-200 transition"
-                                        title={isTimerPaused ? "계속" : "일시정지"}
-                                    >
-                                        {isTimerPaused ? <Play size={24} /> : <Pause size={24} />}
-                                    </button>
-                                )}
-                                <button
-                                    onClick={resetGame}
-                                    className="p-3 bg-gray-100 rounded-full hover:bg-gray-200 transition"
-                                    title="처음부터"
-                                >
-                                    <RotateCcw size={24} />
-                                </button>
                             </div>
                         </div>
 
@@ -415,8 +398,17 @@ const WordSwipeQuiz = () => {
                             </div>
 
                             {timerMode && (
-                                <div className={`text-6xl font-bold mb-2 ${getTimerColor()}`}>
-                                    {timeLeft}
+                                <div className="flex items-center justify-center gap-4 mb-4">
+                                    <div className={`text-6xl font-bold ${getTimerColor()}`}>
+                                        {timeLeft}
+                                    </div>
+                                    <button
+                                        onClick={togglePause}
+                                        className="p-3 bg-blue-100 rounded-full hover:bg-blue-200 transition"
+                                        title={isTimerPaused ? "계속" : "일시정지"}
+                                    >
+                                        {isTimerPaused ? <Play size={24} /> : <Pause size={24} />}
+                                    </button>
                                 </div>
                             )}
 
