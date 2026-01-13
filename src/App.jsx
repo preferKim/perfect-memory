@@ -20,6 +20,8 @@ const WordSwipeQuiz = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [options, setOptions] = useState([]);
     const [score, setScore] = useState(0);
+    const [allWords, setAllWords] = useState([]);
+    const [stage, setStage] = useState(1);
     const [total, setTotal] = useState(0);
     const [feedback, setFeedback] = useState(null);
     const [dragStart, setDragStart] = useState(null);
@@ -37,11 +39,13 @@ const WordSwipeQuiz = () => {
     const quizRef = useRef(null);
 
     useEffect(() => {
-        if (isGameStarted) {
+        if (isGameStarted && words.length > 0) {
             generateOptions();
-            speakWord(words[currentIndex].english);
+            if (words[currentIndex]) {
+                speakWord(words[currentIndex].english);
+            }
         }
-    }, [currentIndex, isGameStarted]);
+    }, [currentIndex, isGameStarted, words]);
 
     useEffect(() => {
         const handleBackButton = (e) => {
@@ -84,13 +88,18 @@ const WordSwipeQuiz = () => {
         setIsLoading(true);
         try {
             const response = await fetch(`/words/${level}.json`);
+
             if (response.ok) {
                 const data = await response.json();
-                // 최대 20개의 단어를 랜덤으로 선택
-                const selectedWords = data
-                    .sort(() => Math.random() - 0.5)
-                    .slice(0, 20);
-                setWords(selectedWords);
+                if (Array.isArray(data) && data.length > 0 && data.some(item => 'level' in item)) {
+                    setAllWords(data);
+                    setStage(1);
+                    const stageWords = data.filter(w => w.level === 1);
+                    setWords(stageWords.length > 0 ? stageWords.sort(() => Math.random() - 0.5).slice(0, 4) : []);
+                } else {
+                    setWords(data.sort(() => Math.random() - 0.5).slice(0, 20));
+                    setAllWords([]);
+                }
                 setDifficulty(level);
             } else {
                 console.log('파일을 찾을 수 없어 기본 단어를 사용합니다.');
@@ -98,6 +107,7 @@ const WordSwipeQuiz = () => {
                     .sort(() => Math.random() - 0.5)
                     .slice(0, 20);
                 setWords(selectedWords);
+                setAllWords([]);
             }
         } catch (error) {
             console.log('파일 로드 실패, 기본 단어를 사용합니다.');
@@ -105,8 +115,32 @@ const WordSwipeQuiz = () => {
                 .sort(() => Math.random() - 0.5)
                 .slice(0, 20);
             setWords(selectedWords);
+            setAllWords([]);
         }
         setIsLoading(false);
+    };
+
+    const handleNext = () => {
+        setFeedback(null);
+        setTimeLeft(5);
+        if (currentIndex < words.length - 1) {
+            setCurrentIndex(currentIndex + 1);
+        } else {
+            if (allWords.length > 0) {
+                const nextStage = stage + 1;
+                const nextStageWords = allWords.filter(w => w.level === nextStage);
+                if (nextStageWords.length > 0) {
+                    setStage(nextStage);
+                    setWords(nextStageWords.sort(() => Math.random() - 0.5).slice(0, 4));
+                    setCurrentIndex(0);
+                } else {
+                    setIsGameStarted(false);
+                    setShowQuiz(false);
+                }
+            } else {
+                setCurrentIndex(0);
+            }
+        }
     };
 
     const handleTimeout = () => {
@@ -115,14 +149,15 @@ const WordSwipeQuiz = () => {
         playTimeoutBuzzer();
 
         setTimeout(() => {
-            setFeedback(null);
-            setTimeLeft(5);
-            if (currentIndex < words.length - 1) {
-                setCurrentIndex(currentIndex + 1);
-            } else {
-                setCurrentIndex(0);
-            }
-        }, 1500);
+            const currentWord = words[currentIndex];
+            speakWord(currentWord.english, 1, () => {
+                if (currentWord.example) {
+                    speakWord(currentWord.example, 1, handleNext);
+                } else {
+                    handleNext();
+                }
+            });
+        }, 500);
     };
 
     const speakWord = (word, repeatCount = 2, onComplete) => {
@@ -199,7 +234,7 @@ const WordSwipeQuiz = () => {
 
     const generateOptions = () => {
         const current = words[currentIndex];
-        const wrongOptions = words
+        const wrongOptions = allWords
             .filter(w => w.english !== current.english)
             .sort(() => Math.random() - 0.5)
             .slice(0, 3)
@@ -280,27 +315,23 @@ const WordSwipeQuiz = () => {
             setScore(score + 1);
             setFeedback('correct');
             
-            setTimeout(() => {
-                setFeedback(null);
-                setTimeLeft(5);
-                if (currentIndex < words.length - 1) {
-                    setCurrentIndex(currentIndex + 1);
-                } else {
-                    setCurrentIndex(0);
-                }
-            }, 1000);
+            const currentWord = words[currentIndex];
+            if (currentWord.example) {
+                speakWord(currentWord.example, 1, handleNext);
+            } else {
+                setTimeout(handleNext, 1000);
+            }
         } else {
             setFeedback('wrong');
             playTimeoutBuzzer();
 
             setTimeout(() => {
-                speakWord(words[currentIndex].english, 1, () => {
-                    setFeedback(null);
-                    setTimeLeft(5);
-                    if (currentIndex < words.length - 1) {
-                        setCurrentIndex(currentIndex + 1);
+                const currentWord = words[currentIndex];
+                speakWord(currentWord.english, 1, () => {
+                    if (currentWord.example) {
+                        speakWord(currentWord.example, 1, handleNext);
                     } else {
-                        setCurrentIndex(0);
+                        handleNext();
                     }
                 });
             }, 500);
@@ -325,6 +356,7 @@ const WordSwipeQuiz = () => {
         setCurrentIndex(0);
         setScore(0);
         setTotal(0);
+        setStage(1);
         setFeedback(null);
         setTimeLeft(5);
         setIsTimerPaused(false);
@@ -477,6 +509,9 @@ const WordSwipeQuiz = () => {
                     >
                         {/* 단어 영역 - 최상단 */}
                         <div className="bg-white rounded-2xl shadow-lg p-8 mb-8 text-center">
+                            <div className="text-sm font-bold text-indigo-500 mb-2 uppercase tracking-wider">
+                                Level {stage}
+                            </div>
                             <div className="flex items-center justify-center gap-3 mb-2">
                                 <div className="text-5xl font-bold text-gray-800">
                                     {words[currentIndex].english}
@@ -596,6 +631,11 @@ const WordSwipeQuiz = () => {
                                             <>
                                                 <CheckCircle size={80} className="text-white mx-auto mb-4" />
                                                 <div className="text-3xl font-bold text-white">정답!</div>
+                                                {words[currentIndex].example && (
+                                                    <div className="mt-4 text-white text-lg font-medium bg-black bg-opacity-20 p-4 rounded-xl">
+                                                        {words[currentIndex].example}
+                                                    </div>
+                                                )}
                                             </>
                                         ) : feedback === 'timeout' ? (
                                             <>
@@ -604,6 +644,11 @@ const WordSwipeQuiz = () => {
                                                 <div className="text-xl text-white mt-2">
                                                     정답: {words[currentIndex].korean}
                                                 </div>
+                                                {words[currentIndex].example && (
+                                                    <div className="mt-4 text-white text-lg font-medium bg-black bg-opacity-20 p-4 rounded-xl">
+                                                        {words[currentIndex].example}
+                                                    </div>
+                                                )}
                                             </>
                                         ) : (
                                             <>
@@ -612,6 +657,11 @@ const WordSwipeQuiz = () => {
                                                 <div className="text-xl text-white mt-2">
                                                     정답: {words[currentIndex].korean}
                                                 </div>
+                                                {words[currentIndex].example && (
+                                                    <div className="mt-4 text-white text-lg font-medium bg-black bg-opacity-20 p-4 rounded-xl">
+                                                        {words[currentIndex].example}
+                                                    </div>
+                                                )}
                                             </>
                                         )}
                                     </div>
