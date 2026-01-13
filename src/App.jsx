@@ -497,42 +497,45 @@ const WordSwipeQuiz = () => {
 
                         {/* 조이스틱 영역 */}
                         <div className="relative h-[330px] bg-white rounded-2xl shadow-lg px-4 py-8">
-                            {/* 위쪽 답안 */}
-                            <div className="absolute left-1/2 -translate-x-1/2" style={{ top: '2rem' }}>
-                                <div className="bg-gradient-to-b from-blue-500 to-blue-600 text-white rounded-2xl px-8 py-4 shadow-lg">
-                                    <div className="text-xl font-bold">{options[0]}</div>
+                            {/* 위쪽 답안 (Soft Blue) */}
+                            <div className="absolute left-1/2 -translate-x-1/2" style={{ top: '1.5rem' }}>
+                                <div className="bg-white border-2 border-blue-500 text-blue-600 rounded-2xl px-8 py-3 shadow-sm min-w-[120px] text-center">
+                                    <div className="text-lg font-bold tracking-tight">{options[0]}</div>
                                 </div>
                             </div>
 
-                            {/* 아래쪽 답안 */}
-                            <div className="absolute left-1/2 -translate-x-1/2" style={{ bottom: '2rem' }}>
-                                <div className="bg-gradient-to-b from-green-500 to-green-600 text-white rounded-2xl px-8 py-4 shadow-lg">
-                                    <div className="text-xl font-bold">{options[1]}</div>
+                            {/* 아래쪽 답안 (Soft Green) */}
+                            <div className="absolute left-1/2 -translate-x-1/2" style={{ bottom: '1.5rem' }}>
+                                <div className="bg-white border-2 border-emerald-500 text-emerald-600 rounded-2xl px-8 py-3 shadow-sm min-w-[120px] text-center">
+                                    <div className="text-lg font-bold tracking-tight">{options[1]}</div>
                                 </div>
                             </div>
 
-                            {/* 왼쪽 답안 */}
+                            {/* 왼쪽 답안 (Soft Purple) */}
                             <div className="absolute left-2 top-1/2 -translate-y-1/2">
-                                <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-2xl px-2 py-6 shadow-lg w-20 text-center">
-                                    <div className="text-xl font-bold">{options[2]}</div>
+                                <div className="bg-white border-2 border-purple-500 text-purple-600 rounded-2xl px-2 py-6 shadow-sm w-20 text-center">
+                                    <div className="text-lg font-bold tracking-tight">{options[2]}</div>
                                 </div>
                             </div>
 
-                            {/* 오른쪽 답안 */}
+                            {/* 오른쪽 답안 (Soft Orange) */}
                             <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                                <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-2xl px-2 py-6 shadow-lg w-20 text-center">
-                                    <div className="text-xl font-bold">{options[3]}</div>
+                                <div className="bg-white border-2 border-orange-500 text-orange-600 rounded-2xl px-2 py-6 shadow-sm w-20 text-center">
+                                    <div className="text-lg font-bold tracking-tight">{options[3]}</div>
                                 </div>
                             </div>
 
                             {/* 중앙 조이스틱 */}
                             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                                {/* 배경 베이스: 조이스틱이 박혀있는 듯한 깊이감 */}
+                                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 bg-slate-200 rounded-full shadow-inner border-4 border-slate-300/50"></div>
+                                
                                 <div
                                     ref={cardRef}
                                     className="relative w-20 h-20 cursor-grab active:cursor-grabbing select-none"
                                     style={{
                                         transform: getDragTransform(),
-                                        transition: isDragging ? 'none' : 'transform 0.3s ease',
+                                        transition: isDragging ? 'none' : 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
                                         touchAction: 'none'
                                     }}
                                     onMouseDown={handleDragStart}
@@ -543,21 +546,33 @@ const WordSwipeQuiz = () => {
                                     onTouchMove={handleDragMove}
                                     onTouchEnd={handleDragEnd}
                                 >
-                                    {/* 외곽 원 */}
-                                    <div className="absolute inset-0 bg-gradient-to-br from-gray-300 to-gray-400 rounded-full shadow-xl"></div>
+                                    {/* 메인 핸들러: 메탈릭한 다크 네이비 */}
+                                    <div className={`absolute inset-0 bg-gradient-to-br from-slate-700 to-slate-900 rounded-full shadow-2xl transition-transform ${isDragging ? 'scale-95' : 'scale-100'}`}>
+                                        
+                                        {/* 상단 발광 링 (드래그 시 강조) */}
+                                        <div className={`absolute inset-1 rounded-full border-2 transition-colors duration-300 ${isDragging ? 'border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.8)]' : 'border-slate-600'}`}></div>
 
-                                    {/* 내부 원 */}
-                                    <div className="absolute inset-2 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full shadow-inner flex items-center justify-center">
-                                        <div className="text-center">
-                                            <div className="text-lg mb-1">🕹️</div>
-                                        </div>
-                                    </div>
-
-                                    {/* 방향 표시 (드래그 중) */}
-                                    {isDragging && (
+                                        {/* 조이스틱 내부 아이콘/패턴 */}
                                         <div className="absolute inset-0 flex items-center justify-center">
-                                            <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                                            <div className="relative">
+                                                {/* 중앙 십자 포인트 */}
+                                                <div className="w-1 h-6 bg-slate-500 rounded-full absolute left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-40"></div>
+                                                <div className="w-6 h-1 bg-slate-500 rounded-full absolute left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-40"></div>
+                                                
+                                                {/* 중앙 이모지 또는 아이콘 */}
+                                                <div className={`text-2xl transform transition-transform ${isDragging ? 'scale-110' : 'scale-100'}`}>
+                                                    {isDragging ? '🚀' : '🎮'}
+                                                </div>
+                                            </div>
                                         </div>
+
+                                        {/* 빛 반사 하이라이트 */}
+                                        <div className="absolute top-2 left-4 w-6 h-3 bg-white/10 rounded-[100%] rotate-[-20deg]"></div>
+                                    </div>
+                                    
+                                    {/* 드래그 중일 때 바닥에 생기는 그림자 */}
+                                    {isDragging && (
+                                        <div className="absolute -inset-4 bg-cyan-500/10 rounded-full blur-xl -z-10 animate-pulse"></div>
                                     )}
                                 </div>
                             </div>
@@ -654,21 +669,21 @@ const WordSwipeQuiz = () => {
                                     disabled={isLoading}
                                     className="px-2 py-4 bg-green-400 text-white text-sm font-bold rounded-2xl hover:bg-green-500 transition shadow-[0_4px_0_rgb(34,197,94)] active:shadow-none active:translate-y-[4px] disabled:opacity-50"
                                 >
-                                    병아리반 🐣
+                                    🐣<br/>병아리반
                                 </button>
                                 <button
                                     onClick={() => startGame('medium')}
                                     disabled={isLoading}
                                     className="px-2 py-4 bg-yellow-400 text-white text-sm font-bold rounded-2xl hover:bg-yellow-500 transition shadow-[0_4px_0_rgb(234,179,8)] active:shadow-none active:translate-y-[4px] disabled:opacity-50"
                                 >
-                                    토끼반 🐰
+                                    🐰<br/>토끼반
                                 </button>
                                 <button
                                     onClick={() => startGame('hard')}
                                     disabled={isLoading}
                                     className="px-2 py-4 bg-red-400 text-white text-sm font-bold rounded-2xl hover:bg-red-500 transition shadow-[0_4px_0_rgb(239,68,68)] active:shadow-none active:translate-y-[4px] disabled:opacity-50"
                                 >
-                                    호랑이반 🐯
+                                    🐯<br/>호랑이반
                                 </button>
                             </div>
                             {isLoading && (
@@ -679,11 +694,16 @@ const WordSwipeQuiz = () => {
                 )}
 
                 {isGameStarted && (
-                    <div className="bg-white rounded-2xl shadow-lg p-4 mt-2">
-                        <div className="text-s text-gray-600 text-center space-y-1">
-                            <div>Slow and steady wins the race</div>
+                <div className="bg-white rounded-2xl shadow-lg p-6 mt-2">
+                    <div className="text-center">
+                        <div className="text-md font-medium text-gray-700 mb-1">
+                            "Slow and steady wins the race"
                         </div>
+                        <span className="inline-block px-3 py-1 bg-gray-50 text-gray-500 text-xs rounded-full border border-gray-100">
+                            천천히 꾸준히 하는 사람이 결국 승리한다
+                        </span>
                     </div>
+                </div>
                 )}
             </div>
         </div>
