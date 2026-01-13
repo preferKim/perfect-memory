@@ -40,6 +40,7 @@ const WordSwipeQuiz = () => {
 
     useEffect(() => {
         if (isGameStarted && words.length > 0) {
+            generateOptions();
             if (words[currentIndex]) {
                 speakWord(words[currentIndex].english);
             }
