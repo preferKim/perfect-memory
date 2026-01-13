@@ -34,16 +34,25 @@ const WordSwipeQuiz = () => {
     const [isSpeaking, setIsSpeaking] = useState(false);
     const [showQuiz, setShowQuiz] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isKakaoBrowser, setIsKakaoBrowser] = useState(false);
     const cardRef = useRef(null);
     const timerRef = useRef(null);
     const quizRef = useRef(null);
 
     useEffect(() => {
+        if (navigator.userAgent.includes('KAKAOTALK')) {
+            setIsKakaoBrowser(true);
+        }
+    }, []);
+
+    useEffect(() => {
         if (isGameStarted && words.length > 0) {
             generateOptions();
-            if (words[currentIndex]) {
-                speakWord(words[currentIndex].english);
-            }
+            // Note: Automatic word playback is disabled to ensure better compatibility 
+            // with in-app browsers like KakaoTalk, where autoplay is restricted.
+            // if (words[currentIndex]) {
+            //     speakWord(words[currentIndex].english);
+            // }
         }
     }, [currentIndex, isGameStarted, words]);
 
@@ -425,6 +434,12 @@ const WordSwipeQuiz = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-2 sm:p-4 flex items-center justify-center overflow-x-hidden">
             <div className="max-w-2xl w-full">
+                {isKakaoBrowser && (
+                    <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4 rounded-lg" role="alert">
+                        <p className="font-bold">카카오톡 브라우저 이용 안내</p>
+                        <p className="text-sm">음성 재생 등 일부 기능이 제한될 수 있습니다. <br /><strong>우측 하단 메뉴(점 3개) &gt; 다른 브라우저로 열기</strong>를 통해 이용하시면 모든 기능을 사용하실 수 있습니다.</p>
+                    </div>
+                )}
                 {isGameStarted && showQuiz ? (
                     <div
                         ref={quizRef}
