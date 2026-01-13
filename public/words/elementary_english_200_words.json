@@ -1,0 +1,1202 @@
+[
+  {
+    "english": "apple",
+    "korean": "사과",
+    "level": 1,
+    "example": "I use the word apple in a simple sentence."
+  },
+  {
+    "english": "book",
+    "korean": "책",
+    "level": 1,
+    "example": "I use the word book in a simple sentence."
+  },
+  {
+    "english": "dog",
+    "korean": "개",
+    "level": 1,
+    "example": "I use the word dog in a simple sentence."
+  },
+  {
+    "english": "cat",
+    "korean": "고양이",
+    "level": 1,
+    "example": "I use the word cat in a simple sentence."
+  },
+  {
+    "english": "ball",
+    "korean": "공",
+    "level": 1,
+    "example": "I use the word ball in a simple sentence."
+  },
+  {
+    "english": "pen",
+    "korean": "펜",
+    "level": 1,
+    "example": "I use the word pen in a simple sentence."
+  },
+  {
+    "english": "sun",
+    "korean": "태양",
+    "level": 1,
+    "example": "I use the word sun in a simple sentence."
+  },
+  {
+    "english": "hat",
+    "korean": "모자",
+    "level": 1,
+    "example": "I use the word hat in a simple sentence."
+  },
+  {
+    "english": "boy",
+    "korean": "소년",
+    "level": 1,
+    "example": "I use the word boy in a simple sentence."
+  },
+  {
+    "english": "girl",
+    "korean": "소녀",
+    "level": 1,
+    "example": "I use the word girl in a simple sentence."
+  },
+  {
+    "english": "car",
+    "korean": "자동차",
+    "level": 1,
+    "example": "I use the word car in a simple sentence."
+  },
+  {
+    "english": "milk",
+    "korean": "우유",
+    "level": 1,
+    "example": "I use the word milk in a simple sentence."
+  },
+  {
+    "english": "cup",
+    "korean": "컵",
+    "level": 1,
+    "example": "I use the word cup in a simple sentence."
+  },
+  {
+    "english": "bed",
+    "korean": "침대",
+    "level": 1,
+    "example": "I use the word bed in a simple sentence."
+  },
+  {
+    "english": "door",
+    "korean": "문",
+    "level": 1,
+    "example": "I use the word door in a simple sentence."
+  },
+  {
+    "english": "tree",
+    "korean": "나무",
+    "level": 1,
+    "example": "I use the word tree in a simple sentence."
+  },
+  {
+    "english": "egg",
+    "korean": "달걀",
+    "level": 1,
+    "example": "I use the word egg in a simple sentence."
+  },
+  {
+    "english": "fish",
+    "korean": "물고기",
+    "level": 1,
+    "example": "I use the word fish in a simple sentence."
+  },
+  {
+    "english": "shoe",
+    "korean": "신발",
+    "level": 1,
+    "example": "I use the word shoe in a simple sentence."
+  },
+  {
+    "english": "toy",
+    "korean": "장난감",
+    "level": 1,
+    "example": "I use the word toy in a simple sentence."
+  },
+  {
+    "english": "school",
+    "korean": "",
+    "level": 2,
+    "example": "I use the word school in a simple sentence."
+  },
+  {
+    "english": "house",
+    "korean": "",
+    "level": 2,
+    "example": "I use the word house in a simple sentence."
+  },
+  {
+    "english": "friend",
+    "korean": "",
+    "level": 2,
+    "example": "I use the word friend in a simple sentence."
+  },
+  {
+    "english": "teacher",
+    "korean": "",
+    "level": 2,
+    "example": "I use the word teacher in a simple sentence."
+  },
+  {
+    "english": "class",
+    "korean": "",
+    "level": 2,
+    "example": "I use the word class in a simple sentence."
+  },
+  {
+    "english": "water",
+    "korean": "",
+    "level": 2,
+    "example": "I use the word water in a simple sentence."
+  },
+  {
+    "english": "food",
+    "korean": "",
+    "level": 2,
+    "example": "I use the word food in a simple sentence."
+  },
+  {
+    "english": "mother",
+    "korean": "",
+    "level": 2,
+    "example": "I use the word mother in a simple sentence."
+  },
+  {
+    "english": "father",
+    "korean": "",
+    "level": 2,
+    "example": "I use the word father in a simple sentence."
+  },
+  {
+    "english": "room",
+    "korean": "",
+    "level": 2,
+    "example": "I use the word room in a simple sentence."
+  },
+  {
+    "english": "desk",
+    "korean": "",
+    "level": 2,
+    "example": "I use the word desk in a simple sentence."
+  },
+  {
+    "english": "chair",
+    "korean": "",
+    "level": 2,
+    "example": "I use the word chair in a simple sentence."
+  },
+  {
+    "english": "park",
+    "korean": "",
+    "level": 2,
+    "example": "I use the word park in a simple sentence."
+  },
+  {
+    "english": "store",
+    "korean": "",
+    "level": 2,
+    "example": "I use the word store in a simple sentence."
+  },
+  {
+    "english": "street",
+    "korean": "",
+    "level": 2,
+    "example": "I use the word street in a simple sentence."
+  },
+  {
+    "english": "bus",
+    "korean": "",
+    "level": 2,
+    "example": "I use the word bus in a simple sentence."
+  },
+  {
+    "english": "train",
+    "korean": "",
+    "level": 2,
+    "example": "I use the word train in a simple sentence."
+  },
+  {
+    "english": "bag",
+    "korean": "",
+    "level": 2,
+    "example": "I use the word bag in a simple sentence."
+  },
+  {
+    "english": "clock",
+    "korean": "",
+    "level": 2,
+    "example": "I use the word clock in a simple sentence."
+  },
+  {
+    "english": "phone",
+    "korean": "",
+    "level": 2,
+    "example": "I use the word phone in a simple sentence."
+  },
+  {
+    "english": "run",
+    "korean": "",
+    "level": 3,
+    "example": "I use the word run in a simple sentence."
+  },
+  {
+    "english": "walk",
+    "korean": "",
+    "level": 3,
+    "example": "I use the word walk in a simple sentence."
+  },
+  {
+    "english": "eat",
+    "korean": "",
+    "level": 3,
+    "example": "I use the word eat in a simple sentence."
+  },
+  {
+    "english": "drink",
+    "korean": "",
+    "level": 3,
+    "example": "I use the word drink in a simple sentence."
+  },
+  {
+    "english": "see",
+    "korean": "",
+    "level": 3,
+    "example": "I use the word see in a simple sentence."
+  },
+  {
+    "english": "hear",
+    "korean": "",
+    "level": 3,
+    "example": "I use the word hear in a simple sentence."
+  },
+  {
+    "english": "play",
+    "korean": "",
+    "level": 3,
+    "example": "I use the word play in a simple sentence."
+  },
+  {
+    "english": "read",
+    "korean": "",
+    "level": 3,
+    "example": "I use the word read in a simple sentence."
+  },
+  {
+    "english": "write",
+    "korean": "",
+    "level": 3,
+    "example": "I use the word write in a simple sentence."
+  },
+  {
+    "english": "open",
+    "korean": "",
+    "level": 3,
+    "example": "I use the word open in a simple sentence."
+  },
+  {
+    "english": "close",
+    "korean": "",
+    "level": 3,
+    "example": "I use the word close in a simple sentence."
+  },
+  {
+    "english": "sit",
+    "korean": "",
+    "level": 3,
+    "example": "I use the word sit in a simple sentence."
+  },
+  {
+    "english": "stand",
+    "korean": "",
+    "level": 3,
+    "example": "I use the word stand in a simple sentence."
+  },
+  {
+    "english": "come",
+    "korean": "",
+    "level": 3,
+    "example": "I use the word come in a simple sentence."
+  },
+  {
+    "english": "go",
+    "korean": "",
+    "level": 3,
+    "example": "I use the word go in a simple sentence."
+  },
+  {
+    "english": "look",
+    "korean": "",
+    "level": 3,
+    "example": "I use the word look in a simple sentence."
+  },
+  {
+    "english": "like",
+    "korean": "",
+    "level": 3,
+    "example": "I use the word like in a simple sentence."
+  },
+  {
+    "english": "want",
+    "korean": "",
+    "level": 3,
+    "example": "I use the word want in a simple sentence."
+  },
+  {
+    "english": "have",
+    "korean": "",
+    "level": 3,
+    "example": "I use the word have in a simple sentence."
+  },
+  {
+    "english": "make",
+    "korean": "",
+    "level": 3,
+    "example": "I use the word make in a simple sentence."
+  },
+  {
+    "english": "big",
+    "korean": "",
+    "level": 4,
+    "example": "I use the word big in a simple sentence."
+  },
+  {
+    "english": "small",
+    "korean": "",
+    "level": 4,
+    "example": "I use the word small in a simple sentence."
+  },
+  {
+    "english": "happy",
+    "korean": "",
+    "level": 4,
+    "example": "I use the word happy in a simple sentence."
+  },
+  {
+    "english": "sad",
+    "korean": "",
+    "level": 4,
+    "example": "I use the word sad in a simple sentence."
+  },
+  {
+    "english": "hot",
+    "korean": "",
+    "level": 4,
+    "example": "I use the word hot in a simple sentence."
+  },
+  {
+    "english": "cold",
+    "korean": "",
+    "level": 4,
+    "example": "I use the word cold in a simple sentence."
+  },
+  {
+    "english": "fast",
+    "korean": "",
+    "level": 4,
+    "example": "I use the word fast in a simple sentence."
+  },
+  {
+    "english": "slow",
+    "korean": "",
+    "level": 4,
+    "example": "I use the word slow in a simple sentence."
+  },
+  {
+    "english": "new",
+    "korean": "",
+    "level": 4,
+    "example": "I use the word new in a simple sentence."
+  },
+  {
+    "english": "old",
+    "korean": "",
+    "level": 4,
+    "example": "I use the word old in a simple sentence."
+  },
+  {
+    "english": "good",
+    "korean": "",
+    "level": 4,
+    "example": "I use the word good in a simple sentence."
+  },
+  {
+    "english": "bad",
+    "korean": "",
+    "level": 4,
+    "example": "I use the word bad in a simple sentence."
+  },
+  {
+    "english": "easy",
+    "korean": "",
+    "level": 4,
+    "example": "I use the word easy in a simple sentence."
+  },
+  {
+    "english": "hard",
+    "korean": "",
+    "level": 4,
+    "example": "I use the word hard in a simple sentence."
+  },
+  {
+    "english": "clean",
+    "korean": "",
+    "level": 4,
+    "example": "I use the word clean in a simple sentence."
+  },
+  {
+    "english": "dirty",
+    "korean": "",
+    "level": 4,
+    "example": "I use the word dirty in a simple sentence."
+  },
+  {
+    "english": "tall",
+    "korean": "",
+    "level": 4,
+    "example": "I use the word tall in a simple sentence."
+  },
+  {
+    "english": "short",
+    "korean": "",
+    "level": 4,
+    "example": "I use the word short in a simple sentence."
+  },
+  {
+    "english": "young",
+    "korean": "",
+    "level": 4,
+    "example": "I use the word young in a simple sentence."
+  },
+  {
+    "english": "early",
+    "korean": "",
+    "level": 4,
+    "example": "I use the word early in a simple sentence."
+  },
+  {
+    "english": "time",
+    "korean": "",
+    "level": 5,
+    "example": "I use the word time in a simple sentence."
+  },
+  {
+    "english": "day",
+    "korean": "",
+    "level": 5,
+    "example": "I use the word day in a simple sentence."
+  },
+  {
+    "english": "night",
+    "korean": "",
+    "level": 5,
+    "example": "I use the word night in a simple sentence."
+  },
+  {
+    "english": "week",
+    "korean": "",
+    "level": 5,
+    "example": "I use the word week in a simple sentence."
+  },
+  {
+    "english": "today",
+    "korean": "",
+    "level": 5,
+    "example": "I use the word today in a simple sentence."
+  },
+  {
+    "english": "tomorrow",
+    "korean": "",
+    "level": 5,
+    "example": "I use the word tomorrow in a simple sentence."
+  },
+  {
+    "english": "yesterday",
+    "korean": "",
+    "level": 5,
+    "example": "I use the word yesterday in a simple sentence."
+  },
+  {
+    "english": "morning",
+    "korean": "",
+    "level": 5,
+    "example": "I use the word morning in a simple sentence."
+  },
+  {
+    "english": "evening",
+    "korean": "",
+    "level": 5,
+    "example": "I use the word evening in a simple sentence."
+  },
+  {
+    "english": "birthday",
+    "korean": "",
+    "level": 5,
+    "example": "I use the word birthday in a simple sentence."
+  },
+  {
+    "english": "holiday",
+    "korean": "",
+    "level": 5,
+    "example": "I use the word holiday in a simple sentence."
+  },
+  {
+    "english": "weather",
+    "korean": "",
+    "level": 5,
+    "example": "I use the word weather in a simple sentence."
+  },
+  {
+    "english": "season",
+    "korean": "",
+    "level": 5,
+    "example": "I use the word season in a simple sentence."
+  },
+  {
+    "english": "spring",
+    "korean": "",
+    "level": 5,
+    "example": "I use the word spring in a simple sentence."
+  },
+  {
+    "english": "summer",
+    "korean": "",
+    "level": 5,
+    "example": "I use the word summer in a simple sentence."
+  },
+  {
+    "english": "fall",
+    "korean": "",
+    "level": 5,
+    "example": "I use the word fall in a simple sentence."
+  },
+  {
+    "english": "winter",
+    "korean": "",
+    "level": 5,
+    "example": "I use the word winter in a simple sentence."
+  },
+  {
+    "english": "year",
+    "korean": "",
+    "level": 5,
+    "example": "I use the word year in a simple sentence."
+  },
+  {
+    "english": "month",
+    "korean": "",
+    "level": 5,
+    "example": "I use the word month in a simple sentence."
+  },
+  {
+    "english": "hour",
+    "korean": "",
+    "level": 5,
+    "example": "I use the word hour in a simple sentence."
+  },
+  {
+    "english": "family",
+    "korean": "",
+    "level": 6,
+    "example": "I use the word family in a simple sentence."
+  },
+  {
+    "english": "people",
+    "korean": "",
+    "level": 6,
+    "example": "I use the word people in a simple sentence."
+  },
+  {
+    "english": "child",
+    "korean": "",
+    "level": 6,
+    "example": "I use the word child in a simple sentence."
+  },
+  {
+    "english": "children",
+    "korean": "",
+    "level": 6,
+    "example": "I use the word children in a simple sentence."
+  },
+  {
+    "english": "student",
+    "korean": "",
+    "level": 6,
+    "example": "I use the word student in a simple sentence."
+  },
+  {
+    "english": "job",
+    "korean": "",
+    "level": 6,
+    "example": "I use the word job in a simple sentence."
+  },
+  {
+    "english": "work",
+    "korean": "",
+    "level": 6,
+    "example": "I use the word work in a simple sentence."
+  },
+  {
+    "english": "study",
+    "korean": "",
+    "level": 6,
+    "example": "I use the word study in a simple sentence."
+  },
+  {
+    "english": "learn",
+    "korean": "",
+    "level": 6,
+    "example": "I use the word learn in a simple sentence."
+  },
+  {
+    "english": "teach",
+    "korean": "",
+    "level": 6,
+    "example": "I use the word teach in a simple sentence."
+  },
+  {
+    "english": "help",
+    "korean": "",
+    "level": 6,
+    "example": "I use the word help in a simple sentence."
+  },
+  {
+    "english": "love",
+    "korean": "",
+    "level": 6,
+    "example": "I use the word love in a simple sentence."
+  },
+  {
+    "english": "live",
+    "korean": "",
+    "level": 6,
+    "example": "I use the word live in a simple sentence."
+  },
+  {
+    "english": "playground",
+    "korean": "",
+    "level": 6,
+    "example": "I use the word playground in a simple sentence."
+  },
+  {
+    "english": "library",
+    "korean": "",
+    "level": 6,
+    "example": "I use the word library in a simple sentence."
+  },
+  {
+    "english": "hospital",
+    "korean": "",
+    "level": 6,
+    "example": "I use the word hospital in a simple sentence."
+  },
+  {
+    "english": "restaurant",
+    "korean": "",
+    "level": 6,
+    "example": "I use the word restaurant in a simple sentence."
+  },
+  {
+    "english": "market",
+    "korean": "",
+    "level": 6,
+    "example": "I use the word market in a simple sentence."
+  },
+  {
+    "english": "office",
+    "korean": "",
+    "level": 6,
+    "example": "I use the word office in a simple sentence."
+  },
+  {
+    "english": "city",
+    "korean": "",
+    "level": 6,
+    "example": "I use the word city in a simple sentence."
+  },
+  {
+    "english": "animal",
+    "korean": "",
+    "level": 7,
+    "example": "I use the word animal in a simple sentence."
+  },
+  {
+    "english": "country",
+    "korean": "",
+    "level": 7,
+    "example": "I use the word country in a simple sentence."
+  },
+  {
+    "english": "world",
+    "korean": "",
+    "level": 7,
+    "example": "I use the word world in a simple sentence."
+  },
+  {
+    "english": "earth",
+    "korean": "",
+    "level": 7,
+    "example": "I use the word earth in a simple sentence."
+  },
+  {
+    "english": "river",
+    "korean": "",
+    "level": 7,
+    "example": "I use the word river in a simple sentence."
+  },
+  {
+    "english": "mountain",
+    "korean": "",
+    "level": 7,
+    "example": "I use the word mountain in a simple sentence."
+  },
+  {
+    "english": "sea",
+    "korean": "",
+    "level": 7,
+    "example": "I use the word sea in a simple sentence."
+  },
+  {
+    "english": "beach",
+    "korean": "",
+    "level": 7,
+    "example": "I use the word beach in a simple sentence."
+  },
+  {
+    "english": "forest",
+    "korean": "",
+    "level": 7,
+    "example": "I use the word forest in a simple sentence."
+  },
+  {
+    "english": "sky",
+    "korean": "",
+    "level": 7,
+    "example": "I use the word sky in a simple sentence."
+  },
+  {
+    "english": "star",
+    "korean": "",
+    "level": 7,
+    "example": "I use the word star in a simple sentence."
+  },
+  {
+    "english": "moon",
+    "korean": "",
+    "level": 7,
+    "example": "I use the word moon in a simple sentence."
+  },
+  {
+    "english": "space",
+    "korean": "",
+    "level": 7,
+    "example": "I use the word space in a simple sentence."
+  },
+  {
+    "english": "nature",
+    "korean": "",
+    "level": 7,
+    "example": "I use the word nature in a simple sentence."
+  },
+  {
+    "english": "plant",
+    "korean": "",
+    "level": 7,
+    "example": "I use the word plant in a simple sentence."
+  },
+  {
+    "english": "flower",
+    "korean": "",
+    "level": 7,
+    "example": "I use the word flower in a simple sentence."
+  },
+  {
+    "english": "treehouse",
+    "korean": "",
+    "level": 7,
+    "example": "I use the word treehouse in a simple sentence."
+  },
+  {
+    "english": "garden",
+    "korean": "",
+    "level": 7,
+    "example": "I use the word garden in a simple sentence."
+  },
+  {
+    "english": "farm",
+    "korean": "",
+    "level": 7,
+    "example": "I use the word farm in a simple sentence."
+  },
+  {
+    "english": "island",
+    "korean": "",
+    "level": 7,
+    "example": "I use the word island in a simple sentence."
+  },
+  {
+    "english": "always",
+    "korean": "",
+    "level": 8,
+    "example": "I use the word always in a simple sentence."
+  },
+  {
+    "english": "often",
+    "korean": "",
+    "level": 8,
+    "example": "I use the word often in a simple sentence."
+  },
+  {
+    "english": "sometimes",
+    "korean": "",
+    "level": 8,
+    "example": "I use the word sometimes in a simple sentence."
+  },
+  {
+    "english": "never",
+    "korean": "",
+    "level": 8,
+    "example": "I use the word never in a simple sentence."
+  },
+  {
+    "english": "usually",
+    "korean": "",
+    "level": 8,
+    "example": "I use the word usually in a simple sentence."
+  },
+  {
+    "english": "again",
+    "korean": "",
+    "level": 8,
+    "example": "I use the word again in a simple sentence."
+  },
+  {
+    "english": "together",
+    "korean": "",
+    "level": 8,
+    "example": "I use the word together in a simple sentence."
+  },
+  {
+    "english": "around",
+    "korean": "",
+    "level": 8,
+    "example": "I use the word around in a simple sentence."
+  },
+  {
+    "english": "inside",
+    "korean": "",
+    "level": 8,
+    "example": "I use the word inside in a simple sentence."
+  },
+  {
+    "english": "outside",
+    "korean": "",
+    "level": 8,
+    "example": "I use the word outside in a simple sentence."
+  },
+  {
+    "english": "before",
+    "korean": "",
+    "level": 8,
+    "example": "I use the word before in a simple sentence."
+  },
+  {
+    "english": "after",
+    "korean": "",
+    "level": 8,
+    "example": "I use the word after in a simple sentence."
+  },
+  {
+    "english": "first",
+    "korean": "",
+    "level": 8,
+    "example": "I use the word first in a simple sentence."
+  },
+  {
+    "english": "last",
+    "korean": "",
+    "level": 8,
+    "example": "I use the word last in a simple sentence."
+  },
+  {
+    "english": "next",
+    "korean": "",
+    "level": 8,
+    "example": "I use the word next in a simple sentence."
+  },
+  {
+    "english": "early",
+    "korean": "",
+    "level": 8,
+    "example": "I use the word early in a simple sentence."
+  },
+  {
+    "english": "late",
+    "korean": "",
+    "level": 8,
+    "example": "I use the word late in a simple sentence."
+  },
+  {
+    "english": "already",
+    "korean": "",
+    "level": 8,
+    "example": "I use the word already in a simple sentence."
+  },
+  {
+    "english": "soon",
+    "korean": "",
+    "level": 8,
+    "example": "I use the word soon in a simple sentence."
+  },
+  {
+    "english": "finally",
+    "korean": "",
+    "level": 8,
+    "example": "I use the word finally in a simple sentence."
+  },
+  {
+    "english": "think",
+    "korean": "",
+    "level": 9,
+    "example": "I use the word think in a simple sentence."
+  },
+  {
+    "english": "know",
+    "korean": "",
+    "level": 9,
+    "example": "I use the word know in a simple sentence."
+  },
+  {
+    "english": "believe",
+    "korean": "",
+    "level": 9,
+    "example": "I use the word believe in a simple sentence."
+  },
+  {
+    "english": "remember",
+    "korean": "",
+    "level": 9,
+    "example": "I use the word remember in a simple sentence."
+  },
+  {
+    "english": "forget",
+    "korean": "",
+    "level": 9,
+    "example": "I use the word forget in a simple sentence."
+  },
+  {
+    "english": "decide",
+    "korean": "",
+    "level": 9,
+    "example": "I use the word decide in a simple sentence."
+  },
+  {
+    "english": "choose",
+    "korean": "",
+    "level": 9,
+    "example": "I use the word choose in a simple sentence."
+  },
+  {
+    "english": "try",
+    "korean": "",
+    "level": 9,
+    "example": "I use the word try in a simple sentence."
+  },
+  {
+    "english": "hope",
+    "korean": "",
+    "level": 9,
+    "example": "I use the word hope in a simple sentence."
+  },
+  {
+    "english": "feel",
+    "korean": "",
+    "level": 9,
+    "example": "I use the word feel in a simple sentence."
+  },
+  {
+    "english": "seem",
+    "korean": "",
+    "level": 9,
+    "example": "I use the word seem in a simple sentence."
+  },
+  {
+    "english": "become",
+    "korean": "",
+    "level": 9,
+    "example": "I use the word become in a simple sentence."
+  },
+  {
+    "english": "begin",
+    "korean": "",
+    "level": 9,
+    "example": "I use the word begin in a simple sentence."
+  },
+  {
+    "english": "finish",
+    "korean": "",
+    "level": 9,
+    "example": "I use the word finish in a simple sentence."
+  },
+  {
+    "english": "continue",
+    "korean": "",
+    "level": 9,
+    "example": "I use the word continue in a simple sentence."
+  },
+  {
+    "english": "stop",
+    "korean": "",
+    "level": 9,
+    "example": "I use the word stop in a simple sentence."
+  },
+  {
+    "english": "move",
+    "korean": "",
+    "level": 9,
+    "example": "I use the word move in a simple sentence."
+  },
+  {
+    "english": "travel",
+    "korean": "",
+    "level": 9,
+    "example": "I use the word travel in a simple sentence."
+  },
+  {
+    "english": "change",
+    "korean": "",
+    "level": 9,
+    "example": "I use the word change in a simple sentence."
+  },
+  {
+    "english": "grow",
+    "korean": "",
+    "level": 9,
+    "example": "I use the word grow in a simple sentence."
+  },
+  {
+    "english": "problem",
+    "korean": "",
+    "level": 10,
+    "example": "I use the word problem in a simple sentence."
+  },
+  {
+    "english": "answer",
+    "korean": "",
+    "level": 10,
+    "example": "I use the word answer in a simple sentence."
+  },
+  {
+    "english": "question",
+    "korean": "",
+    "level": 10,
+    "example": "I use the word question in a simple sentence."
+  },
+  {
+    "english": "idea",
+    "korean": "",
+    "level": 10,
+    "example": "I use the word idea in a simple sentence."
+  },
+  {
+    "english": "story",
+    "korean": "",
+    "level": 10,
+    "example": "I use the word story in a simple sentence."
+  },
+  {
+    "english": "example",
+    "korean": "",
+    "level": 10,
+    "example": "I use the word example in a simple sentence."
+  },
+  {
+    "english": "practice",
+    "korean": "",
+    "level": 10,
+    "example": "I use the word practice in a simple sentence."
+  },
+  {
+    "english": "mistake",
+    "korean": "",
+    "level": 10,
+    "example": "I use the word mistake in a simple sentence."
+  },
+  {
+    "english": "result",
+    "korean": "",
+    "level": 10,
+    "example": "I use the word result in a simple sentence."
+  },
+  {
+    "english": "reason",
+    "korean": "",
+    "level": 10,
+    "example": "I use the word reason in a simple sentence."
+  },
+  {
+    "english": "important",
+    "korean": "",
+    "level": 10,
+    "example": "I use the word important in a simple sentence."
+  },
+  {
+    "english": "different",
+    "korean": "",
+    "level": 10,
+    "example": "I use the word different in a simple sentence."
+  },
+  {
+    "english": "same",
+    "korean": "",
+    "level": 10,
+    "example": "I use the word same in a simple sentence."
+  },
+  {
+    "english": "special",
+    "korean": "",
+    "level": 10,
+    "example": "I use the word special in a simple sentence."
+  },
+  {
+    "english": "possible",
+    "korean": "",
+    "level": 10,
+    "example": "I use the word possible in a simple sentence."
+  },
+  {
+    "english": "sure",
+    "korean": "",
+    "level": 10,
+    "example": "I use the word sure in a simple sentence."
+  },
+  {
+    "english": "ready",
+    "korean": "",
+    "level": 10,
+    "example": "I use the word ready in a simple sentence."
+  },
+  {
+    "english": "careful",
+    "korean": "",
+    "level": 10,
+    "example": "I use the word careful in a simple sentence."
+  },
+  {
+    "english": "strong",
+    "korean": "",
+    "level": 10,
+    "example": "I use the word strong in a simple sentence."
+  },
+  {
+    "english": "healthy",
+    "korean": "",
+    "level": 10,
+    "example": "I use the word healthy in a simple sentence."
+  }
+]

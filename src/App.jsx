@@ -26,9 +26,10 @@ const WordSwipeQuiz = () => {
     const [dragCurrent, setDragCurrent] = useState(null);
     const [isDragging, setIsDragging] = useState(false);
     const [timerMode, setTimerMode] = useState(true);
-    const [timeLeft, setTimeLeft] = useState(10);
+    const [timeLeft, setTimeLeft] = useState(5);
     const [isTimerPaused, setIsTimerPaused] = useState(false);
     const [isGameStarted, setIsGameStarted] = useState(false);
+    const [isSpeaking, setIsSpeaking] = useState(false);
     const [showQuiz, setShowQuiz] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const cardRef = useRef(null);
@@ -61,7 +62,7 @@ const WordSwipeQuiz = () => {
     }, [isGameStarted]);
 
     useEffect(() => {
-        if (timerMode && !isTimerPaused && timeLeft > 0 && !feedback && isGameStarted) {
+        if (timerMode && !isTimerPaused && timeLeft > 0 && !feedback && isGameStarted && !isSpeaking) {
             // 3초 이하일 때 경고음 발생
             if (timeLeft <= 3 && timeLeft > 0) {
                 playWarningSound();
@@ -77,7 +78,7 @@ const WordSwipeQuiz = () => {
         return () => {
             if (timerRef.current) clearTimeout(timerRef.current);
         };
-    }, [timerMode, timeLeft, isTimerPaused, feedback, isGameStarted]);
+    }, [timerMode, timeLeft, isTimerPaused, feedback, isGameStarted, isSpeaking]);
 
     const loadWords = async (level) => {
         setIsLoading(true);
@@ -115,7 +116,7 @@ const WordSwipeQuiz = () => {
 
         setTimeout(() => {
             setFeedback(null);
-            setTimeLeft(10);
+            setTimeLeft(5);
             if (currentIndex < words.length - 1) {
                 setCurrentIndex(currentIndex + 1);
             } else {
@@ -124,12 +125,13 @@ const WordSwipeQuiz = () => {
         }, 1500);
     };
 
-    const speakWord = (word) => {
+    const speakWord = (word, repeatCount = 2, onComplete) => {
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
+            setIsSpeaking(true);
             
             const speak = (count = 0) => {
-                if (count < 3) {
+                if (count < repeatCount) {
                     const utterance = new SpeechSynthesisUtterance(word);
                     utterance.lang = 'en-US';
                     utterance.rate = 0.8;
@@ -137,6 +139,9 @@ const WordSwipeQuiz = () => {
                         setTimeout(() => speak(count + 1), 1000);
                     };
                     window.speechSynthesis.speak(utterance);
+                } else {
+                    setIsSpeaking(false);
+                    if (onComplete) onComplete();
                 }
             };
             
@@ -274,19 +279,32 @@ const WordSwipeQuiz = () => {
         if (isCorrect) {
             setScore(score + 1);
             setFeedback('correct');
+            
+            setTimeout(() => {
+                setFeedback(null);
+                setTimeLeft(5);
+                if (currentIndex < words.length - 1) {
+                    setCurrentIndex(currentIndex + 1);
+                } else {
+                    setCurrentIndex(0);
+                }
+            }, 1000);
         } else {
             setFeedback('wrong');
-        }
+            playTimeoutBuzzer();
 
-        setTimeout(() => {
-            setFeedback(null);
-            setTimeLeft(10);
-            if (currentIndex < words.length - 1) {
-                setCurrentIndex(currentIndex + 1);
-            } else {
-                setCurrentIndex(0);
-            }
-        }, 1000);
+            setTimeout(() => {
+                speakWord(words[currentIndex].english, 1, () => {
+                    setFeedback(null);
+                    setTimeLeft(5);
+                    if (currentIndex < words.length - 1) {
+                        setCurrentIndex(currentIndex + 1);
+                    } else {
+                        setCurrentIndex(0);
+                    }
+                });
+            }, 500);
+        }
     };
 
     const resetGame = () => {
@@ -294,10 +312,11 @@ const WordSwipeQuiz = () => {
         setScore(0);
         setTotal(0);
         setFeedback(null);
-        setTimeLeft(10);
+        setTimeLeft(5);
         setIsTimerPaused(false);
         setIsGameStarted(false);
         setShowQuiz(false);
+        setIsSpeaking(false);
     };
 
     const startGame = async (level) => {
@@ -307,7 +326,7 @@ const WordSwipeQuiz = () => {
         setScore(0);
         setTotal(0);
         setFeedback(null);
-        setTimeLeft(10);
+        setTimeLeft(5);
         setIsTimerPaused(false);
 
         setTimeout(() => {
@@ -326,12 +345,12 @@ const WordSwipeQuiz = () => {
         setScore(0);
         setTotal(0);
         setFeedback(null);
-        setTimeLeft(10);
+        setTimeLeft(5);
     };
 
     const toggleTimerMode = () => {
         setTimerMode(!timerMode);
-        setTimeLeft(10);
+        setTimeLeft(5);
         setIsTimerPaused(false);
     };
 
@@ -348,8 +367,8 @@ const WordSwipeQuiz = () => {
     };
 
     const getTimerColor = () => {
-        if (timeLeft > 6) return 'text-green-600';
-        if (timeLeft > 3) return 'text-yellow-600';
+        if (timeLeft > 3) return 'text-green-600';
+        if (timeLeft > 1) return 'text-yellow-600';
         return 'text-red-600';
     };
 
@@ -604,10 +623,13 @@ const WordSwipeQuiz = () => {
                     <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-12 text-center border-4 border-indigo-200">
                         <div className="text-8xl mb-6 animate-bounce">🐻</div>
                         <h2 className="text-3xl sm:text-5xl font-extrabold text-indigo-600 mb-4 leading-tight break-words tracking-tight">
-                            영어 단어 퀴즈 놀이!
+                            완벽한 암기<br/>
+                            Perfect memory
                         </h2>
                         <p className="text-xl text-gray-600 mb-8 font-medium">
-                            친구들과 함께 재미있게 영어를 배워봐요 🎈
+                            시험, 자격증, 언어 학습까지<br />
+                            망각 곡선에 맞춘 게임 학습법으로<br />
+                            가장 적은 시간으로 가장 오래 기억하세요<br />
                         </p>
                         
                         <div className="bg-indigo-50 rounded-2xl p-6 mb-8 text-left max-w-md mx-auto border-2 border-indigo-100">
