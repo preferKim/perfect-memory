@@ -613,65 +613,60 @@ const WordSwipeQuiz = () => {
                     </div>
                 ) : !isGameStarted && (
                     <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-12 text-center border-4 border-indigo-200">
-                        <div className="text-8xl mb-6 animate-bounce">🐻</div>
-                        <h2 className="text-3xl sm:text-5xl font-extrabold text-indigo-600 mb-4 leading-tight break-words tracking-tight">
-                            완벽한 암기<br/>
-                            Perfect memory
+                        <h2 className="text-3xl sm:text-5xl font-extrabold text-indigo-600 mb-4 leading-tight break-words tracking-tight animate-bounce">
+                            Perfect Memory
                         </h2>
-                        <p className="text-xl text-gray-600 mb-8 font-medium">
-                            시험, 자격증, 언어 학습까지<br />
-                            망각 곡선에 맞춘 게임 학습법으로<br />
-                            가장 적은 시간으로 가장 오래 기억하세요<br />
+                        <p className="text-sm text-gray-600 mb-4 font-medium">
+                            망각 곡선에 맞춘 게임방식 암기법
                         </p>
                         
                         <div className="bg-indigo-50 rounded-2xl p-6 mb-8 text-left max-w-md mx-auto border-2 border-indigo-100">
-                            <h3 className="text-lg font-bold text-indigo-800 mb-4 text-center">🎮 게임 방법</h3>
                             <div className="space-y-4">
                                 <div className="flex items-center gap-4 bg-white p-3 rounded-xl shadow-sm">
-                                    <div className="text-3xl">👆</div>
+                                    <div className="text-3xl">🧭</div>
                                     <div>
-                                        <div className="font-bold text-gray-800">쓱~ 밀어서 정답!</div>
-                                        <div className="text-gray-500 text-sm">카드를 정답 쪽으로 밀어주세요</div>
+                                        <div className="font-bold text-gray-800">단순한 조작</div>
+                                        <div className="text-gray-500 text-sm">정답 방향으로 밀어주세요</div>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-4 bg-white p-3 rounded-xl shadow-sm">
-                                    <div className="text-3xl">🔊</div>
+                                    <div className="text-3xl">🗣️</div>
                                     <div>
-                                        <div className="font-bold text-gray-800">소리를 들어봐요</div>
-                                        <div className="text-gray-500 text-sm">스피커를 누르면 발음이 나와요</div>
+                                        <div className="font-bold text-gray-800">음성지원</div>
+                                        <div className="text-gray-500 text-sm">실제발음과 예문을 확인하세요</div>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-4 bg-white p-3 rounded-xl shadow-sm">
-                                    <div className="text-3xl">⏰</div>
+                                    <div className="text-3xl">🧠</div>
                                     <div>
-                                        <div className="font-bold text-gray-800">시간은 10초!</div>
-                                        <div className="text-gray-500 text-sm">째깍째깍! 서둘러야 해요</div>
+                                        <div className="font-bold text-gray-800">시간제한</div>
+                                        <div className="text-gray-500 text-sm">긴장감으로 암기효과를 높여요</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="mb-6">
-                            <p className="text-xl font-bold text-indigo-800 mb-6">도전할 레벨을 골라보세요!</p>
-                            <div className="flex flex-wrap gap-4 justify-center">
+                        <div className="mb-4">
+                            <p className="text-xl font-bold text-indigo-800 mb-4">도전할 레벨을 골라보세요!</p>
+                            <div className="grid grid-cols-3 gap-2">
                                 <button
                                     onClick={() => startGame('easy')}
                                     disabled={isLoading}
-                                    className="px-6 py-4 bg-green-400 text-white text-xl font-bold rounded-2xl hover:bg-green-500 transition shadow-[0_4px_0_rgb(34,197,94)] active:shadow-none active:translate-y-[4px] disabled:opacity-50 w-full sm:w-auto"
+                                    className="px-2 py-4 bg-green-400 text-white text-sm font-bold rounded-2xl hover:bg-green-500 transition shadow-[0_4px_0_rgb(34,197,94)] active:shadow-none active:translate-y-[4px] disabled:opacity-50"
                                 >
                                     병아리반 🐣
                                 </button>
                                 <button
                                     onClick={() => startGame('medium')}
                                     disabled={isLoading}
-                                    className="px-6 py-4 bg-yellow-400 text-white text-xl font-bold rounded-2xl hover:bg-yellow-500 transition shadow-[0_4px_0_rgb(234,179,8)] active:shadow-none active:translate-y-[4px] disabled:opacity-50 w-full sm:w-auto"
+                                    className="px-2 py-4 bg-yellow-400 text-white text-sm font-bold rounded-2xl hover:bg-yellow-500 transition shadow-[0_4px_0_rgb(234,179,8)] active:shadow-none active:translate-y-[4px] disabled:opacity-50"
                                 >
                                     토끼반 🐰
                                 </button>
                                 <button
                                     onClick={() => startGame('hard')}
                                     disabled={isLoading}
-                                    className="px-6 py-4 bg-red-400 text-white text-xl font-bold rounded-2xl hover:bg-red-500 transition shadow-[0_4px_0_rgb(239,68,68)] active:shadow-none active:translate-y-[4px] disabled:opacity-50 w-full sm:w-auto"
+                                    className="px-2 py-4 bg-red-400 text-white text-sm font-bold rounded-2xl hover:bg-red-500 transition shadow-[0_4px_0_rgb(239,68,68)] active:shadow-none active:translate-y-[4px] disabled:opacity-50"
                                 >
                                     호랑이반 🐯
                                 </button>
