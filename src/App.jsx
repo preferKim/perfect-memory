@@ -259,7 +259,7 @@ const WordSwipeQuiz = () => {
     const handleDragMove = (e) => {
         if (!isDragging || !dragStart) return;
 
-        e.preventDefault();
+        if (e.cancelable) e.preventDefault();
 
         const pos = e.type.includes('mouse')
             ? { x: e.clientX, y: e.clientY }
@@ -425,82 +425,6 @@ const WordSwipeQuiz = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-2 sm:p-4 flex items-center justify-center overflow-x-hidden">
             <div className="max-w-2xl w-full">
-                {isGameStarted && (
-                    <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6">
-                        <div className="flex flex-wrap justify-between items-center mb-4 gap-2">
-                            <button
-                                onClick={resetGame}
-                                className="p-3 bg-gray-100 rounded-full hover:bg-gray-200 transition flex items-center gap-2"
-                                title="시작 화면으로"
-                            >
-                                <ArrowLeft size={24} />
-                            </button>
-                            <div className="flex gap-2">
-                                <button
-                                    onClick={() => changeDifficulty('easy')}
-                                    className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-semibold transition ${
-                                        difficulty === 'easy'
-                                            ? 'bg-green-500 text-white'
-                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                    }`}
-                                >
-                                    쉬움
-                                </button>
-                                <button
-                                    onClick={() => changeDifficulty('medium')}
-                                    className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-semibold transition ${
-                                        difficulty === 'medium'
-                                            ? 'bg-yellow-500 text-white'
-                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                    }`}
-                                >
-                                    보통
-                                </button>
-                                <button
-                                    onClick={() => changeDifficulty('hard')}
-                                    className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-semibold transition ${
-                                        difficulty === 'hard'
-                                            ? 'bg-red-500 text-white'
-                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                    }`}
-                                >
-                                    어려움
-                                </button>
-                            </div>
-                            <div className="flex gap-2">
-                                <button
-                                    onClick={toggleTimerMode}
-                                    className={`p-3 rounded-full transition ${
-                                        timerMode
-                                            ? 'bg-purple-500 text-white'
-                                            : 'bg-gray-100 hover:bg-gray-200'
-                                    }`}
-                                    title="타이머 모드"
-                                >
-                                    <Clock size={24} />
-                                </button>
-                            </div>
-                        </div>
-
-                        <div className="flex gap-4">
-                            <div className="flex-1 bg-blue-50 rounded-lg p-4 text-center">
-                                <div className="text-3xl font-bold text-blue-600">{score}</div>
-                                <div className="text-sm text-gray-600">정답</div>
-                            </div>
-                            <div className="flex-1 bg-purple-50 rounded-lg p-4 text-center">
-                                <div className="text-3xl font-bold text-purple-600">{total}</div>
-                                <div className="text-sm text-gray-600">총 문제</div>
-                            </div>
-                            <div className="flex-1 bg-green-50 rounded-lg p-4 text-center">
-                                <div className="text-3xl font-bold text-green-600">
-                                    {total > 0 ? Math.round((score / total) * 100) : 0}%
-                                </div>
-                                <div className="text-sm text-gray-600">정답률</div>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
                 {isGameStarted && showQuiz ? (
                     <div
                         ref={quizRef}
@@ -508,10 +432,18 @@ const WordSwipeQuiz = () => {
                         style={{ opacity: showQuiz ? 1 : 0 }}
                     >
                         {/* 단어 영역 - 최상단 */}
-                        <div className="bg-white rounded-2xl shadow-lg p-8 mb-8 text-center">
-                            <div className="text-sm font-bold text-indigo-500 mb-2 uppercase tracking-wider">
-                                Level {stage}
+                        <div className="bg-white rounded-2xl shadow-lg p-8 mb-2 text-center relative">
+                            <button
+                                onClick={resetGame}
+                                className="absolute left-4 top-4 text-gray-400 hover:text-gray-600 transition p-2"
+                                title="그만하기"
+                            >
+                                <ArrowLeft size={24} />
+                            </button>
+                            <div className="text-sm font-bold text-indigo-500 mb-2 uppercase tracking-wider ">
+                                Level {stage} ({currentIndex + 1}/{words.length})
                             </div>
+                            
                             <div className="flex items-center justify-center gap-3 mb-2">
                                 <div className="text-5xl font-bold text-gray-800">
                                     {words[currentIndex].english}
@@ -526,35 +458,45 @@ const WordSwipeQuiz = () => {
                             </div>
 
                             {timerMode && (
-                                <div className="flex items-center justify-between gap-4 mb-4">
-                                    <div className="text-2xl font-bold text-green-600">
-                                        ○ {score}
+                                <div className="flex items-center justify-between gap-4 mb-6 px-2">
+                                    <div className="flex flex-col items-center bg-green-50 px-5 py-3 rounded-2xl border-2 border-green-100 shadow-sm min-w-[80px]">
+                                        <div className="text-green-500 mb-1">
+                                            <CheckCircle size={24} />
+                                        </div>
+                                        <div className="text-3xl font-bold text-green-600">
+                                            {score}
+                                        </div>
                                     </div>
-                                    <div className="flex items-center gap-2">
-                                        <div className={`text-6xl font-bold ${getTimerColor()}`}>
+                                    <div className="flex flex-col items-center">
+                                        <div className={`text-6xl font-black tabular-nums tracking-tight ${getTimerColor()} drop-shadow-sm`}>
                                             {timeLeft}
                                         </div>
                                         <button
                                             onClick={togglePause}
-                                            className="p-3 bg-blue-100 rounded-full hover:bg-blue-200 transition"
+                                            className="mt-2 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition text-gray-500"
                                             title={isTimerPaused ? "계속" : "일시정지"}
                                         >
-                                            {isTimerPaused ? <Play size={24} /> : <Pause size={24} />}
+                                            {isTimerPaused ? <Play size={20} /> : <Pause size={20} />}
                                         </button>
                                     </div>
-                                    <div className="text-2xl font-bold text-red-600">
-                                        ✕ {total - score}
+                                    <div className="flex flex-col items-center bg-red-50 px-5 py-3 rounded-2xl border-2 border-red-100 shadow-sm min-w-[80px]">
+                                        <div className="text-red-500 mb-1">
+                                            <XCircle size={24} />
+                                        </div>
+                                        <div className="text-3xl font-bold text-red-600">
+                                            {total - score}
+                                        </div>
                                     </div>
                                 </div>
                             )}
 
                             <div className="text-gray-400 text-sm">
-                                {currentIndex + 1} / {words.length}
+                                총 문제 : {total} , 정답률 : {total > 0 ? Math.round((score / total) * 100) : 0}%
                             </div>
                         </div>
 
                         {/* 조이스틱 영역 */}
-                        <div className="relative h-[400px] bg-white rounded-2xl shadow-lg px-4 py-8">
+                        <div className="relative h-[330px] bg-white rounded-2xl shadow-lg px-4 py-8">
                             {/* 위쪽 답안 */}
                             <div className="absolute left-1/2 -translate-x-1/2" style={{ top: '2rem' }}>
                                 <div className="bg-gradient-to-b from-blue-500 to-blue-600 text-white rounded-2xl px-8 py-4 shadow-lg">
@@ -570,15 +512,15 @@ const WordSwipeQuiz = () => {
                             </div>
 
                             {/* 왼쪽 답안 */}
-                            <div className="absolute left-8 top-1/2 -translate-y-1/2">
-                                <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-2xl px-8 py-4 shadow-lg">
+                            <div className="absolute left-2 top-1/2 -translate-y-1/2">
+                                <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-2xl px-2 py-6 shadow-lg w-20 text-center">
                                     <div className="text-xl font-bold">{options[2]}</div>
                                 </div>
                             </div>
 
                             {/* 오른쪽 답안 */}
-                            <div className="absolute right-8 top-1/2 -translate-y-1/2">
-                                <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-2xl px-8 py-4 shadow-lg">
+                            <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                                <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-2xl px-2 py-6 shadow-lg w-20 text-center">
                                     <div className="text-xl font-bold">{options[3]}</div>
                                 </div>
                             </div>
@@ -742,11 +684,9 @@ const WordSwipeQuiz = () => {
                 )}
 
                 {isGameStarted && (
-                    <div className="bg-white rounded-2xl shadow-lg p-4 mt-6">
-                        <div className="text-sm text-gray-600 text-center space-y-1">
-                            <div>💡 카드를 상하좌우로 드래그하여 정답을 선택하세요</div>
-                            <div>🔊 스피커 아이콘을 클릭하면 발음을 들을 수 있어요</div>
-                            {timerMode && <div>⏱️ 타이머 모드: 10초 안에 답을 선택하세요!</div>}
+                    <div className="bg-white rounded-2xl shadow-lg p-4 mt-2">
+                        <div className="text-s text-gray-600 text-center space-y-1">
+                            <div>Slow and steady wins the race</div>
                         </div>
                     </div>
                 )}
