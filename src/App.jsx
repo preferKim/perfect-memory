@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import HomeScreen from './screens/HomeScreen';
 import GameScreen from './screens/GameScreen';
+import RankingScreen from './screens/RankingScreen';
 
 
 const WordSwipeQuiz = () => {
@@ -22,6 +23,7 @@ const WordSwipeQuiz = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [options, setOptions] = useState([]);
     const [score, setScore] = useState(0);
+    const [wrongAnswers, setWrongAnswers] = useState(0);
     const [allWords, setAllWords] = useState([]);
     const [stage, setStage] = useState(1);
     const [total, setTotal] = useState(0);
@@ -38,6 +40,9 @@ const WordSwipeQuiz = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [gameMode, setGameMode] = useState('normal');
     const [speedRunTimeLeft, setSpeedRunTimeLeft] = useState(100);
+    const [playerName, setPlayerName] = useState('');
+    const [speedRankings, setSpeedRankings] = useState([]);
+    const [showRanking, setShowRanking] = useState(false);
 
     const cardRef = useRef(null);
     const timerRef = useRef(null);
@@ -94,17 +99,21 @@ const WordSwipeQuiz = () => {
     // Timer for Speed Mode
     useEffect(() => {
         if (gameMode === 'speed' && isGameStarted && !isTimerPaused && speedRunTimeLeft > 0) {
+            playWarningSound();
             timerRef.current = setTimeout(() => {
                 setSpeedRunTimeLeft(prev => prev - 1);
             }, 1000);
         } else if (gameMode === 'speed' && isGameStarted && speedRunTimeLeft === 0) {
-            setIsGameStarted(false); // End game
+            const finalScore = score - (wrongAnswers * 5);
+            setSpeedRankings(prev => [...prev, { name: playerName, score: finalScore }]);
+            setShowRanking(true);
+            setIsGameStarted(false);
             setShowQuiz(false);
         }
         return () => {
             if (timerRef.current) clearTimeout(timerRef.current);
         };
-    }, [gameMode, isGameStarted, isTimerPaused, speedRunTimeLeft]);
+    }, [gameMode, isGameStarted, isTimerPaused, speedRunTimeLeft, playerName, score, wrongAnswers]);
 
 
     const loadWords = async (level, mode) => {
@@ -342,6 +351,7 @@ const WordSwipeQuiz = () => {
             }
         } else {
              if (gameMode === 'speed') {
+                setWrongAnswers(wrongAnswers + 1);
                 handleNext();
                 return;
             }
@@ -363,6 +373,7 @@ const WordSwipeQuiz = () => {
     const resetGame = () => {
         setCurrentIndex(0);
         setScore(0);
+        setWrongAnswers(0);
         setTotal(0);
         setFeedback(null);
         setTimeLeft(5);
@@ -372,20 +383,29 @@ const WordSwipeQuiz = () => {
         setIsSpeaking(false);
         setGameMode('normal');
         setSpeedRunTimeLeft(100);
+        setPlayerName('');
+        setShowRanking(false);
     };
 
-    const startGame = async (level, mode) => {
+    const handleRestart = () => {
+        resetGame();
+    };
+
+    const startGame = async (name, level, mode) => {
+        setPlayerName(name);
         setGameMode(mode);
         await loadWords(level, mode);
         setIsGameStarted(true);
         setCurrentIndex(0);
         setScore(0);
+        setWrongAnswers(0);
         setTotal(0);
         setStage(1);
         setFeedback(null);
         setTimeLeft(5);
         setSpeedRunTimeLeft(100);
         setIsTimerPaused(false);
+        setShowRanking(false);
 
         setTimeout(() => {
             setShowQuiz(true);
@@ -421,40 +441,50 @@ const WordSwipeQuiz = () => {
         return 'text-red-600';
     };
 
+    const renderContent = () => {
+        if (showRanking) {
+            return <RankingScreen rankings={speedRankings} onRestart={handleRestart} />;
+        }
+        if (isGameStarted && showQuiz) {
+            return (
+                <GameScreen
+                    words={words}
+                    currentIndex={currentIndex}
+                    stage={stage}
+                    score={score}
+                    wrongAnswers={wrongAnswers}
+                    total={total}
+                    timeLeft={gameMode === 'speed' ? speedRunTimeLeft : timeLeft}
+                    timerMode={timerMode}
+                    isTimerPaused={isTimerPaused}
+                    options={options}
+                    feedback={gameMode === 'speed' ? null : feedback}
+                    isDragging={isDragging}
+                    quizRef={quizRef}
+                    cardRef={cardRef}
+                    resetGame={resetGame}
+                    speakWord={speakWord}
+                    togglePause={togglePause}
+                    getDragTransform={getDragTransform}
+                    getTimerColor={getTimerColor}
+                    handleDragStart={handleDragStart}
+                    handleDragMove={handleDragMove}
+                    handleDragEnd={handleDragEnd}
+                    gameMode={gameMode}
+                />
+            );
+        }
+        return <HomeScreen onStartGame={startGame} isLoading={isLoading} />;
+    };
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-2 sm:p-4 flex items-center justify-center overflow-x-hidden">
             <div className="max-w-2xl w-full">
-                {isGameStarted && showQuiz ? (
-                    <GameScreen
-                        words={words}
-                        currentIndex={currentIndex}
-                        stage={stage}
-                        score={score}
-                        total={total}
-                        timeLeft={gameMode === 'speed' ? speedRunTimeLeft : timeLeft}
-                        timerMode={timerMode}
-                        isTimerPaused={isTimerPaused}
-                        options={options}
-                        feedback={gameMode === 'speed' ? null : feedback}
-                        isDragging={isDragging}
-                        quizRef={quizRef}
-                        cardRef={cardRef}
-                        resetGame={resetGame}
-                        speakWord={speakWord}
-                        togglePause={togglePause}
-                        getDragTransform={getDragTransform}
-                        getTimerColor={getTimerColor}
-                        handleDragStart={handleDragStart}
-                        handleDragMove={handleDragMove}
-                        handleDragEnd={handleDragEnd}
-                        gameMode={gameMode}
-                    />
-                ) : (
-                    <HomeScreen onStartGame={startGame} isLoading={isLoading} />
-                )}
+                {renderContent()}
             </div>
         </div>
     );
 };
+
 
 export default WordSwipeQuiz;

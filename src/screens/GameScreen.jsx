@@ -6,6 +6,7 @@ const GameScreen = ({
     currentIndex,
     stage,
     score,
+    wrongAnswers,
     total,
     timeLeft,
     timerMode,
@@ -32,6 +33,9 @@ const GameScreen = ({
             </div>
         );
     }
+
+    const accuracy = total > 0 ? Math.round((score / total) * 100) : 0;
+    const finalScore = score - (wrongAnswers * 5);
 
     return (
         <div
@@ -81,27 +85,30 @@ const GameScreen = ({
                             <div className={`text-6xl font-black tabular-nums tracking-tight ${getTimerColor()} drop-shadow-sm`}>
                                 {timeLeft}
                             </div>
-                            <button
-                                onClick={togglePause}
-                                className="mt-2 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition text-gray-500"
-                                title={isTimerPaused ? "계속" : "일시정지"}
-                            >
-                                {isTimerPaused ? <Play size={20} /> : <Pause size={20} />}
-                            </button>
+                            {gameMode !== 'speed' && (
+                                <button
+                                    onClick={togglePause}
+                                    className="mt-2 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition text-gray-500"
+                                    title={isTimerPaused ? "계속" : "일시정지"}
+                                >
+                                    {isTimerPaused ? <Play size={20} /> : <Pause size={20} />}
+                                </button>
+                            )}
                         </div>
                         <div className="flex flex-col items-center bg-red-50 px-5 py-3 rounded-2xl border-2 border-red-100 shadow-sm min-w-[80px]">
                             <div className="text-red-500 mb-1">
                                 <XCircle size={24} />
                             </div>
                             <div className="text-3xl font-bold text-red-600">
-                                {total - score}
+                                {wrongAnswers}
                             </div>
                         </div>
                     </div>
                 )}
 
                 <div className="text-gray-400 text-sm">
-                    총 문제 : {total} , 정답률 : {total > 0 ? Math.round((score / total) * 100) : 0}%
+                   총 문제 : {total} , 정답률 : {accuracy}%
+                   {gameMode === 'speed' && ` / 최종점수 : ${finalScore}`}
                 </div>
             </div>
 
