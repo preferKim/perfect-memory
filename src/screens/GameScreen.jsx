@@ -150,8 +150,6 @@ const GameScreen = ({
                         ref={cardRef}
                         className="relative w-20 h-20 cursor-grab active:cursor-grabbing select-none"
                         style={{
-                            transform: getDragTransform(),
-                            transition: isDragging ? 'none' : 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
                             touchAction: 'none'
                         }}
                         onMouseDown={handleDragStart}

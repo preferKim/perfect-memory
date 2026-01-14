@@ -29,7 +29,6 @@ const WordSwipeQuiz = () => {
     const [total, setTotal] = useState(0);
     const [feedback, setFeedback] = useState(null);
     const [dragStart, setDragStart] = useState(null);
-    const [dragCurrent, setDragCurrent] = useState(null);
     const [isDragging, setIsDragging] = useState(false);
     const [timerMode, setTimerMode] = useState(true);
     const [timeLeft, setTimeLeft] = useState(5);
@@ -113,7 +112,7 @@ const WordSwipeQuiz = () => {
         return () => {
             if (timerRef.current) clearTimeout(timerRef.current);
         };
-    }, [gameMode, isGameStarted, isTimerPaused, speedRunTimeLeft, playerName, score, wrongAnswers]);
+    }, [gameMode, isGameStarted, isTimerPaused, speedRunTimeLeft]);
 
 
     const loadWords = async (level, mode) => {
@@ -175,6 +174,7 @@ const WordSwipeQuiz = () => {
                     setWords(nextStageWords.sort(() => Math.random() - 0.5).slice(0, 4));
                     setCurrentIndex(0);
                 } else {
+                    setShowRanking(true);
                     setIsGameStarted(false);
                     setShowQuiz(false);
                 }
@@ -280,31 +280,46 @@ const WordSwipeQuiz = () => {
         setOptions(allOptions);
     };
 
+    const dragPosRef = useRef({ x: 0, y: 0 });
+
     const handleDragStart = (e) => {
         const pos = e.type.includes('mouse')
             ? { x: e.clientX, y: e.clientY }
             : { x: e.touches[0].clientX, y: e.touches[0].clientY };
 
         setDragStart(pos);
-        setDragCurrent(pos);
         setIsDragging(true);
+        if (cardRef.current) {
+            cardRef.current.style.transition = 'none';
+        }
     };
 
     const handleDragMove = (e) => {
         if (!isDragging || !dragStart) return;
         if (e.cancelable) e.preventDefault();
+        
         const pos = e.type.includes('mouse')
             ? { x: e.clientX, y: e.clientY }
             : { x: e.touches[0].clientX, y: e.touches[0].clientY };
-        setDragCurrent(pos);
+
+        dragPosRef.current = pos;
+
+        const dx = pos.x - dragStart.x;
+        const dy = pos.y - dragStart.y;
+        const rotation = dx * 0.1;
+
+        if (cardRef.current) {
+            cardRef.current.style.transform = `translate(${dx}px, ${dy}px) rotate(${rotation}deg)`;
+        }
     };
 
     const handleDragEnd = () => {
-        if (!isDragging || !dragStart || !dragCurrent) {
+        if (!isDragging || !dragStart) {
             setIsDragging(false);
             return;
         }
 
+        const dragCurrent = dragPosRef.current;
         const dx = dragCurrent.x - dragStart.x;
         const dy = dragCurrent.y - dragStart.y;
         const threshold = 50;
@@ -326,7 +341,11 @@ const WordSwipeQuiz = () => {
 
         setIsDragging(false);
         setDragStart(null);
-        setDragCurrent(null);
+
+        if (cardRef.current) {
+            cardRef.current.style.transform = '';
+            cardRef.current.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        }
     };
 
     const checkAnswer = (direction) => {
@@ -421,14 +440,6 @@ const WordSwipeQuiz = () => {
         setIsTimerPaused(!isTimerPaused);
     };
 
-    const getDragTransform = () => {
-        if (!isDragging || !dragStart || !dragCurrent) return '';
-        const dx = dragCurrent.x - dragStart.x;
-        const dy = dragCurrent.y - dragStart.y;
-        const rotation = dx * 0.1;
-        return `translate(${dx}px, ${dy}px) rotate(${rotation}deg)`;
-    };
-
     const getTimerColor = () => {
         const time = gameMode === 'speed' ? speedRunTimeLeft : timeLeft;
         if (gameMode === 'speed') {
@@ -443,7 +454,14 @@ const WordSwipeQuiz = () => {
 
     const renderContent = () => {
         if (showRanking) {
-            return <RankingScreen rankings={speedRankings} onRestart={handleRestart} />;
+            return <RankingScreen 
+                rankings={speedRankings} 
+                onRestart={handleRestart} 
+                gameMode={gameMode}
+                score={score}
+                wrongAnswers={wrongAnswers}
+                total={total}
+            />;
         }
         if (isGameStarted && showQuiz) {
             return (
@@ -465,7 +483,6 @@ const WordSwipeQuiz = () => {
                     resetGame={resetGame}
                     speakWord={speakWord}
                     togglePause={togglePause}
-                    getDragTransform={getDragTransform}
                     getTimerColor={getTimerColor}
                     handleDragStart={handleDragStart}
                     handleDragMove={handleDragMove}
