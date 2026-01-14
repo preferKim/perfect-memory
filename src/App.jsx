@@ -46,6 +46,7 @@ const WordSwipeQuiz = () => {
     const [lives, setLives] = useState(3);
     const [connectWords, setConnectWords] = useState([]);
     const [matchedPairs, setMatchedPairs] = useState([]);
+    const [connectTime, setConnectTime] = useState(0);
 
     const cardRef = useRef(null);
     const timerRef = useRef(null);
@@ -139,6 +140,19 @@ const WordSwipeQuiz = () => {
             if (timerRef.current) clearTimeout(timerRef.current);
         };
     }, [gameMode, isGameStarted, isTimerPaused, speedRunTimeLeft]);
+
+    // Timer for Connect Mode
+    useEffect(() => {
+        let interval = null;
+        if (gameMode === 'connect' && isGameStarted && !showRanking) {
+            interval = setInterval(() => {
+                setConnectTime(prevTime => prevTime + 1);
+            }, 1000);
+        } else {
+            clearInterval(interval);
+        }
+        return () => clearInterval(interval);
+    }, [gameMode, isGameStarted, showRanking]);
 
 
     const loadWords = async (level, mode) => {
@@ -463,6 +477,7 @@ const WordSwipeQuiz = () => {
         setLives(3);
         setConnectWords([]);
         setMatchedPairs([]);
+        setConnectTime(0);
     };
 
     const handleRestart = () => {
@@ -488,6 +503,7 @@ const WordSwipeQuiz = () => {
         if (mode === 'connect') {
             setLives(3);
             setMatchedPairs([]);
+            setConnectTime(0);
         }
 
         setTimeout(() => {
@@ -525,6 +541,8 @@ const WordSwipeQuiz = () => {
                 score={score}
                 wrongAnswers={wrongAnswers}
                 total={total}
+                lives={lives}
+                time={connectTime}
             />;
         }
         if (isGameStarted) {
@@ -535,6 +553,7 @@ const WordSwipeQuiz = () => {
                     onCheckAnswer={checkConnectAnswer}
                     matchedPairs={matchedPairs}
                     resetGame={resetGame}
+                    time={connectTime}
                 />;
             }
             if (showQuiz) {

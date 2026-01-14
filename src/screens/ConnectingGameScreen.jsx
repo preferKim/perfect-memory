@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Heart, ArrowLeft } from 'lucide-react';
+import { Heart, ArrowLeft, Clock } from 'lucide-react';
 
 // Fisher-Yates shuffle algorithm
 const shuffleArray = (array) => {
@@ -11,7 +11,13 @@ const shuffleArray = (array) => {
     return newArray;
 };
 
-const ConnectingGameScreen = ({ words, lives, matchedPairs, onCheckAnswer, resetGame }) => {
+const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+};
+
+const ConnectingGameScreen = ({ words, lives, matchedPairs, onCheckAnswer, resetGame, time }) => {
     const [leftColumn, setLeftColumn] = useState([]);
     const [rightColumn, setRightColumn] = useState([]);
 
@@ -100,7 +106,10 @@ const ConnectingGameScreen = ({ words, lives, matchedPairs, onCheckAnswer, reset
                 <button onClick={resetGame} className="text-gray-500 hover:text-indigo-600 p-2 rounded-full transition">
                     <ArrowLeft size={28} />
                 </button>
-                <h2 className="text-2xl font-bold text-indigo-600">단어와 뜻을 연결하세요!</h2>
+                <div className="flex items-center gap-2 text-2xl font-bold text-indigo-600">
+                    <Clock size={28} />
+                    <span>{formatTime(time)}</span>
+                </div>
                 <div className="flex items-center gap-2">
                     {Array.from({ length: 3 }).map((_, i) => (
                         <Heart key={i} size={32} className={i < lives ? 'text-red-500 fill-current animate-pulse' : 'text-gray-300'} />
