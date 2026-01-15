@@ -30,8 +30,8 @@ const HomeScreen = ({ onStartGame, isLoading }) => {
     };
 
     return (
-        <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-12 text-center border-4 border-indigo-200">
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-indigo-600 mb-4 leading-tight break-words tracking-tight animate-bounce">
+        <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-12 text-center border-4 border-normal-light">
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-primary-dark mb-4 leading-tight break-words tracking-tight animate-bounce">
                 Perfect Memory
             </h2>
             <p className="text-sm text-gray-600 mb-8 font-medium">
@@ -39,13 +39,13 @@ const HomeScreen = ({ onStartGame, isLoading }) => {
             </p>
             
             <div className="mb-6">
-                <p className="text-xl font-bold text-indigo-800 mb-4">1. 게임 모드를 선택하세요!</p>
+                <p className="text-xl font-bold text-primary-dark mb-4">1. 게임 모드를 선택하세요!</p>
                 <div className="flex justify-center gap-2">
                     <button
                         onClick={() => setGameMode('normal')}
                         className={`px-6 py-3 rounded-xl font-bold transition ${
                             gameMode === 'normal' 
-                                ? 'bg-indigo-600 text-white shadow-lg scale-105' 
+                                ? 'bg-normal-light text-gray-800 shadow-lg scale-105' 
                                 : 'bg-gray-200 text-gray-600'
                         }`}
                     >
@@ -55,7 +55,7 @@ const HomeScreen = ({ onStartGame, isLoading }) => {
                         onClick={() => setGameMode('speed')}
                         className={`px-6 py-3 rounded-xl font-bold transition ${
                             gameMode === 'speed' 
-                                ? 'bg-amber-500 text-white shadow-lg scale-105' 
+                                ? 'bg-speed-light text-gray-800 shadow-lg scale-105' 
                                 : 'bg-gray-200 text-gray-600'
                         }`}
                     >
@@ -65,7 +65,7 @@ const HomeScreen = ({ onStartGame, isLoading }) => {
                         onClick={() => setGameMode('connect')}
                         className={`px-6 py-3 rounded-xl font-bold transition ${
                             gameMode === 'connect'
-                                ? 'bg-cyan-500 text-white shadow-lg scale-105'
+                                ? 'bg-connect-light text-gray-800 shadow-lg scale-105'
                                 : 'bg-gray-200 text-gray-600'
                         }`}
                     >
@@ -74,26 +74,26 @@ const HomeScreen = ({ onStartGame, isLoading }) => {
                 </div>
             </div>
 
-            <div className="bg-indigo-50 rounded-2xl p-6 mb-6 text-left max-w-md mx-auto border-2 border-indigo-100">
+            <div className="bg-normal-light/30 rounded-2xl p-6 mb-6 text-left max-w-md mx-auto border-2 border-normal-light/60">
                 {renderModeInfo()}
             </div>
 
             {gameMode === 'speed' && (
                 <div className="mb-6">
-                    <label htmlFor="playerName" className="text-xl font-bold text-indigo-800 mb-4 block">2. 도전자의 이름을 알려주세요!</label>
+                    <label htmlFor="playerName" className="text-xl font-bold text-primary-dark mb-4 block">2. 도전자의 이름을 알려주세요!</label>
                     <input
                         id="playerName"
                         type="text"
                         value={playerName}
                         onChange={(e) => setPlayerName(e.target.value)}
                         placeholder="예: 아이유"
-                        className="w-full max-w-xs mx-auto px-4 py-3 text-center text-lg font-medium border-2 border-indigo-200 rounded-xl focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition"
+                        className="w-full max-w-xs mx-auto px-4 py-3 text-center text-lg font-medium border-2 border-normal-light rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition"
                     />
                 </div>
             )}
 
             <div className="mb-4">
-                <p className="text-xl font-bold text-indigo-800 mb-4">
+                <p className="text-xl font-bold text-primary-dark mb-4">
                     {gameMode === 'speed' ? '3. ' : '2. '}
                     도전할 레벨을 골라보세요!
                 </p>
@@ -101,30 +101,30 @@ const HomeScreen = ({ onStartGame, isLoading }) => {
                     <button
                         onClick={() => onStartGame(playerName, 'easy', gameMode)}
                         disabled={isStartDisabled}
-                        className="px-2 py-4 bg-green-400 text-white text-sm font-bold rounded-2xl hover:bg-green-500 transition shadow-[0_4px_0_rgb(34,197,94)] active:shadow-none active:translate-y-[4px] disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-2 py-4 bg-success text-gray-800 text-sm font-bold rounded-2xl hover:bg-success-dark transition shadow-[0_4px_0_theme(colors.success.dark)] active:shadow-none active:translate-y-[4px] disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         🐣<br/>병아리반
                     </button>
                     <button
                         onClick={() => onStartGame(playerName, 'medium', gameMode)}
                         disabled={isStartDisabled}
-                        className="px-2 py-4 bg-yellow-400 text-white text-sm font-bold rounded-2xl hover:bg-yellow-500 transition shadow-[0_4px_0_rgb(234,179,8)] active:shadow-none active:translate-y-[4px] disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-2 py-4 bg-speed text-gray-800 text-sm font-bold rounded-2xl hover:bg-speed-dark transition shadow-[0_4px_0_theme(colors.speed.dark)] active:shadow-none active:translate-y-[4px] disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         🐰<br/>토끼반
                     </button>
                     <button
                         onClick={() => onStartGame(playerName, 'hard', gameMode)}
                         disabled={isStartDisabled}
-                        className="px-2 py-4 bg-red-400 text-white text-sm font-bold rounded-2xl hover:bg-red-500 transition shadow-[0_4px_0_rgb(239,68,68)] active:shadow-none active:translate-y-[4px] disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-2 py-4 bg-danger text-gray-800 text-sm font-bold rounded-2xl hover:bg-danger-dark transition shadow-[0_4px_0_theme(colors.danger.dark)] active:shadow-none active:translate-y-[4px] disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         🐯<br/>호랑이반
                     </button>
                 </div>
                 {isLoading && (
-                    <p className="text-indigo-400 mt-4 font-medium animate-pulse">단어 카드를 가져오고 있어요...</p>
+                    <p className="text-primary mt-4 font-medium animate-pulse">단어 카드를 가져오고 있어요...</p>
                 )}
                 {gameMode === 'speed' && !playerName && (
-                    <p className="text-red-500 mt-4 font-medium">경쟁 모드는 이름 입력이 필수입니다.</p>
+                    <p className="text-danger-dark mt-4 font-medium">경쟁 모드는 이름 입력이 필수입니다.</p>
                 )}
             </div>
         </div>

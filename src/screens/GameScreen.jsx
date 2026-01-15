@@ -49,11 +49,12 @@ const GameScreen = ({
                     onClick={resetGame}
                     className="absolute left-4 top-4 text-gray-400 hover:text-gray-600 transition p-2"
                     title="그만하기"
+                    aria-label="그만하기"
                 >
                     <ArrowLeft size={24} />
                 </button>
                 {gameMode === 'normal' && (
-                    <div className="text-sm font-bold text-indigo-500 mb-2 uppercase tracking-wider ">
+                    <div className="text-sm font-bold text-primary mb-2 uppercase tracking-wider ">
                         Level {stage} ({currentIndex + 1}/{words.length})
                     </div>
                 )}
@@ -67,19 +68,20 @@ const GameScreen = ({
                             onClick={() => speakWord(words[currentIndex].english, 1)}
                             className="p-3 hover:bg-gray-100 rounded-full transition"
                             title="발음 듣기"
+                            aria-label="발음 듣기"
                         >
-                            <Volume2 size={28} className="text-blue-500" />
+                            <Volume2 size={28} className="text-primary" />
                         </button>
                     )}
                 </div>
 
                 {timerMode && (
                     <div className="flex items-center justify-between gap-4 mb-6 px-2">
-                        <div className="flex flex-col items-center bg-green-50 px-5 py-3 rounded-2xl border-2 border-green-100 shadow-sm min-w-[80px]">
-                            <div className="text-green-500 mb-1">
+                        <div className="flex flex-col items-center bg-success-light/20 px-5 py-3 rounded-2xl border-2 border-success-light shadow-sm min-w-[80px]">
+                            <div className="text-success-dark mb-1">
                                 <CheckCircle size={24} />
                             </div>
-                            <div className="text-3xl font-bold text-green-600">
+                            <div className="text-3xl font-bold text-success-dark">
                                 {score}
                             </div>
                         </div>
@@ -92,16 +94,17 @@ const GameScreen = ({
                                     onClick={togglePause}
                                     className="mt-2 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition text-gray-500"
                                     title={isTimerPaused ? "계속" : "일시정지"}
+                                    aria-label={isTimerPaused ? "계속" : "일시정지"}
                                 >
                                     {isTimerPaused ? <Play size={20} /> : <Pause size={20} />}
                                 </button>
                             )}
                         </div>
-                        <div className="flex flex-col items-center bg-red-50 px-5 py-3 rounded-2xl border-2 border-red-100 shadow-sm min-w-[80px]">
-                            <div className="text-red-500 mb-1">
+                        <div className="flex flex-col items-center bg-danger-light/20 px-5 py-3 rounded-2xl border-2 border-danger-light shadow-sm min-w-[80px]">
+                            <div className="text-danger-dark mb-1">
                                 <XCircle size={24} />
                             </div>
-                            <div className="text-3xl font-bold text-red-600">
+                            <div className="text-3xl font-bold text-danger-dark">
                                 {wrongAnswers}
                             </div>
                         </div>
@@ -171,6 +174,7 @@ const GameScreen = ({
                                     <div className={`text-2xl transform transition-transform ${isDragging ? 'scale-110' : 'scale-100'}`}>
                                         {isDragging ? '🚀' : '🎮'}
                                     </div>
+
                                 </div>
                             </div>
                             <div className="absolute top-2 left-4 w-6 h-3 bg-white/10 rounded-[100%] rotate-[-20deg]"></div>
@@ -182,52 +186,50 @@ const GameScreen = ({
                 </div>
 
                 {/* 피드백 오버레이 */}
-                {feedback && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20 rounded-2xl">
-                        <div className={`text-center p-8 rounded-2xl ${
-                            feedback === 'correct' ? 'bg-green-500' :
-                                feedback === 'timeout' ? 'bg-orange-500' : 'bg-red-500'
-                        }`}>
-                            {feedback === 'correct' ? (
-                                <>
-                                    <CheckCircle size={80} className="text-white mx-auto mb-4" />
-                                    <div className="text-3xl font-bold text-white">정답!</div>
-                                    {words[currentIndex].example && (
-                                        <div className="mt-4 text-white text-lg font-medium bg-black bg-opacity-20 p-4 rounded-xl">
-                                            {words[currentIndex].example}
-                                        </div>
-                                    )}
-                                </>
-                            ) : feedback === 'timeout' ? (
-                                <>
-                                    <Clock size={80} className="text-white mx-auto mb-4" />
-                                    <div className="text-3xl font-bold text-white">시간 초과!</div>
-                                    <div className="text-xl text-white mt-2">
-                                        정답: {words[currentIndex].korean}
+                <div className={`absolute inset-0 flex items-center justify-center bg-black/50 z-20 rounded-2xl transition-all duration-300 ease-in-out ${feedback ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                    <div className={`transform text-center p-8 rounded-2xl transition-transform duration-300 ease-in-out ${feedback ? 'scale-100' : 'scale-95'} ${
+                        feedback === 'correct' ? 'bg-success-dark' :
+                            feedback === 'timeout' ? 'bg-speed-dark' : 'bg-danger-dark'
+                    }`}>
+                        {feedback === 'correct' ? (
+                            <>
+                                <CheckCircle size={80} className="text-white mx-auto mb-4" />
+                                <div className="text-3xl font-bold text-white">정답!</div>
+                                {words[currentIndex].example && (
+                                    <div className="mt-4 text-white text-lg font-medium bg-black/20 p-4 rounded-xl">
+                                        {words[currentIndex].example}
                                     </div>
-                                    {words[currentIndex].example && (
-                                        <div className="mt-4 text-white text-lg font-medium bg-black bg-opacity-20 p-4 rounded-xl">
-                                            {words[currentIndex].example}
-                                        </div>
-                                    )}
-                                </>
-                            ) : (
-                                <>
-                                    <XCircle size={80} className="text-white mx-auto mb-4" />
-                                    <div className="text-3xl font-bold text-white">오답!</div>
-                                    <div className="text-xl text-white mt-2">
-                                        정답: {words[currentIndex].korean}
+                                )}
+                            </>
+                        ) : feedback === 'timeout' ? (
+                            <>
+                                <Clock size={80} className="text-white mx-auto mb-4" />
+                                <div className="text-3xl font-bold text-white">시간 초과!</div>
+                                <div className="text-xl text-white mt-2">
+                                    정답: {words[currentIndex].korean}
+                                </div>
+                                {words[currentIndex].example && (
+                                    <div className="mt-4 text-white text-lg font-medium bg-black/20 p-4 rounded-xl">
+                                        {words[currentIndex].example}
                                     </div>
-                                    {words[currentIndex].example && (
-                                        <div className="mt-4 text-white text-lg font-medium bg-black bg-opacity-20 p-4 rounded-xl">
-                                            {words[currentIndex].example}
-                                        </div>
-                                    )}
-                                </>
-                            )}
-                        </div>
+                                )}
+                            </>
+                        ) : (
+                            <>
+                                <XCircle size={80} className="text-white mx-auto mb-4" />
+                                <div className="text-3xl font-bold text-white">오답!</div>
+                                <div className="text-xl text-white mt-2">
+                                    정답: {words[currentIndex].korean}
+                                </div>
+                                {words[currentIndex].example && (
+                                    <div className="mt-4 text-white text-lg font-medium bg-black/20 p-4 rounded-xl">
+                                        {words[currentIndex].example}
+                                    </div>
+                                )}
+                            </>
+                        )}
                     </div>
-                )}
+                </div>
             </div>
              <div className="bg-white rounded-2xl shadow-lg p-6 mt-2">
                 <div className="text-center">
