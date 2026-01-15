@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useReducer } from 'react';
+import { supabase } from './supabaseClient';
 import HomeScreen from './screens/HomeScreen';
 import GameScreen from './screens/GameScreen';
 import RankingScreen from './screens/RankingScreen';
@@ -176,6 +177,7 @@ const WordSwipeQuiz = () => {
     const [isDragging, setIsDragging] = useState(false);
     const [timerMode, setTimerMode] = useState(true);
     const [speedRankings, setSpeedRankings] = useState([]);
+    const [user, setUser] = useState(null);
 
     const cardRef = useRef(null);
     const timerRef = useRef(null);
@@ -183,6 +185,18 @@ const WordSwipeQuiz = () => {
     const dragPosRef = useRef({ x: 0, y: 0 });
 
     // Load words when game starts
+    useEffect(() => {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            setUser(session?.user ?? null);
+        });
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session?.user ?? null);
+        });
+
+        return () => subscription.unsubscribe();
+    }, []);
+
     const loadWords = async (level, mode) => {
         try {
             const response = await fetch(`/words/${level}.json`);
@@ -223,6 +237,49 @@ const WordSwipeQuiz = () => {
 
     const startGame = (name, level, mode) => {
         dispatch({ type: 'START_GAME', payload: { name, level, mode } });
+    };
+
+    const handleSignUp = async (email, password, nickname) => {
+        try {
+            const { error } = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: {
+                        name: nickname,
+                    },
+                },
+            });
+            if (error) throw error;
+            alert('회원가입 성공! 이메일을 확인해주세요.');
+        } catch (error) {
+            console.error('Sign up error:', error.message);
+            alert('회원가입 실패: ' + error.message);
+        }
+    };
+
+    const handleLogin = async (email, password) => {
+        try {
+            const { error } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
+            if (error) throw error;
+            alert('로그인 성공!');
+        } catch (error) {
+            console.error('Login error:', error.message);
+            alert('로그인 실패: ' + error.message);
+        }
+    };
+
+    const handleLogout = async () => {
+        try {
+            const { error } = await supabase.auth.signOut();
+            if (error) throw error;
+        } catch (error) {
+            console.error('Logout error:', error.message);
+            alert('로그아웃 실패: ' + error.message);
+        }
     };
 
     const checkConnectAnswer = (word1, word2) => {
@@ -511,9 +568,9 @@ const WordSwipeQuiz = () => {
     const renderContent = () => {
         switch (status) {
             case 'idle':
-                return <HomeScreen onStartGame={startGame} isLoading={false} />;
+                return <HomeScreen onStartGame={startGame} onSignUp={handleSignUp} onLogin={handleLogin} onLogout={handleLogout} isLoading={false} user={user} />;
             case 'loading':
-                return <HomeScreen onStartGame={startGame} isLoading={true} />;
+                return <HomeScreen onStartGame={startGame} onSignUp={handleSignUp} onLogin={handleLogin} onLogout={handleLogout} isLoading={true} user={user} />;
             case 'playing':
                 if (gameMode === 'connect') {
                     return <ConnectingGameScreen 
@@ -563,7 +620,7 @@ const WordSwipeQuiz = () => {
                     time={gameMode === 'connect' ? connectTime : speedRunTimeLeft}
                 />;
             default:
-                return <HomeScreen onStartGame={startGame} isLoading={false} />;
+                return <HomeScreen onStartGame={startGame} onSignUp={handleSignUp} onLogin={handleLogin} onLogout={handleLogout} isLoading={false} user={user} />;
         }
     };
 
