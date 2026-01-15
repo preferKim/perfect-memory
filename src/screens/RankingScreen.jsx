@@ -1,4 +1,11 @@
 import React from 'react';
+import { Heart, Clock } from 'lucide-react';
+
+const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+};
 
 const RankingScreen = ({
     rankings,
@@ -7,6 +14,8 @@ const RankingScreen = ({
     score = 0,
     wrongAnswers = 0,
     total = 0,
+    lives = 0,
+    time = 0,
 }) => {
     const sortedRankings = [...rankings].sort((a, b) => b.score - a.score);
 
@@ -70,9 +79,54 @@ const RankingScreen = ({
         </>
     );
 
+    const renderConnectModeResult = () => (
+        <>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-cyan-600 mb-4 leading-tight">
+                {lives > 0 ? '✨ 게임 결과 ✨' : '😭 게임 실패 😭'}
+            </h2>
+            <p className="text-gray-600 mb-8">
+                {lives > 0 ? '모든 단어를 성공적으로 연결했습니다!' : (
+                    <>
+                        단어 연결에 실패 하였습니다.
+                        <br />
+                        다시 도전하세요
+                    </>
+                )}
+            </p>
+    
+            <div className="rounded-xl border-2 border-cyan-100 bg-cyan-50 p-6 space-y-4 text-left">
+                <div className="flex justify-between items-center text-lg">
+                    <span className="font-bold text-gray-700 flex items-center gap-2"><Heart className="text-red-500" /> 남은 목숨:</span>
+                    <span className="text-3xl font-bold text-red-500">{lives} <span className="text-sm">개</span></span>
+                </div>
+                <div className="flex justify-between items-center text-lg">
+                    <span className="font-bold text-gray-700 flex items-center gap-2"><Clock className="text-indigo-500" /> 소요 시간:</span>
+                    <span className="text-3xl font-bold text-indigo-500">{formatTime(time)}</span>
+                </div>
+            </div>
+        </>
+    );
+
+    const getBorderColor = () => {
+        if (gameMode === 'speed') return 'border-amber-200';
+        if (gameMode === 'connect') return 'border-cyan-200';
+        return 'border-indigo-200';
+    }
+
+    const renderContent = () => {
+        switch(gameMode) {
+            case 'speed':
+                return renderSpeedModeResult();
+            case 'connect':
+                return renderConnectModeResult();
+            default:
+                return renderNormalModeResult();
+        }
+    }
+
     return (
-        <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-12 text-center border-4 border-amber-200">
-            {gameMode === 'speed' ? renderSpeedModeResult() : renderNormalModeResult()}
+        <div className={`bg-white rounded-3xl shadow-2xl p-6 sm:p-12 text-center border-4 ${getBorderColor()}`}>
+            {renderContent()}
 
             <button
                 onClick={onRestart}
@@ -85,3 +139,4 @@ const RankingScreen = ({
 };
 
 export default RankingScreen;
+

@@ -1,99 +1,261 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useReducer } from 'react';
 import HomeScreen from './screens/HomeScreen';
 import GameScreen from './screens/GameScreen';
 import RankingScreen from './screens/RankingScreen';
 import ConnectingGameScreen from './screens/ConnectingGameScreen';
 
+const initialState = {
+    status: 'idle', // 'idle', 'loading', 'playing', 'finished'
+    gameMode: 'normal',
+    difficulty: 'easy',
+    playerName: '',
+    words: [],
+    allWords: [],
+    connectWords: [],
+    currentIndex: 0,
+    options: [],
+    score: 0,
+    wrongAnswers: 0,
+    total: 0,
+    lives: 3,
+    matchedPairs: [],
+    stage: 1,
+    feedback: null,
+    timeLeft: 5,
+    speedRunTimeLeft: 100,
+    connectTime: 0,
+    isTimerPaused: false,
+    isSpeaking: false,
+};
+
+function reducer(state, action) {
+    switch (action.type) {
+        case 'SPEAKING_START':
+            return { ...state, isSpeaking: true };
+        case 'SPEAKING_END':
+            return { ...state, isSpeaking: false };
+        case 'START_GAME':
+            return {
+                ...initialState,
+                playerName: action.payload.name,
+                gameMode: action.payload.mode,
+                difficulty: action.payload.level,
+                status: 'loading',
+            };
+        case 'SET_WORDS_SUCCESS':
+            return {
+                ...state,
+                words: action.payload.words || [],
+                allWords: action.payload.allWords || [],
+                connectWords: action.payload.connectWords || [],
+                status: 'playing',
+            };
+        case 'SET_WORDS_ERROR':
+            return {
+                ...state,
+                words: defaultWords,
+                status: 'playing',
+            };
+        case 'TICK':
+            if (state.isTimerPaused || (state.gameMode === 'normal' && state.isSpeaking)) return state;
+            if (state.gameMode === 'normal' && state.timeLeft > 0) {
+                return { ...state, timeLeft: state.timeLeft - 1 };
+            }
+            if (state.gameMode === 'speed' && state.speedRunTimeLeft > 0) {
+                return { ...state, speedRunTimeLeft: state.speedRunTimeLeft - 1 };
+            }
+            if (state.gameMode === 'connect') {
+                return { ...state, connectTime: state.connectTime + 1 };
+            }
+            return state;
+        case 'SET_OPTIONS':
+            return { ...state, options: action.payload };
+        case 'CHECK_ANSWER': {
+            const isCorrect = action.payload.isCorrect;
+            const newScore = isCorrect ? state.score + 1 : state.score;
+            const newWrongAnswers = !isCorrect ? state.wrongAnswers + 1 : state.wrongAnswers;
+            if (state.gameMode === 'speed') {
+                return {
+                    ...state,
+                    score: newScore,
+                    wrongAnswers: newWrongAnswers,
+                    total: state.total + 1,
+                };
+            }
+            return {
+                ...state,
+                score: newScore,
+                total: state.total + 1,
+                feedback: isCorrect ? 'correct' : 'wrong',
+            };
+        }
+        case 'NEXT_WORD': {
+            if (state.gameMode === 'speed') {
+                const nextRandomIndex = Math.floor(Math.random() * state.words.length);
+                return { ...state, currentIndex: nextRandomIndex, feedback: null };
+            }
+            // Normal Mode
+            if (state.currentIndex < state.words.length - 1) {
+                return { ...state, currentIndex: state.currentIndex + 1, feedback: null, timeLeft: 5 };
+            }
+            if (state.allWords.length > 0) {
+                const nextStage = state.stage + 1;
+                const nextStageWords = state.allWords.filter(w => w.level === nextStage);
+                if (nextStageWords.length > 0) {
+                    return {
+                        ...state,
+                        stage: nextStage,
+                        words: nextStageWords.sort(() => Math.random() - 0.5).slice(0, 4),
+                        currentIndex: 0,
+                        feedback: null,
+                        timeLeft: 5,
+                    };
+                }
+            }
+            // If no more words or stages, finish game
+            return { ...state, status: 'finished' };
+        }
+        case 'TIMEOUT':
+            return { ...state, total: state.total + 1, feedback: 'timeout' };
+        case 'FINISH_GAME':
+             if(state.gameMode === 'speed') {
+                const finalScore = state.score - (state.wrongAnswers * 5);
+                // Here you would typically also update a global ranking state or send to a server
+             }
+            return { ...state, status: 'finished' };
+        case 'RESET_GAME':
+            return {
+                ...initialState,
+                status: 'idle',
+            };
+        case 'PAUSE_TIMER':
+            return { ...state, isTimerPaused: !state.isTimerPaused };
+
+        case 'CHECK_CONNECT_ANSWER': {
+            const { word1, word2 } = action.payload;
+            if (word1.english === word2.english) {
+                const newMatchedPairs = [...state.matchedPairs, word1.english];
+                if (newMatchedPairs.length === state.connectWords.length) {
+                    return { ...state, matchedPairs: newMatchedPairs, score: state.lives * 10, status: 'finished' };
+                }
+                return { ...state, matchedPairs: newMatchedPairs };
+            }
+            const newLives = state.lives - 1;
+            if (newLives <= 0) {
+                return { ...state, lives: newLives, score: state.matchedPairs.length * 5, status: 'finished' };
+            }
+            return { ...state, lives: newLives };
+        }
+        default:
+            return state;
+    }
+}
+
+const defaultWords = [
+    { english: "apple", korean: "사과" },
+    { english: "book", korean: "책" },
+    { english: "cat", korean: "고양이" },
+    { english: "dog", korean: "개" },
+    { english: "house", korean: "집" },
+    { english: "tree", korean: "나무" },
+    { english: "water", korean: "물" },
+    { english: "fire", korean: "불" },
+    { english: "sun", korean: "태양" },
+    { english: "moon", korean: "달" }
+];
 
 const WordSwipeQuiz = () => {
-    const defaultWords = [
-        { english: "apple", korean: "사과" },
-        { english: "book", korean: "책" },
-        { english: "cat", korean: "고양이" },
-        { english: "dog", korean: "개" },
-        { english: "house", korean: "집" },
-        { english: "tree", korean: "나무" },
-        { english: "water", korean: "물" },
-        { english: "fire", korean: "불" },
-        { english: "sun", korean: "태양" },
-        { english: "moon", korean: "달" }
-    ];
+    const [state, dispatch] = useReducer(reducer, initialState);
+    const { 
+        status, gameMode, difficulty, playerName, words, allWords, connectWords, 
+        currentIndex, options, score, wrongAnswers, total, lives, matchedPairs, 
+        stage, feedback, timeLeft, speedRunTimeLeft, connectTime, isTimerPaused, isSpeaking 
+    } = state;
 
-    const [words, setWords] = useState(defaultWords);
-    const [difficulty, setDifficulty] = useState('easy');
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [options, setOptions] = useState([]);
-    const [score, setScore] = useState(0);
-    const [wrongAnswers, setWrongAnswers] = useState(0);
-    const [allWords, setAllWords] = useState([]);
-    const [stage, setStage] = useState(1);
-    const [total, setTotal] = useState(0);
-    const [feedback, setFeedback] = useState(null);
     const [dragStart, setDragStart] = useState(null);
     const [isDragging, setIsDragging] = useState(false);
     const [timerMode, setTimerMode] = useState(true);
-    const [timeLeft, setTimeLeft] = useState(5);
-    const [isTimerPaused, setIsTimerPaused] = useState(false);
-    const [isGameStarted, setIsGameStarted] = useState(false);
-    const [isSpeaking, setIsSpeaking] = useState(false);
-    const [showQuiz, setShowQuiz] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [gameMode, setGameMode] = useState('normal');
-    const [speedRunTimeLeft, setSpeedRunTimeLeft] = useState(100);
-    const [playerName, setPlayerName] = useState('');
     const [speedRankings, setSpeedRankings] = useState([]);
-    const [showRanking, setShowRanking] = useState(false);
-    const [lives, setLives] = useState(3);
-    const [connectWords, setConnectWords] = useState([]);
-    const [matchedPairs, setMatchedPairs] = useState([]);
 
     const cardRef = useRef(null);
     const timerRef = useRef(null);
     const quizRef = useRef(null);
     const dragPosRef = useRef({ x: 0, y: 0 });
 
-    const checkConnectAnswer = (word1, word2) => {
-        if (word1.english === word2.english) {
-            const newMatchedPairs = [...matchedPairs, word1.english];
-            setMatchedPairs(newMatchedPairs);
-            
-            if (newMatchedPairs.length === connectWords.length) {
-                // Game Won
-                setScore(lives * 10); // Example score calculation
-                setShowRanking(true);
+    // Load words when game starts
+    const loadWords = async (level, mode) => {
+        try {
+            const response = await fetch(`/words/${level}.json`);
+            if (response.ok) {
+                const data = await response.json();
+                let payload = {};
+                if (mode === 'speed') {
+                    payload = { words: data, allWords: data };
+                } else if (mode === 'connect') {
+                    payload = { connectWords: data.sort(() => Math.random() - 0.5).slice(0, 10), words: [] };
+                } else {
+                    if (Array.isArray(data) && data.length > 0 && data.some(item => 'level' in item)) {
+                        const stageWords = data.filter(w => w.level === 1);
+                        payload = {
+                            words: stageWords.length > 0 ? stageWords.sort(() => Math.random() - 0.5).slice(0, 4) : [],
+                            allWords: data
+                        };
+                    } else {
+                        payload = { words: data.sort(() => Math.random() - 0.5).slice(0, 20), allWords: [] };
+                    }
+                }
+                dispatch({ type: 'SET_WORDS_SUCCESS', payload });
+            } else {
+                dispatch({ type: 'SET_WORDS_ERROR' });
             }
-        } else {
-            const newLives = lives - 1;
-            setLives(newLives);
-            if (newLives <= 0) {
-                // Game Over
-                setScore(matchedPairs.length * 5); // Example score calculation
-                setShowRanking(true);
-            }
+        } catch (error) {
+            dispatch({ type: 'SET_WORDS_ERROR' });
         }
     };
+
+    const resetGame = () => {
+        dispatch({ type: 'RESET_GAME' });
+    };
+
+    const handleRestart = () => {
+        resetGame();
+    };
+
+    const startGame = (name, level, mode) => {
+        dispatch({ type: 'START_GAME', payload: { name, level, mode } });
+    };
+
+    const checkConnectAnswer = (word1, word2) => {
+        dispatch({ type: 'CHECK_CONNECT_ANSWER', payload: { word1, word2 } });
+    };
     
-    // Auto-speak for normal mode
+    // Side-effects management
     useEffect(() => {
-        if (isGameStarted && words.length > 0 && gameMode === 'normal') {
-            generateOptions();
-            if (words[currentIndex]) {
-                speakWord(words[currentIndex].english);
-            }
-        } else if (isGameStarted && words.length > 0 && gameMode === 'speed') {
-            generateOptions();
+        if (status === 'loading') {
+            loadWords(difficulty, gameMode);
         }
-    }, [currentIndex, isGameStarted, words, gameMode]);
+    }, [status, difficulty, gameMode]);
+
+    useEffect(() => {
+        if (status === 'playing') {
+            generateOptions();
+            const wordToSpeak = words[currentIndex]?.english;
+            if (wordToSpeak) {
+                const repeatCount = gameMode === 'speed' ? 1 : 2;
+                speakWord(wordToSpeak, repeatCount);
+            }
+        }
+    }, [currentIndex, status, words]); // Depends on words loading and index changing
 
     useEffect(() => {
         const handleBackButton = (e) => {
-            if (isGameStarted) {
+            if (status === 'playing') {
                 e.preventDefault();
                 resetGame();
             }
         };
 
-        if (isGameStarted) {
+        if (status === 'playing') {
             window.history.pushState(null, '', window.location.href);
             window.addEventListener('popstate', handleBackButton);
         }
@@ -101,129 +263,43 @@ const WordSwipeQuiz = () => {
         return () => {
             window.removeEventListener('popstate', handleBackButton);
         };
-    }, [isGameStarted]);
+    }, [status]);
 
-    // Timer for Normal Mode
+    // Timers
     useEffect(() => {
-        if (gameMode === 'normal' && timerMode && !isTimerPaused && timeLeft > 0 && !feedback && isGameStarted && !isSpeaking) {
-            if (timeLeft <= 3 && timeLeft > 0) {
+        if (status !== 'playing') return;
+
+        timerRef.current = setInterval(() => dispatch({ type: 'TICK' }), 1000);
+        
+        return () => {
+            if(timerRef.current) clearInterval(timerRef.current);
+        };
+    }, [status, isTimerPaused]);
+
+    // Timer-based events
+    useEffect(() => {
+        if (status !== 'playing') return;
+
+        if (gameMode === 'normal' && timerMode && !isTimerPaused && !feedback) {
+            if (timeLeft === 0) {
+                handleTimeout();
+            } else if (timeLeft <= 3) {
                 playWarningSound();
             }
-            timerRef.current = setTimeout(() => {
-                setTimeLeft(timeLeft - 1);
-            }, 1000);
-        } else if (gameMode === 'normal' && timerMode && timeLeft === 0 && !feedback && isGameStarted) {
-            handleTimeout();
-        }
-
-        return () => {
-            if (timerRef.current) clearTimeout(timerRef.current);
-        };
-    }, [gameMode, timerMode, timeLeft, isTimerPaused, feedback, isGameStarted, isSpeaking]);
-
-    // Timer for Speed Mode
-    useEffect(() => {
-        if (gameMode === 'speed' && isGameStarted && !isTimerPaused && speedRunTimeLeft > 0) {
-            playTickSound();
-            timerRef.current = setTimeout(() => {
-                setSpeedRunTimeLeft(prev => prev - 1);
-            }, 1000);
-        } else if (gameMode === 'speed' && isGameStarted && speedRunTimeLeft === 0) {
+        } else if (gameMode === 'speed' && speedRunTimeLeft === 0) {
             const finalScore = score - (wrongAnswers * 5);
-            setSpeedRankings(prev => [...prev, { name: playerName, score: finalScore }]);
-            setShowRanking(true);
-            setIsGameStarted(false);
-            setShowQuiz(false);
+            setSpeedRankings(prev => [...prev, { name: playerName, score: finalScore }].sort((a, b) => b.score - a.score));
+            dispatch({ type: 'FINISH_GAME' });
         }
-        return () => {
-            if (timerRef.current) clearTimeout(timerRef.current);
-        };
-    }, [gameMode, isGameStarted, isTimerPaused, speedRunTimeLeft]);
+    }, [timeLeft, speedRunTimeLeft, status]);
 
-
-    const loadWords = async (level, mode) => {
-        setIsLoading(true);
-        try {
-            const response = await fetch(`/words/${level}.json`);
-            if (response.ok) {
-                const data = await response.json();
-                if (mode === 'speed') {
-                    setAllWords(data);
-                    setWords(data);
-                } else if (mode === 'connect') {
-                    setConnectWords(data.sort(() => Math.random() - 0.5).slice(0, 10));
-                    setWords([]); // Clear other modes' words
-                } else { // normal mode
-                    if (Array.isArray(data) && data.length > 0 && data.some(item => 'level' in item)) {
-                        setAllWords(data);
-                        setStage(1);
-                        const stageWords = data.filter(w => w.level === 1);
-                        setWords(stageWords.length > 0 ? stageWords.sort(() => Math.random() - 0.5).slice(0, 4) : []);
-                    } else {
-                        setWords(data.sort(() => Math.random() - 0.5).slice(0, 20));
-                        setAllWords([]);
-                    }
-                }
-                setDifficulty(level);
-            } else {
-                console.log('파일을 찾을 수 없어 기본 단어를 사용합니다.');
-                const selectedWords = defaultWords.sort(() => Math.random() - 0.5).slice(0, 20);
-                if (mode === 'connect') {
-                    setConnectWords(selectedWords.slice(0, 10));
-                } else {
-                    setWords(selectedWords);
-                }
-                setAllWords([]);
-            }
-        } catch (error) {
-            console.log('파일 로드 실패, 기본 단어를 사용합니다.');
-            const selectedWords = defaultWords.sort(() => Math.random() - 0.5).slice(0, 20);
-            if (mode === 'connect') {
-                setConnectWords(selectedWords.slice(0, 10));
-            } else {
-                setWords(selectedWords);
-            }
-            setAllWords([]);
-        }
-        setIsLoading(false);
-    };
 
     const handleNext = () => {
-        setFeedback(null);
-
-        if (gameMode === 'speed') {
-             if (words.length > 0) {
-                setCurrentIndex(Math.floor(Math.random() * words.length));
-            }
-            return;
-        }
-
-        // Normal Mode
-        setTimeLeft(5);
-        if (currentIndex < words.length - 1) {
-            setCurrentIndex(currentIndex + 1);
-        } else {
-            if (allWords.length > 0) {
-                const nextStage = stage + 1;
-                const nextStageWords = allWords.filter(w => w.level === nextStage);
-                if (nextStageWords.length > 0) {
-                    setStage(nextStage);
-                    setWords(nextStageWords.sort(() => Math.random() - 0.5).slice(0, 4));
-                    setCurrentIndex(0);
-                } else {
-                    setShowRanking(true);
-                    setIsGameStarted(false);
-                    setShowQuiz(false);
-                }
-            } else {
-                setCurrentIndex(0);
-            }
-        }
+        dispatch({ type: 'NEXT_WORD' });
     };
 
     const handleTimeout = () => {
-        setTotal(total + 1);
-        setFeedback('timeout');
+        dispatch({ type: 'TIMEOUT' });
         playTimeoutBuzzer();
 
         setTimeout(() => {
@@ -238,10 +314,10 @@ const WordSwipeQuiz = () => {
         }, 500);
     };
 
-    const speakWord = (word, repeatCount = 2, onComplete) => {
+    const speakWord = (word, repeatCount = 1, onComplete) => {
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
-            setIsSpeaking(true);
+            dispatch({ type: 'SPEAKING_START' });
             
             const speak = (count = 0) => {
                 if (count < repeatCount) {
@@ -249,16 +325,18 @@ const WordSwipeQuiz = () => {
                     utterance.lang = 'en-US';
                     utterance.rate = 0.8;
                     utterance.onend = () => {
-                        setTimeout(() => speak(count + 1), 1000);
+                        setTimeout(() => speak(count + 1), 500); // Small delay between repeats
                     };
                     window.speechSynthesis.speak(utterance);
                 } else {
-                    setIsSpeaking(false);
+                    dispatch({ type: 'SPEAKING_END' });
                     if (onComplete) onComplete();
                 }
             };
             
             speak();
+        } else {
+            if (onComplete) onComplete();
         }
     };
 
@@ -266,39 +344,14 @@ const WordSwipeQuiz = () => {
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const oscillator = audioContext.createOscillator();
         const gainNode = audioContext.createGain();
-        
         oscillator.connect(gainNode);
         gainNode.connect(audioContext.destination);
-        
         oscillator.frequency.value = 800;
         oscillator.type = 'sine';
-        
         gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
         gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-        
         oscillator.start(audioContext.currentTime);
         oscillator.stop(audioContext.currentTime + 0.1);
-    };
-
-    const playTickSound = () => {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioContext.state === 'suspended') {
-            audioContext.resume();
-        }
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-
-        oscillator.type = 'triangle';
-        oscillator.frequency.setValueAtTime(3000, audioContext.currentTime);
-
-        gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.05);
-
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.05);
     };
 
     const playTimeoutBuzzer = () => {
@@ -335,7 +388,7 @@ const WordSwipeQuiz = () => {
         const allOptions = [...wrongOptions, current.korean]
             .sort(() => Math.random() - 0.5);
 
-        setOptions(allOptions);
+        dispatch({ type: 'SET_OPTIONS', payload: allOptions });
     };
 
     const handleDragStart = (e) => {
@@ -410,14 +463,14 @@ const WordSwipeQuiz = () => {
         const correctAnswer = words[currentIndex].korean;
         const isCorrect = selectedAnswer === correctAnswer;
 
-        setTotal(total + 1);
+        dispatch({ type: 'CHECK_ANSWER', payload: { isCorrect } });
+        
+        if (gameMode === 'speed') {
+            handleNext();
+            return;
+        }
+
         if (isCorrect) {
-            setScore(score + 1);
-            if (gameMode === 'speed') {
-                handleNext();
-                return;
-            }
-            setFeedback('correct');
             const currentWord = words[currentIndex];
             if (currentWord.example) {
                 speakWord(currentWord.example, 1, handleNext);
@@ -425,12 +478,6 @@ const WordSwipeQuiz = () => {
                 setTimeout(handleNext, 1000);
             }
         } else {
-             if (gameMode === 'speed') {
-                setWrongAnswers(wrongAnswers + 1);
-                handleNext();
-                return;
-            }
-            setFeedback('wrong');
             playTimeoutBuzzer();
             setTimeout(() => {
                 const currentWord = words[currentIndex];
@@ -445,63 +492,8 @@ const WordSwipeQuiz = () => {
         }
     };
 
-    const resetGame = () => {
-        setCurrentIndex(0);
-        setScore(0);
-        setWrongAnswers(0);
-        setTotal(0);
-        setFeedback(null);
-        setTimeLeft(5);
-        setIsTimerPaused(false);
-        setIsGameStarted(false);
-        setShowQuiz(false);
-        setIsSpeaking(false);
-        setGameMode('normal');
-        setSpeedRunTimeLeft(100);
-        setPlayerName('');
-        setShowRanking(false);
-        setLives(3);
-        setConnectWords([]);
-        setMatchedPairs([]);
-    };
-
-    const handleRestart = () => {
-        resetGame();
-    };
-
-    const startGame = async (name, level, mode) => {
-        setPlayerName(name);
-        setGameMode(mode);
-        await loadWords(level, mode);
-        setIsGameStarted(true);
-        setCurrentIndex(0);
-        setScore(0);
-        setWrongAnswers(0);
-        setTotal(0);
-        setStage(1);
-        setFeedback(null);
-        setTimeLeft(5);
-        setSpeedRunTimeLeft(100);
-        setIsTimerPaused(false);
-        setShowRanking(false);
-
-        if (mode === 'connect') {
-            setLives(3);
-            setMatchedPairs([]);
-        }
-
-        setTimeout(() => {
-            setShowQuiz(true);
-            setTimeout(() => {
-                if (quizRef.current) {
-                    quizRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            }, 100);
-        }, 300);
-    };
-
     const togglePause = () => {
-        setIsTimerPaused(!isTimerPaused);
+        dispatch({ type: 'PAUSE_TIMER' });
     };
 
     const getTimerColor = () => {
@@ -517,27 +509,22 @@ const WordSwipeQuiz = () => {
     };
 
     const renderContent = () => {
-        if (showRanking) {
-            return <RankingScreen 
-                rankings={speedRankings} 
-                onRestart={handleRestart} 
-                gameMode={gameMode}
-                score={score}
-                wrongAnswers={wrongAnswers}
-                total={total}
-            />;
-        }
-        if (isGameStarted) {
-            if (gameMode === 'connect') {
-                return <ConnectingGameScreen 
-                    words={connectWords} 
-                    lives={lives}
-                    onCheckAnswer={checkConnectAnswer}
-                    matchedPairs={matchedPairs}
-                    resetGame={resetGame}
-                />;
-            }
-            if (showQuiz) {
+        switch (status) {
+            case 'idle':
+                return <HomeScreen onStartGame={startGame} isLoading={false} />;
+            case 'loading':
+                return <HomeScreen onStartGame={startGame} isLoading={true} />;
+            case 'playing':
+                if (gameMode === 'connect') {
+                    return <ConnectingGameScreen 
+                        words={connectWords} 
+                        lives={lives}
+                        onCheckAnswer={checkConnectAnswer}
+                        matchedPairs={matchedPairs}
+                        resetGame={resetGame}
+                        time={connectTime}
+                    />;
+                }
                 return (
                     <GameScreen
                         words={words}
@@ -559,15 +546,25 @@ const WordSwipeQuiz = () => {
                         togglePause={togglePause}
                         getTimerColor={getTimerColor}
                         handleDragStart={handleDragStart}
-
                         handleDragMove={handleDragMove}
                         handleDragEnd={handleDragEnd}
                         gameMode={gameMode}
                     />
                 );
-            }
+            case 'finished':
+                return <RankingScreen 
+                    rankings={speedRankings} 
+                    onRestart={handleRestart} 
+                    gameMode={gameMode}
+                    score={score}
+                    wrongAnswers={wrongAnswers}
+                    total={total}
+                    lives={lives}
+                    time={gameMode === 'connect' ? connectTime : speedRunTimeLeft}
+                />;
+            default:
+                return <HomeScreen onStartGame={startGame} isLoading={false} />;
         }
-        return <HomeScreen onStartGame={startGame} isLoading={isLoading} />;
     };
 
     return (
