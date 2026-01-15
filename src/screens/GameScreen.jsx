@@ -62,13 +62,15 @@ const GameScreen = ({
                     <div className="text-5xl font-bold text-gray-800">
                         {words[currentIndex].english}
                     </div>
-                    <button
-                        onClick={() => speakWord(words[currentIndex].english, 1)}
-                        className="p-3 hover:bg-gray-100 rounded-full transition"
-                        title="발음 듣기"
-                    >
-                        <Volume2 size={28} className="text-blue-500" />
-                    </button>
+                    {gameMode !== 'speed' && (
+                        <button
+                            onClick={() => speakWord(words[currentIndex].english, 1)}
+                            className="p-3 hover:bg-gray-100 rounded-full transition"
+                            title="발음 듣기"
+                        >
+                            <Volume2 size={28} className="text-blue-500" />
+                        </button>
+                    )}
                 </div>
 
                 {timerMode && (

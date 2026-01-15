@@ -83,6 +83,9 @@ const WordSwipeQuiz = () => {
             }
         } else if (isGameStarted && words.length > 0 && gameMode === 'speed') {
             generateOptions();
+            if (words[currentIndex]) {
+                speakWord(words[currentIndex].english, 1);
+            }
         }
     }, [currentIndex, isGameStarted, words, gameMode]);
 
@@ -125,7 +128,6 @@ const WordSwipeQuiz = () => {
     // Timer for Speed Mode
     useEffect(() => {
         if (gameMode === 'speed' && isGameStarted && !isTimerPaused && speedRunTimeLeft > 0) {
-            playTickSound();
             timerRef.current = setTimeout(() => {
                 setSpeedRunTimeLeft(prev => prev - 1);
             }, 1000);
