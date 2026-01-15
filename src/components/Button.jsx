@@ -28,7 +28,7 @@ const Button = ({
         normal: 'bg-normal-light text-gray-800 shadow-lg scale-105',
         speed: 'bg-speed-light text-gray-800 shadow-lg scale-105',
         connect: 'bg-connect-light text-gray-800 shadow-lg scale-105',
-        inactive: 'bg-gray-200 text-gray-600',
+        inactive: 'bg-white/10 text-white hover:bg-white/20',
     };
 
     let selectedVariantClass, selectedColorClass;

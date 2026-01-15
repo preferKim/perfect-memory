@@ -568,7 +568,7 @@ const WordSwipeQuiz = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-primary-light/20 to-primary-light/50 p-2 sm:p-4 flex items-center justify-center overflow-x-hidden">
+        <div className="min-h-screen flex items-center justify-center overflow-x-hidden">
             <div className="max-w-2xl w-full">
                 {renderContent()}
             </div>

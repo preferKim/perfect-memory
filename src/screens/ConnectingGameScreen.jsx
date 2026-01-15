@@ -84,40 +84,40 @@ const ConnectingGameScreen = ({ words, lives, matchedPairs, onCheckAnswer, reset
             <div
                 ref={el => itemRefs.current[id] = el}
                 id={id}
-                className={`p-2 rounded-lg shadow-md border-2 transition-all duration-300 ${
+                className={`p-2 rounded-lg border-2 transition-all duration-300 ${
                     isMatched 
-                        ? 'bg-green-100 border-green-300 opacity-60' 
+                        ? 'bg-success-dark/30 border-success-dark/0 opacity-60' 
                         : isSelected
-                        ? 'bg-indigo-200 border-indigo-400 ring-2 ring-indigo-500'
+                        ? 'bg-primary-dark/50 border-primary-light ring-2 ring-primary-light'
                         : isIncorrect
-                        ? 'bg-red-200 border-red-400'
-                        : 'bg-white cursor-pointer hover:bg-indigo-100 hover:border-indigo-400'
+                        ? 'bg-danger-dark/50 border-danger-light ring-2 ring-danger-light'
+                        : 'bg-white/10 border-white/10 cursor-pointer hover:bg-white/20 hover:border-white/30'
                 }`}
                 onClick={() => handleWordClick({ id, ...node })}
             >
-                <p className={`text-base font-semibold text-center ${isMatched ? 'text-green-700' : 'text-gray-800'}`}>{text}</p>
+                <p className={`text-base font-semibold text-center ${isMatched ? 'text-gray-400' : 'text-white'}`}>{text}</p>
             </div>
         );
     };
 
     return (
-        <div className="w-full max-w-4xl mx-auto p-4">
-             <div className="flex justify-between items-center mb-4 bg-white p-4 rounded-xl shadow-lg">
-                <button onClick={resetGame} className="text-gray-500 hover:text-indigo-600 p-2 rounded-full transition">
+        <div className="w-full max-w-4xl mx-auto p-4 flex flex-col gap-2">
+             <div className="glass-card flex justify-between items-center p-4">
+                <button onClick={resetGame} className="text-gray-300 hover:text-white p-2 rounded-full transition">
                     <ArrowLeft size={28} />
                 </button>
-                <div className="flex items-center gap-2 text-2xl font-bold text-indigo-600">
+                <div className="flex items-center gap-2 text-2xl font-bold text-white">
                     <Clock size={28} />
                     <span>{formatTime(time)}</span>
                 </div>
                 <div className="flex items-center gap-2">
                     {Array.from({ length: 3 }).map((_, i) => (
-                        <Heart key={i} size={32} className={i < lives ? 'text-red-500 fill-current animate-pulse' : 'text-gray-300'} />
+                        <Heart key={i} size={32} className={i < lives ? 'text-danger-light fill-current animate-pulse' : 'text-gray-600'} />
                     ))}
                 </div>
             </div>
 
-            <div className="relative">
+            <div className="relative glass-card p-4">
                 <div className="grid grid-cols-2 gap-x-12 gap-y-2">
                     <div className="space-y-2">
                         {leftColumn.map((item) => (
@@ -137,7 +137,7 @@ const ConnectingGameScreen = ({ words, lives, matchedPairs, onCheckAnswer, reset
                         const startPos = getNodePosition(`korean-${word.english}`);
                         const endPos = getNodePosition(`english-${word.english}`);
                         if (startPos && endPos) {
-                           return <line key={`line-${word.english}`} x1={startPos.x} y1={startPos.y} x2={endPos.x} y2={endPos.y} stroke="#22c55e" strokeWidth="5" strokeLinecap="round" />
+                           return <line key={`line-${word.english}`} x1={startPos.x} y1={startPos.y} x2={endPos.x} y2={endPos.y} stroke="theme(colors.success.light)" strokeWidth="5" strokeLinecap="round" />
                         }
                         return null;
                     })}

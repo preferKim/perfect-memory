@@ -2,6 +2,9 @@ export default {
   content: ["./index.html", "./src/**/*.{js,jsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+      },
       colors: {
         primary: { // Celestial Blue
           light: '#a7d8ff',
@@ -32,8 +35,27 @@ export default {
           light: '#ffb3d1',
           DEFAULT: '#f783ac',
           dark: '#f06595',
+        },
+        aurora: {
+          // A nice deep purple
+          100: '#5f4b8b',
+          // A vibrant pink
+          200: '#e661ac',
+          // A rich blue
+          300: '#3d5af1',
+          // A bright teal
+          400: '#00bfa5',
+        },
+      },
+      keyframes: {
+        aurora: {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
         }
       },
+      animation: {
+        aurora: 'aurora 20s ease infinite',
+      }
     },
   },
   plugins: [],

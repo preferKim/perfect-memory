@@ -8,11 +8,11 @@ const HomeScreen = ({ onStartGame, isLoading }) => {
     const isStartDisabled = isLoading || (gameMode === 'speed' && !playerName);
 
     const InfoCard = ({ icon, title, description }) => (
-        <div className="flex items-center gap-4 bg-white p-3 rounded-xl shadow-sm">
+        <div className="flex items-center gap-4 bg-white/5 p-3 rounded-xl">
             <div className="text-3xl">{icon}</div>
             <div>
-                <div className="font-bold text-gray-800">{title}</div>
-                <div className="text-gray-500 text-sm">{description}</div>
+                <div className="font-bold text-gray-100">{title}</div>
+                <div className="text-gray-300 text-sm">{description}</div>
             </div>
         </div>
     );
@@ -31,16 +31,16 @@ const HomeScreen = ({ onStartGame, isLoading }) => {
     };
 
     return (
-        <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-12 text-center border-4 border-normal-light">
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-primary-dark mb-4 leading-tight break-words tracking-tight animate-bounce">
+        <div className="glass-card p-6 sm:p-12 text-center">
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-white mb-4 leading-tight break-words tracking-tight animate-bounce">
                 Perfect Memory
             </h2>
-            <p className="text-sm text-gray-600 mb-8 font-medium">
+            <p className="text-sm text-gray-300 mb-8 font-medium">
                 망각 곡선에 맞춘 게임방식 암기법
             </p>
             
             <div className="mb-6">
-                <p className="text-xl font-bold text-primary-dark mb-4">1. 게임 모드를 선택하세요!</p>
+                <p className="text-xl font-bold text-white mb-4">1. 게임 모드를 선택하세요!</p>
                 <div className="flex justify-center gap-2">
                     <Button
                         onClick={() => setGameMode('normal')}
@@ -69,26 +69,26 @@ const HomeScreen = ({ onStartGame, isLoading }) => {
                 </div>
             </div>
 
-            <div className="bg-normal-light/30 rounded-2xl p-6 mb-6 text-left max-w-md mx-auto border-2 border-normal-light/60">
+            <div className="bg-black/10 rounded-2xl p-6 mb-6 text-left max-w-md mx-auto border-2 border-white/10">
                 {renderModeInfo()}
             </div>
 
             {gameMode === 'speed' && (
                 <div className="mb-6">
-                    <label htmlFor="playerName" className="text-xl font-bold text-primary-dark mb-4 block">2. 도전자의 이름을 알려주세요!</label>
+                    <label htmlFor="playerName" className="text-xl font-bold text-white mb-4 block">2. 도전자의 이름을 알려주세요!</label>
                     <input
                         id="playerName"
                         type="text"
                         value={playerName}
                         onChange={(e) => setPlayerName(e.target.value)}
                         placeholder="예: 아이유"
-                        className="w-full max-w-xs mx-auto px-4 py-3 text-center text-lg font-medium border-2 border-normal-light rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition"
+                        className="w-full max-w-xs mx-auto px-4 py-3 text-center text-lg font-medium bg-white/5 border-2 border-white/10 rounded-xl text-white focus:ring-2 focus:ring-primary focus:border-primary transition"
                     />
                 </div>
             )}
 
             <div className="mb-4">
-                <p className="text-xl font-bold text-primary-dark mb-4">
+                <p className="text-xl font-bold text-white mb-4">
                     {gameMode === 'speed' ? '3. ' : '2. '}
                     도전할 레벨을 골라보세요!
                 </p>
@@ -119,10 +119,10 @@ const HomeScreen = ({ onStartGame, isLoading }) => {
                     </Button>
                 </div>
                 {isLoading && (
-                    <p className="text-primary mt-4 font-medium animate-pulse">단어 카드를 가져오고 있어요...</p>
+                    <p className="text-primary-light mt-4 font-medium animate-pulse">단어 카드를 가져오고 있어요...</p>
                 )}
                 {gameMode === 'speed' && !playerName && (
-                    <p className="text-danger-dark mt-4 font-medium">경쟁 모드는 이름 입력이 필수입니다.</p>
+                    <p className="text-danger-light mt-4 font-medium">경쟁 모드는 이름 입력이 필수입니다.</p>
                 )}
             </div>
         </div>
