@@ -126,23 +126,19 @@ const HomeScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLoading, user 
         <div className="glass-card p-6 sm:p-12 text-center relative">
             <div className="absolute top-4 right-4 z-10">
                 {!user ? (
-                    <Button 
+                    <button 
                         onClick={() => { setIsAuthOpen(true); setAuthMode('login'); }}
-                        variant="threedee"
-                        color="primary"
-                        className="text-sm"
+                        className="text-sm font-semibold text-gray-200 hover:text-white px-4 py-1.5 rounded-full border border-white/40 hover:border-white/80 bg-black/20 hover:bg-black/40 transition-all"
                     >
                         로그인
-                    </Button>
+                    </button>
                 ) : (
-                    <Button 
+                    <button 
                         onClick={onLogout}
-                        variant="threedee"
-                        color="secondary"
-                        className="text-sm"
+                        className="text-sm font-semibold text-gray-200 hover:text-white px-4 py-1.5 rounded-full border border-white/40 hover:border-white/80 bg-black/20 hover:bg-black/40 transition-all"
                     >
                         로그아웃
-                    </Button>
+                    </button>
                 )}
             </div>
             <img src="/images/logo.svg" alt="Perfect Memory Logo" className="w-full max-w-sm mx-auto mb-4" />
