@@ -145,9 +145,7 @@ const HomeScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLoading, user 
                     </Button>
                 )}
             </div>
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-white mb-4 leading-tight break-words tracking-tight animate-bounce">
-                Perfect Memory
-            </h2>
+            <img src="/images/logo.svg" alt="Perfect Memory Logo" className="w-full max-w-sm mx-auto mb-4" />
             <p className="text-sm text-gray-300 mb-8 font-medium">
                 망각 곡선에 맞춘 게임방식 암기법
             </p>
