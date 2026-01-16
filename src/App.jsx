@@ -353,7 +353,7 @@ const WordSwipeQuiz = () => {
     }, [status, isTimerPaused]);
 
     useEffect(() => {
-        if (status === 'playing' && gameMode === 'normal' && state.levelDescriptions && stage > 0) {
+        if (status === 'playing' && gameMode === 'normal' && state.levelDescriptions && stage > 1) {
             const description = state.levelDescriptions[stage];
             if (description) {
                 setLevelUpInfo({ message: `Level ${stage}`, description });
