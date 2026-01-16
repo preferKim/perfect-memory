@@ -1,5 +1,6 @@
 import React from 'react';
 import { CheckCircle, XCircle, Clock, Volume2, Play, Pause, ArrowLeft } from 'lucide-react';
+import LevelUpNotification from '../components/LevelUpNotification';
 
 const GameScreen = ({
     words,
@@ -25,6 +26,7 @@ const GameScreen = ({
     handleDragMove,
     handleDragEnd,
     gameMode,
+    levelUpInfo,
 }) => {
     if (!words || words.length === 0 || !words[currentIndex]) {
         return (
@@ -43,6 +45,7 @@ const GameScreen = ({
             className="transition-opacity duration-500 flex flex-col gap-2"
             style={{ opacity: 1 }}
         >
+            <LevelUpNotification levelUpInfo={levelUpInfo} />
             {/* 단어 영역 - 최상단 */}
             <div className="glass-card p-8 text-center relative">
                 <button
@@ -74,6 +77,12 @@ const GameScreen = ({
                         </button>
                     )}
                 </div>
+
+                {words[currentIndex].pronunciation && (
+                    <div className="text-3xl text-primary-light font-mono tracking-wider mb-4">
+                        {words[currentIndex].pronunciation}
+                    </div>
+                )}
 
                 {timerMode && (
                     <div className="flex items-center justify-between gap-4 mb-6 px-2">
@@ -197,7 +206,12 @@ const GameScreen = ({
                                 <div className="text-3xl font-bold text-white">정답!</div>
                                 {words[currentIndex].example && (
                                     <div className="mt-4 text-white text-lg font-medium bg-black/20 p-4 rounded-xl">
-                                        {words[currentIndex].example}
+                                        <div>{words[currentIndex].example}</div>
+                                        {words[currentIndex].example_meaning && (
+                                            <div className="text-gray-300 text-base mt-2">
+                                                {words[currentIndex].example_meaning}
+                                            </div>
+                                        )}
                                     </div>
                                 )}
                             </>
@@ -210,7 +224,12 @@ const GameScreen = ({
                                 </div>
                                 {words[currentIndex].example && (
                                     <div className="mt-4 text-white text-lg font-medium bg-black/20 p-4 rounded-xl">
-                                        {words[currentIndex].example}
+                                        <div>{words[currentIndex].example}</div>
+                                        {words[currentIndex].example_meaning && (
+                                            <div className="text-gray-300 text-base mt-2">
+                                                {words[currentIndex].example_meaning}
+                                            </div>
+                                        )}
                                     </div>
                                 )}
                             </>
@@ -223,7 +242,12 @@ const GameScreen = ({
                                 </div>
                                 {words[currentIndex].example && (
                                     <div className="mt-4 text-white text-lg font-medium bg-black/20 p-4 rounded-xl">
-                                        {words[currentIndex].example}
+                                        <div>{words[currentIndex].example}</div>
+                                        {words[currentIndex].example_meaning && (
+                                            <div className="text-gray-300 text-base mt-2">
+                                                {words[currentIndex].example_meaning}
+                                            </div>
+                                        )}
                                     </div>
                                 )}
                             </>

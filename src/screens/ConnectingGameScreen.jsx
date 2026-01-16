@@ -21,7 +21,7 @@ const ConnectingGameScreen = ({ words, lives, matchedPairs, onCheckAnswer, reset
     const [leftColumn, setLeftColumn] = useState([]);
     const [rightColumn, setRightColumn] = useState([]);
 
-    const [selectedLeft, setSelectedLeft] = useState(null);
+    const [selectedItem, setSelectedItem] = useState(null);
     const [incorrectPair, setIncorrectPair] = useState([]);
 
     const svgRef = useRef(null);
@@ -32,7 +32,7 @@ const ConnectingGameScreen = ({ words, lives, matchedPairs, onCheckAnswer, reset
         setLeftColumn(shuffledWords.map(word => ({ type: 'korean', word })));
         setRightColumn(shuffleArray(words).map(word => ({ type: 'english', word })));
         itemRefs.current = {};
-        setSelectedLeft(null);
+        setSelectedItem(null);
         setIncorrectPair([]);
     }, [words]);
 
@@ -54,30 +54,39 @@ const ConnectingGameScreen = ({ words, lives, matchedPairs, onCheckAnswer, reset
             return;
         }
 
-        if (node.type === 'korean') {
-            if (selectedLeft && selectedLeft.id === node.id) {
-                setSelectedLeft(null);
-            } else {
-                setSelectedLeft(node);
-            }
-        } else if (node.type === 'english') {
-            if (selectedLeft) {
-                onCheckAnswer(selectedLeft.word, node.word);
-
-                if (selectedLeft.word.english !== node.word.english) {
-                    setIncorrectPair([selectedLeft.id, node.id]);
-                    setTimeout(() => setIncorrectPair([]), 500);
-                }
-                setSelectedLeft(null);
-            }
+        if (!selectedItem) {
+            setSelectedItem(node);
+            return;
         }
+
+        if (selectedItem.id === node.id) {
+            setSelectedItem(null);
+            return;
+        }
+
+        if (selectedItem.type === node.type) {
+            setSelectedItem(node);
+            return;
+        }
+
+        // Now we have a pair from different columns
+        const word1 = selectedItem.type === 'korean' ? selectedItem.word : node.word;
+        const word2 = selectedItem.type === 'english' ? selectedItem.word : node.word;
+
+        onCheckAnswer(word1, word2);
+
+        if (word1.english !== word2.english) {
+            setIncorrectPair([selectedItem.id, node.id]);
+            setTimeout(() => setIncorrectPair([]), 500);
+        }
+        setSelectedItem(null);
     };
 
     const WordItem = ({ node }) => {
         const id = `${node.type}-${node.word.english}`;
         const text = node.type === 'korean' ? node.word.korean : node.word.english;
         const isMatched = matchedPairs.includes(node.word.english);
-        const isSelected = selectedLeft && selectedLeft.id === id;
+        const isSelected = selectedItem && selectedItem.id === id;
         const isIncorrect = incorrectPair.includes(id);
 
         return (

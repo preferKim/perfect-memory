@@ -27,6 +27,7 @@ const initialState = {
     connectTime: 0,
     isTimerPaused: false,
     isSpeaking: false,
+    levelDescriptions: null,
 };
 
 function reducer(state, action) {
@@ -42,6 +43,7 @@ function reducer(state, action) {
                 gameMode: action.payload.mode,
                 difficulty: action.payload.level,
                 status: 'loading',
+                levelDescriptions: state.levelDescriptions, // Keep descriptions
             };
         case 'SET_WORDS_SUCCESS':
             return {
@@ -57,6 +59,8 @@ function reducer(state, action) {
                 words: defaultWords,
                 status: 'playing',
             };
+        case 'SET_LEVEL_DESCRIPTIONS':
+            return { ...state, levelDescriptions: action.payload };
         case 'TICK':
             if (state.isTimerPaused || (state.gameMode === 'normal' && state.isSpeaking)) return state;
             if (state.gameMode === 'normal' && state.timeLeft > 0) {
@@ -178,11 +182,24 @@ const WordSwipeQuiz = () => {
     const [timerMode, setTimerMode] = useState(true);
     const [speedRankings, setSpeedRankings] = useState([]);
     const [user, setUser] = useState(null);
+    const [levelUpInfo, setLevelUpInfo] = useState({ message: '', description: '' });
 
     const cardRef = useRef(null);
     const timerRef = useRef(null);
     const quizRef = useRef(null);
     const dragPosRef = useRef({ x: 0, y: 0 });
+
+    const loadLevelDescriptions = async () => {
+        try {
+            const response = await fetch(`/words/level_descriptions.json`);
+            if (response.ok) {
+                const data = await response.json();
+                dispatch({ type: 'SET_LEVEL_DESCRIPTIONS', payload: data });
+            }
+        } catch (error) {
+            console.error("Failed to load level descriptions:", error);
+        }
+    };
 
     // Load words when game starts
     useEffect(() => {
@@ -193,6 +210,8 @@ const WordSwipeQuiz = () => {
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             setUser(session?.user ?? null);
         });
+
+        loadLevelDescriptions();
 
         return () => subscription.unsubscribe();
     }, []);
@@ -332,6 +351,17 @@ const WordSwipeQuiz = () => {
             if(timerRef.current) clearInterval(timerRef.current);
         };
     }, [status, isTimerPaused]);
+
+    useEffect(() => {
+        if (status === 'playing' && gameMode === 'normal' && state.levelDescriptions && stage > 0) {
+            const description = state.levelDescriptions[stage];
+            if (description) {
+                setLevelUpInfo({ message: `Level ${stage}`, description });
+                const timer = setTimeout(() => setLevelUpInfo({ message: '', description: '' }), 4000); // show for 4 seconds
+                return () => clearTimeout(timer);
+            }
+        }
+    }, [stage, status, gameMode, state.levelDescriptions]);
 
     // Timer-based events
     useEffect(() => {
@@ -606,6 +636,7 @@ const WordSwipeQuiz = () => {
                         handleDragMove={handleDragMove}
                         handleDragEnd={handleDragEnd}
                         gameMode={gameMode}
+                        levelUpInfo={levelUpInfo}
                     />
                 );
             case 'finished':
