@@ -46,7 +46,7 @@
 {"english": "friend", "korean": "친구", "level": 1, "example": "My best friend.", "pronunciation": "[frend]", "example_meaning": "나의 가장 친한 친구.", "category": "관계"},
 {"english": "love", "korean": "사랑하다", "level": 1, "example": "I love you.", "pronunciation": "[lʌv]", "example_meaning": "나는 너를 사랑해.", "category": "감정"},
 {"english": "like", "korean": "좋아하다", "level": 1, "example": "I like pizza.", "pronunciation": "[laɪk]", "example_meaning": "나는 피자를 좋아한다.", "category": "감정"},
-{"english": "mkilk", "korean": "우유", "level": 1, "example": "Drink milk.", "pronunciation": "[mɪlk]", "example_meaning": "우유를 마셔라.", "category": "음식"},
+{"english": "milk", "korean": "우유", "level": 1, "example": "Drink milk.", "pronunciation": "[mɪlk]", "example_meaning": "우유를 마셔라.", "category": "음식"},
 {"english": "tree", "korean": "나무", "level": 1, "example": "Climb a tree.", "pronunciation": "[triː]", "example_meaning": "나무에 올라가라.", "category": "자연"},
 {"english": "flower", "korean": "꽃", "level": 1, "example": "Beautiful flower.", "pronunciation": "[ˈflaʊər]", "example_meaning": "아름다운 꽃.", "category": "자연"},
 
