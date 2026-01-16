@@ -25,6 +25,8 @@ const Button = ({
             'bg-speed text-gray-800 hover:bg-speed-dark shadow-[0_4px_0_theme(colors.speed.dark)]',
         danger:
             'bg-danger text-gray-800 hover:bg-danger-dark shadow-[0_4px_0_theme(colors.danger.dark)]',
+        google:
+            'bg-google text-gray-800 hover:bg-google-dark shadow-[0_4px_0_theme(colors.google.dark)]',
         normal: 'bg-normal-light text-gray-800 shadow-lg scale-105',
         speed: 'bg-speed-light text-gray-800 shadow-lg scale-105',
         connect: 'bg-connect-light text-gray-800 shadow-lg scale-105',

@@ -36,6 +36,10 @@ export default {
           DEFAULT: '#f783ac',
           dark: '#f06595',
         },
+        google: {
+          DEFAULT: '#ffffff',
+          dark: '#e0e0e0',
+        },
         aurora: {
           // A nice deep purple
           100: '#5f4b8b',

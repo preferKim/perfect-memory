@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Button from '../components/Button';
+import { supabase } from '../supabaseClient';
 
 const HomeScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLoading, user }) => {
     const [gameMode, setGameMode] = useState('normal');
@@ -45,13 +46,18 @@ const HomeScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLoading, user 
 
     const handleAuthSubmit = (e) => {
         if (e) e.preventDefault();
-        if (authMode === 'signup' && onSignUp) {
+        if (authMode === 'signup') {
             onSignUp(email, password, nickname);
-            setIsAuthOpen(false);
-        } else if (authMode === 'login' && onLogin) {
+        } else {
             onLogin(email, password);
-            setIsAuthOpen(false);
         }
+        setIsAuthOpen(false);
+    };
+
+    const handleOAuthLogin = async () => {
+        await supabase.auth.signInWithOAuth({
+            provider: 'google',
+        });
     };
 
     if (isAuthOpen) {
@@ -89,10 +95,21 @@ const HomeScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLoading, user 
                     )}
                     <div className="grid grid-cols-2 gap-3 pt-4">
                         <Button onClick={() => setIsAuthOpen(false)} variant="threedee" color="secondary">취소</Button>
-                        <Button onClick={handleAuthSubmit} variant="threedee" color="primary">
+                        <Button type="submit" variant="threedee" color="primary">
                             {authMode === 'login' ? '로그인' : '가입하기'}
                         </Button>
                     </div>
+                    <div className="relative my-6">
+                        <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                            <div className="w-full border-t border-white/20" />
+                        </div>
+                        <div className="relative flex justify-center">
+                            <span className="bg-gray-800 px-2 text-sm text-gray-400">또는</span>
+                        </div>
+                    </div>
+                    <Button onClick={handleOAuthLogin} variant="threedee" color="google" className="w-full">
+                        구글로 로그인
+                    </Button>
                     <div className="mt-4 text-sm text-gray-300">
                         {authMode === 'login' ? (
                             <p>계정이 없으신가요? <button type="button" onClick={() => setAuthMode('signup')} className="text-primary-light hover:underline font-bold ml-1">회원가입</button></p>
@@ -107,21 +124,27 @@ const HomeScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLoading, user 
 
     return (
         <div className="glass-card p-6 sm:p-12 text-center relative">
-            {!user ? (
-                <button 
-                    onClick={() => { setIsAuthOpen(true); setAuthMode('login'); }}
-                    className="absolute top-4 right-4 text-gray-400 hover:text-white text-sm font-medium transition-colors"
-                >
-                    로그인
-                </button>
-            ) : (
-                <button 
-                    onClick={onLogout}
-                    className="absolute top-4 right-4 text-gray-400 hover:text-white text-sm font-medium transition-colors"
-                >
-                    로그아웃
-                </button>
-            )}
+            <div className="absolute top-4 right-4 z-10">
+                {!user ? (
+                    <Button 
+                        onClick={() => { setIsAuthOpen(true); setAuthMode('login'); }}
+                        variant="threedee"
+                        color="primary"
+                        className="text-sm"
+                    >
+                        로그인
+                    </Button>
+                ) : (
+                    <Button 
+                        onClick={onLogout}
+                        variant="threedee"
+                        color="secondary"
+                        className="text-sm"
+                    >
+                        로그아웃
+                    </Button>
+                )}
+            </div>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-white mb-4 leading-tight break-words tracking-tight animate-bounce">
                 Perfect Memory
             </h2>
