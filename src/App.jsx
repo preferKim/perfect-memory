@@ -4,9 +4,12 @@ import HomeScreen from './screens/HomeScreen';
 import GameScreen from './screens/GameScreen';
 import RankingScreen from './screens/RankingScreen';
 import ConnectingGameScreen from './screens/ConnectingGameScreen';
+import TamagotchiScreen from './screens/TamagotchiScreen';
+import { usePlayer } from './context/PlayerContext';
+import LevelUpNotification from './components/LevelUpNotification';
 
 const initialState = {
-    status: 'idle', // 'idle', 'loading', 'playing', 'finished'
+    status: 'idle', // 'idle', 'loading', 'playing', 'finished', 'tamagotchi'
     gameMode: 'normal',
     difficulty: 'easy',
     playerName: '',
@@ -16,6 +19,7 @@ const initialState = {
     currentIndex: 0,
     options: [],
     score: 0,
+    points: 0,
     wrongAnswers: 0,
     total: 0,
     lives: 3,
@@ -44,7 +48,12 @@ function reducer(state, action) {
                 difficulty: action.payload.level,
                 status: 'loading',
                 levelDescriptions: state.levelDescriptions, // Keep descriptions
+                points: state.points, // Keep points
             };
+        case 'SET_POINTS':
+            return { ...state, points: action.payload };
+        case 'GO_TO_TAMAGOTCHI':
+            return { ...state, status: 'tamagotchi' };
         case 'SET_WORDS_SUCCESS':
             return {
                 ...state,
@@ -122,16 +131,27 @@ function reducer(state, action) {
         }
         case 'TIMEOUT':
             return { ...state, total: state.total + 1, feedback: 'timeout' };
-        case 'FINISH_GAME':
-             if(state.gameMode === 'speed') {
-                const finalScore = state.score - (state.wrongAnswers * 5);
-                // Here you would typically also update a global ranking state or send to a server
-             }
-            return { ...state, status: 'finished' };
+        case 'FINISH_GAME': {
+            let finalScore = state.score;
+            if (state.gameMode === 'speed') {
+                finalScore = state.score - (state.wrongAnswers * 5);
+            } else if (state.gameMode === 'connect') {
+                finalScore = state.lives * 10;
+            }
+            
+            const newTotalPoints = state.points + finalScore;
+            
+            if (action.payload.user) {
+                updatePoints(action.payload.user.id, newTotalPoints);
+            }
+
+            return { ...state, status: 'finished', points: newTotalPoints, score: finalScore };
+        }
         case 'RESET_GAME':
             return {
                 ...initialState,
                 status: 'idle',
+                points: state.points, // Keep points on reset
             };
         case 'PAUSE_TIMER':
             return { ...state, isTimerPaused: !state.isTimerPaused };
@@ -169,14 +189,15 @@ const defaultWords = [
     { english: "moon", korean: "달" }
 ];
 
-const WordSwipeQuiz = () => {
+    const WordSwipeQuiz = () => {
     const [state, dispatch] = useReducer(reducer, initialState);
     const { 
         status, gameMode, difficulty, playerName, words, allWords, connectWords, 
-        currentIndex, options, score, wrongAnswers, total, lives, matchedPairs, 
+        currentIndex, options, score, points, wrongAnswers, total, lives, matchedPairs, 
         stage, feedback, timeLeft, speedRunTimeLeft, connectTime, isTimerPaused, isSpeaking 
     } = state;
 
+    const { addXp } = usePlayer();
     const [dragStart, setDragStart] = useState(null);
     const [isDragging, setIsDragging] = useState(false);
     const [timerMode, setTimerMode] = useState(true);
@@ -210,6 +231,26 @@ const WordSwipeQuiz = () => {
 
         return () => subscription.unsubscribe();
     }, []);
+
+    useEffect(() => {
+        if (user) {
+            const fetchPoints = async () => {
+                const { data, error } = await supabase
+                    .from('profiles')
+                    .select('points')
+                    .eq('user_id', user.id)
+                    .single();
+
+                if (error) {
+                    console.error('Error fetching points:', error);
+                } else if (data) {
+                    dispatch({ type: 'SET_POINTS', payload: data.points });
+                }
+            };
+
+            fetchPoints();
+        }
+    }, [user]);
 
     useEffect(() => {
         if (status === 'loading') {
@@ -317,6 +358,17 @@ const WordSwipeQuiz = () => {
 
     const checkConnectAnswer = (word1, word2) => {
         dispatch({ type: 'CHECK_CONNECT_ANSWER', payload: { word1, word2 } });
+        if (word1.english === word2.english) {
+            const newMatchedPairs = [...matchedPairs, word1.english];
+            if (newMatchedPairs.length === connectWords.length) {
+                dispatch({ type: 'FINISH_GAME', payload: { user } });
+            }
+        } else {
+            const newLives = lives - 1;
+            if (newLives <= 0) {
+                dispatch({ type: 'FINISH_GAME', payload: { user } });
+            }
+        }
     };
     
     // Side-effects management
@@ -371,15 +423,29 @@ const WordSwipeQuiz = () => {
                 playWarningSound();
             }
         } else if (gameMode === 'speed' && speedRunTimeLeft === 0) {
-            const finalScore = score - (wrongAnswers * 5);
-            setSpeedRankings(prev => [...prev, { name: playerName, score: finalScore }].sort((a, b) => b.score - a.score));
-            dispatch({ type: 'FINISH_GAME' });
+            setSpeedRankings(prev => [...prev, { name: playerName, score: score - (wrongAnswers * 5) }].sort((a, b) => b.score - a.score));
+            dispatch({ type: 'FINISH_GAME', payload: { user } });
         }
     }, [timeLeft, speedRunTimeLeft, status]);
 
 
+    const updatePoints = async (userId, newPoints) => {
+        const { error } = await supabase
+            .from('profiles')
+            .update({ points: newPoints })
+            .eq('user_id', userId);
+
+        if (error) {
+            console.error('Error updating points:', error);
+        }
+    };
+
     const handleNext = () => {
-        dispatch({ type: 'NEXT_WORD' });
+        if (currentIndex >= words.length - 1 && stage >= (allWords.reduce((max, w) => Math.max(max, w.level), 0) || 1)) {
+            dispatch({ type: 'FINISH_GAME', payload: { user } });
+        } else {
+            dispatch({ type: 'NEXT_WORD' });
+        }
     };
 
     const handleTimeout = () => {
@@ -390,7 +456,7 @@ const WordSwipeQuiz = () => {
             const currentWord = words[currentIndex];
             speakWord(currentWord.english, 1, () => {
                 if (currentWord.example) {
-                    speakWord(currentWord.example, 1, handleNext);
+                    speakWord(currentWord.example, 1, handleNext);1
                 } else {
                     handleNext();
                 }
@@ -549,6 +615,10 @@ const WordSwipeQuiz = () => {
 
         dispatch({ type: 'CHECK_ANSWER', payload: { isCorrect } });
         
+        if (isCorrect) {
+            addXp(1); // Award 1 XP for a correct answer
+        }
+        
         if (gameMode === 'speed') {
             handleNext();
             return;
@@ -576,6 +646,7 @@ const WordSwipeQuiz = () => {
         }
     };
 
+
     const togglePause = () => {
         dispatch({ type: 'PAUSE_TIMER' });
     };
@@ -592,12 +663,18 @@ const WordSwipeQuiz = () => {
         return 'text-danger-dark';
     };
 
+    const handleNavigate = (screen) => {
+        if (screen === 'tamagotchi') {
+            dispatch({ type: 'GO_TO_TAMAGOTCHI' });
+        }
+    };
+
     const renderContent = () => {
         switch (status) {
             case 'idle':
-                return <HomeScreen onStartGame={startGame} onSignUp={handleSignUp} onLogin={handleLogin} onLogout={handleLogout} isLoading={false} user={user} />;
+                return <HomeScreen onStartGame={startGame} onSignUp={handleSignUp} onLogin={handleLogin} onLogout={handleLogout} isLoading={false} user={user} onNavigate={handleNavigate} />;
             case 'loading':
-                return <HomeScreen onStartGame={startGame} onSignUp={handleSignUp} onLogin={handleLogin} onLogout={handleLogout} isLoading={true} user={user} />;
+                return <HomeScreen onStartGame={startGame} onSignUp={handleSignUp} onLogin={handleLogin} onLogout={handleLogout} isLoading={true} user={user} onNavigate={handleNavigate} />;
             case 'playing':
                 if (gameMode === 'connect') {
                     return <ConnectingGameScreen 
@@ -647,8 +724,10 @@ const WordSwipeQuiz = () => {
                     lives={lives}
                     time={gameMode === 'connect' ? connectTime : speedRunTimeLeft}
                 />;
+            case 'tamagotchi':
+                return <TamagotchiScreen onBack={resetGame} points={points} user={user} updatePoints={updatePoints} />;
             default:
-                return <HomeScreen onStartGame={startGame} onSignUp={handleSignUp} onLogin={handleLogin} onLogout={handleLogout} isLoading={false} user={user} />;
+                return <HomeScreen onStartGame={startGame} onSignUp={handleSignUp} onLogin={handleLogin} onLogout={handleLogout} isLoading={false} user={user} onNavigate={handleNavigate} />;
         }
     };
 
@@ -657,6 +736,7 @@ const WordSwipeQuiz = () => {
             <div className="max-w-2xl w-full">
                 {renderContent()}
             </div>
+            <LevelUpNotification />
         </div>
     );
 };

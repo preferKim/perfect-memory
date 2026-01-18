@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Button from '../components/Button';
 import { supabase } from '../supabaseClient';
+import { usePlayer } from '../context/PlayerContext';
+import PlayerStats from '../components/PlayerStats';
 
-const HomeScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLoading, user }) => {
+const HomeScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLoading, user, onNavigate }) => {
     const [gameMode, setGameMode] = useState('normal');
     const [playerName, setPlayerName] = useState('');
     const [isAuthOpen, setIsAuthOpen] = useState(false);
@@ -19,7 +21,7 @@ const HomeScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLoading, user 
         }
     }, [user]);
 
-    const isStartDisabled = isLoading || (gameMode === 'speed' && !playerName);
+    const isStartDisabled = isLoading || !playerName;
 
     const InfoCard = ({ icon, title, description }) => (
         <div className="flex items-center gap-4 bg-white/5 p-3 rounded-xl">
@@ -133,12 +135,20 @@ const HomeScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLoading, user 
                         로그인
                     </button>
                 ) : (
-                    <button 
-                        onClick={onLogout}
-                        className="text-sm font-semibold text-gray-200 hover:text-white px-4 py-1.5 rounded-full border border-white/40 hover:border-white/80 bg-black/20 hover:bg-black/40 transition-all"
-                    >
-                        로그아웃
-                    </button>
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={() => onNavigate('tamagotchi')}
+                            className="text-sm font-semibold text-gray-200 hover:text-white px-4 py-1.5 rounded-full border border-white/40 hover:border-white/80 bg-black/20 hover:bg-black/40 transition-all"
+                        >
+                            다마고찌
+                        </button>
+                        <button 
+                            onClick={onLogout}
+                            className="text-sm font-semibold text-gray-200 hover:text-white px-4 py-1.5 rounded-full border border-white/40 hover:border-white/80 bg-black/20 hover:bg-black/40 transition-all"
+                        >
+                            로그아웃
+                        </button>
+                    </div>
                 )}
             </div>
             <img src="/images/logo.svg" alt="Perfect Memory Logo" className="w-full max-w-sm mx-auto mb-4" />
@@ -148,6 +158,7 @@ const HomeScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLoading, user 
             
             {user && (
                 <div className="mb-8">
+                    <PlayerStats className="mb-4" />
                     <p className="text-2xl font-bold text-primary-light">
                         {user.user_metadata?.name || '사용자'} 님 환영합니다.
                     </p>
@@ -188,24 +199,21 @@ const HomeScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLoading, user 
                 {renderModeInfo()}
             </div>
 
-            {gameMode === 'speed' && (
-                <div className="mb-6">
-                    <label htmlFor="playerName" className="text-xl font-bold text-white mb-4 block">2. 도전자의 이름을 알려주세요!</label>
-                    <input
-                        id="playerName"
-                        type="text"
-                        value={playerName}
-                        onChange={(e) => setPlayerName(e.target.value)}
-                        placeholder="예: 아이유"
-                        className="w-full max-w-xs mx-auto px-4 py-3 text-center text-lg font-medium bg-white/5 border-2 border-white/10 rounded-xl text-white focus:ring-2 focus:ring-primary focus:border-primary transition"
-                    />
-                </div>
-            )}
+            <div className="mb-6">
+                <label htmlFor="playerName" className="text-xl font-bold text-white mb-4 block">2. 도전자의 이름을 알려주세요!</label>
+                <input
+                    id="playerName"
+                    type="text"
+                    value={playerName}
+                    onChange={(e) => setPlayerName(e.target.value)}
+                    placeholder="예: 아이유"
+                    className="w-full max-w-xs mx-auto px-4 py-3 text-center text-lg font-medium bg-white/5 border-2 border-white/10 rounded-xl text-white focus:ring-2 focus:ring-primary focus:border-primary transition"
+                />
+            </div>
 
             <div className="mb-4">
                 <p className="text-xl font-bold text-white mb-4">
-                    {gameMode === 'speed' ? '3. ' : '2. '}
-                    도전할 레벨을 골라보세요!
+                    3. 도전할 레벨을 골라보세요!
                 </p>
                 <div className="grid grid-cols-3 gap-2">
                     <Button
@@ -236,12 +244,11 @@ const HomeScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLoading, user 
                 {isLoading && (
                     <p className="text-primary-light mt-4 font-medium animate-pulse">단어 카드를 가져오고 있어요...</p>
                 )}
-                {gameMode === 'speed' && !playerName && (
-                    <p className="text-danger-light mt-4 font-medium">경쟁 모드는 이름 입력이 필수입니다.</p>
+                {!playerName && (
+                    <p className="text-danger-light mt-4 font-medium">이름 입력이 필수입니다.</p>
                 )}
             </div>
         </div>
     );
 };
-
 export default HomeScreen;
