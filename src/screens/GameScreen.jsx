@@ -1,6 +1,5 @@
 import React from 'react';
 import { CheckCircle, XCircle, Clock, Volume2, Play, Pause, ArrowLeft } from 'lucide-react';
-import LevelUpNotification from '../components/LevelUpNotification';
 
 const GameScreen = ({
     words,
@@ -26,7 +25,7 @@ const GameScreen = ({
     handleDragMove,
     handleDragEnd,
     gameMode,
-    levelUpInfo,
+    description,
 }) => {
     if (!words || words.length === 0 || !words[currentIndex]) {
         return (
@@ -45,7 +44,7 @@ const GameScreen = ({
             className="transition-opacity duration-500 flex flex-col gap-2"
             style={{ opacity: 1 }}
         >
-            <LevelUpNotification levelUpInfo={levelUpInfo} />
+            
             {/* 단어 영역 - 최상단 */}
             <div className="glass-card p-8 text-center relative">
                 <button
@@ -257,12 +256,20 @@ const GameScreen = ({
             </div>
              <div className="glass-card p-6">
                 <div className="text-center">
-                    <div className="text-md font-medium text-gray-200 mb-1">
-                        "Slow and steady wins the race"
-                    </div>
-                    <span className="inline-block px-3 py-1 bg-white/10 text-gray-300 text-xs rounded-full border border-white/10">
-                        천천히 꾸준히 하는 사람이 결국 승리한다
-                    </span>
+                    {description ? (
+                        <div className="text-md font-medium text-gray-200 mb-1">
+                            {description}
+                        </div>
+                    ) : (
+                        <>
+                            <div className="text-md font-medium text-gray-200 mb-1">
+                                "Slow and steady wins the race"
+                            </div>
+                            <span className="inline-block px-3 py-1 bg-white/10 text-gray-300 text-xs rounded-full border border-white/10">
+                                천천히 꾸준히 하는 사람이 결국 승리한다
+                            </span>
+                        </>
+                    )}
                 </div>
             </div>
         </div>

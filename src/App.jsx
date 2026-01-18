@@ -182,26 +182,23 @@ const WordSwipeQuiz = () => {
     const [timerMode, setTimerMode] = useState(true);
     const [speedRankings, setSpeedRankings] = useState([]);
     const [user, setUser] = useState(null);
-    const [levelUpInfo, setLevelUpInfo] = useState({ message: '', description: '' });
+    const [currentDescription, setCurrentDescription] = useState('');
+
+    useEffect(() => {
+        if (status === 'playing' && gameMode === 'normal' && state.levelDescriptions) {
+            const key = `english_${difficulty}_${stage}`;
+            const description = state.levelDescriptions[key] || `Level ${stage}`; // Fallback
+            setCurrentDescription(description);
+        } else {
+            setCurrentDescription('');
+        }
+    }, [stage, status, gameMode, difficulty, state.levelDescriptions]);
 
     const cardRef = useRef(null);
     const timerRef = useRef(null);
     const quizRef = useRef(null);
     const dragPosRef = useRef({ x: 0, y: 0 });
 
-    const loadLevelDescriptions = async () => {
-        try {
-            const response = await fetch(`/words/level_descriptions.json`);
-            if (response.ok) {
-                const data = await response.json();
-                dispatch({ type: 'SET_LEVEL_DESCRIPTIONS', payload: data });
-            }
-        } catch (error) {
-            console.error("Failed to load level descriptions:", error);
-        }
-    };
-
-    // Load words when game starts
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => {
             setUser(session?.user ?? null);
@@ -211,40 +208,57 @@ const WordSwipeQuiz = () => {
             setUser(session?.user ?? null);
         });
 
-        loadLevelDescriptions();
-
         return () => subscription.unsubscribe();
     }, []);
 
-    const loadWords = async (level, mode) => {
-        try {
-            const response = await fetch(`/words/${level}.json`);
-            if (response.ok) {
-                const data = await response.json();
-                let payload = {};
-                if (mode === 'speed') {
-                    payload = { words: data, allWords: data };
-                } else if (mode === 'connect') {
-                    payload = { connectWords: data.sort(() => Math.random() - 0.5).slice(0, 10), words: [] };
-                } else {
-                    if (Array.isArray(data) && data.length > 0 && data.some(item => 'level' in item)) {
-                        const stageWords = data.filter(w => w.level === 1);
-                        payload = {
-                            words: stageWords.length > 0 ? stageWords.sort(() => Math.random() - 0.5).slice(0, 4) : [],
-                            allWords: data
-                        };
-                    } else {
-                        payload = { words: data.sort(() => Math.random() - 0.5).slice(0, 20), allWords: [] };
+    useEffect(() => {
+        if (status === 'loading') {
+            const loadAllData = async () => {
+                try {
+                    // Fetch both in parallel
+                    const [descResponse, wordsResponse] = await Promise.all([
+                        fetch(`/words/level_descriptions.json`),
+                        fetch(`/words/english_${difficulty}.json`)
+                    ]);
+
+                    if (!descResponse.ok || !wordsResponse.ok) {
+                        throw new Error('Failed to load game data');
                     }
+
+                    const descriptions = await descResponse.json();
+                    const wordsData = await wordsResponse.json();
+
+                    // Dispatch descriptions first
+                    dispatch({ type: 'SET_LEVEL_DESCRIPTIONS', payload: descriptions });
+
+                    // Then dispatch words success, which will change status to 'playing'
+                    let payload = {};
+                    if (gameMode === 'speed') {
+                        payload = { words: wordsData, allWords: wordsData };
+                    } else if (gameMode === 'connect') {
+                        payload = { connectWords: wordsData.sort(() => Math.random() - 0.5).slice(0, 10), words: [] };
+                    } else {
+                        if (Array.isArray(wordsData) && wordsData.length > 0 && wordsData.some(item => 'level' in item)) {
+                            const stageWords = wordsData.filter(w => w.level === 1);
+                            payload = {
+                                words: stageWords.length > 0 ? stageWords.sort(() => Math.random() - 0.5).slice(0, 4) : [],
+                                allWords: wordsData
+                            };
+                        } else {
+                            payload = { words: wordsData.sort(() => Math.random() - 0.5).slice(0, 20), allWords: [] };
+                        }
+                    }
+                    dispatch({ type: 'SET_WORDS_SUCCESS', payload });
+
+                } catch (error) {
+                    console.error("Failed to load game data:", error);
+                    dispatch({ type: 'SET_WORDS_ERROR' });
                 }
-                dispatch({ type: 'SET_WORDS_SUCCESS', payload });
-            } else {
-                dispatch({ type: 'SET_WORDS_ERROR' });
-            }
-        } catch (error) {
-            dispatch({ type: 'SET_WORDS_ERROR' });
+            };
+
+            loadAllData();
         }
-    };
+    }, [status, difficulty, gameMode, dispatch]);
 
     const resetGame = () => {
         dispatch({ type: 'RESET_GAME' });
@@ -307,12 +321,6 @@ const WordSwipeQuiz = () => {
     
     // Side-effects management
     useEffect(() => {
-        if (status === 'loading') {
-            loadWords(difficulty, gameMode);
-        }
-    }, [status, difficulty, gameMode]);
-
-    useEffect(() => {
         if (status === 'playing') {
             generateOptions();
             const wordToSpeak = words[currentIndex]?.english;
@@ -351,17 +359,6 @@ const WordSwipeQuiz = () => {
             if(timerRef.current) clearInterval(timerRef.current);
         };
     }, [status, isTimerPaused]);
-
-    useEffect(() => {
-        if (status === 'playing' && gameMode === 'normal' && state.levelDescriptions && stage > 1) {
-            const description = state.levelDescriptions[stage];
-            if (description) {
-                setLevelUpInfo({ message: `Level ${stage}`, description });
-                const timer = setTimeout(() => setLevelUpInfo({ message: '', description: '' }), 4000); // show for 4 seconds
-                return () => clearTimeout(timer);
-            }
-        }
-    }, [stage, status, gameMode, state.levelDescriptions]);
 
     // Timer-based events
     useEffect(() => {
@@ -636,7 +633,7 @@ const WordSwipeQuiz = () => {
                         handleDragMove={handleDragMove}
                         handleDragEnd={handleDragEnd}
                         gameMode={gameMode}
-                        levelUpInfo={levelUpInfo}
+                        description={currentDescription}
                     />
                 );
             case 'finished':
