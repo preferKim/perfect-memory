@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Button from '../components/Button';
 import { supabase } from '../supabaseClient';
+import { usePlayer } from '../context/PlayerContext';
+import PlayerStats from '../components/PlayerStats';
 
 const HomeScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLoading, user, onNavigate }) => {
     const [gameMode, setGameMode] = useState('normal');
@@ -156,6 +158,7 @@ const HomeScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLoading, user,
             
             {user && (
                 <div className="mb-8">
+                    <PlayerStats className="mb-4" />
                     <p className="text-2xl font-bold text-primary-light">
                         {user.user_metadata?.name || '사용자'} 님 환영합니다.
                     </p>

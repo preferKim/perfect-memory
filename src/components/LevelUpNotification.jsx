@@ -1,28 +1,35 @@
 import React, { useEffect, useState } from 'react';
+import { usePlayer } from '../context/PlayerContext';
+import { Sparkles } from 'lucide-react';
 
-const LevelUpNotification = ({ levelUpInfo }) => {
-    const { message, description } = levelUpInfo;
-    const [visible, setVisible] = useState(false);
+const LevelUpNotification = () => {
+  const { justLeveledUp, level, resetLevelUp } = usePlayer();
+  const [isVisible, setIsVisible] = useState(false);
 
-    useEffect(() => {
-        if (message) {
-            setVisible(true);
-            const timer = setTimeout(() => setVisible(false), 3500); // fade out after 3.5s
-            return () => clearTimeout(timer);
-        }
-    }, [message]);
+  useEffect(() => {
+    if (justLeveledUp) {
+      setIsVisible(true);
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+        resetLevelUp(); // Reset the flag in context after animation
+      }, 3000); // Show for 3 seconds
 
-    if (!message) return null;
+      return () => clearTimeout(timer);
+    }
+  }, [justLeveledUp, level, resetLevelUp]);
 
-    return (
-        <div className={`fixed top-[38%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm p-4 z-50 transition-all duration-700 ease-out ${visible ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-50 -rotate-12'}`}>
-            <div className="glass-card bg-gradient-to-br from-primary/95 to-indigo-600/90 border-4 border-yellow-300 p-6 rounded-3xl shadow-[0_0_30px_rgba(253,224,71,0.6)] text-center">
-                <div className="text-6xl mb-3 animate-bounce drop-shadow-lg">🎉</div>
-                <h2 className="text-3xl font-black text-white mb-2 drop-shadow-md tracking-wide">{message}</h2>
-                <p className="text-white font-bold text-lg drop-shadow-sm">{description}</p>
-            </div>
-        </div>
-    );
+  if (!isVisible) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="glass-card p-8 rounded-2xl text-center shadow-lg border border-primary-light animate-scale-in-out">
+        <Sparkles size={64} className="text-primary-light mx-auto mb-4 animate-bounce-y" />
+        <h2 className="text-5xl font-extrabold text-white mb-2 leading-tight">LEVEL UP!</h2>
+        <p className="text-3xl font-bold text-primary-light">레벨 {level} 달성!</p>
+        <p className="text-lg text-gray-300 mt-2">새로운 도전을 시작하세요!</p>
+      </div>
+    </div>
+  );
 };
 
 export default LevelUpNotification;

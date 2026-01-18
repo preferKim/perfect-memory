@@ -1,5 +1,7 @@
 import React from 'react';
 import { CheckCircle, XCircle, Clock, Volume2, Play, Pause, ArrowLeft } from 'lucide-react';
+import { usePlayer } from '../context/PlayerContext';
+import PlayerStats from '../components/PlayerStats';
 
 const GameScreen = ({
     words,
@@ -27,6 +29,8 @@ const GameScreen = ({
     gameMode,
     description,
 }) => {
+    const { level: playerLevel, xpGainedInCurrentLevel, xpRequiredForCurrentLevel } = usePlayer();
+
     if (!words || words.length === 0 || !words[currentIndex]) {
         return (
             <div className="flex items-center justify-center h-screen">
@@ -44,6 +48,7 @@ const GameScreen = ({
             className="transition-opacity duration-500 flex flex-col gap-2"
             style={{ opacity: 1 }}
         >
+            <PlayerStats className="mb-2" />
             
             {/* 단어 영역 - 최상단 */}
             <div className="glass-card p-8 text-center relative">
@@ -55,11 +60,7 @@ const GameScreen = ({
                 >
                     <ArrowLeft size={24} />
                 </button>
-                {gameMode === 'normal' && (
-                    <div className="text-sm font-bold text-primary-light mb-2 uppercase tracking-wider ">
-                        Level {stage} ({currentIndex + 1}/{words.length})
-                    </div>
-                )}
+
                 
                 <div className="flex items-center justify-center gap-3 mb-2">
                     <div className="text-5xl font-bold text-white">
@@ -256,6 +257,7 @@ const GameScreen = ({
             </div>
              <div className="glass-card p-6">
                 <div className="text-center">
+
                     {description ? (
                         <div className="text-md font-medium text-gray-200 mb-1">
                             {description}

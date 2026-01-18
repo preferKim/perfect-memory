@@ -4,8 +4,9 @@ import HomeScreen from './screens/HomeScreen';
 import GameScreen from './screens/GameScreen';
 import RankingScreen from './screens/RankingScreen';
 import ConnectingGameScreen from './screens/ConnectingGameScreen';
-
 import TamagotchiScreen from './screens/TamagotchiScreen';
+import { usePlayer } from './context/PlayerContext';
+import LevelUpNotification from './components/LevelUpNotification';
 
 const initialState = {
     status: 'idle', // 'idle', 'loading', 'playing', 'finished', 'tamagotchi'
@@ -188,7 +189,7 @@ const defaultWords = [
     { english: "moon", korean: "달" }
 ];
 
-const WordSwipeQuiz = () => {
+    const WordSwipeQuiz = () => {
     const [state, dispatch] = useReducer(reducer, initialState);
     const { 
         status, gameMode, difficulty, playerName, words, allWords, connectWords, 
@@ -196,6 +197,7 @@ const WordSwipeQuiz = () => {
         stage, feedback, timeLeft, speedRunTimeLeft, connectTime, isTimerPaused, isSpeaking 
     } = state;
 
+    const { addXp } = usePlayer();
     const [dragStart, setDragStart] = useState(null);
     const [isDragging, setIsDragging] = useState(false);
     const [timerMode, setTimerMode] = useState(true);
@@ -613,6 +615,10 @@ const WordSwipeQuiz = () => {
 
         dispatch({ type: 'CHECK_ANSWER', payload: { isCorrect } });
         
+        if (isCorrect) {
+            addXp(1); // Award 1 XP for a correct answer
+        }
+        
         if (gameMode === 'speed') {
             handleNext();
             return;
@@ -730,6 +736,7 @@ const WordSwipeQuiz = () => {
             <div className="max-w-2xl w-full">
                 {renderContent()}
             </div>
+            <LevelUpNotification />
         </div>
     );
 };
