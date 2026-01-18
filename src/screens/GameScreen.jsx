@@ -28,8 +28,9 @@ const GameScreen = ({
     handleDragEnd,
     gameMode,
     description,
+    difficulty, // Add difficulty prop
 }) => {
-    const { level: playerLevel, xpGainedInCurrentLevel, xpRequiredForCurrentLevel } = usePlayer();
+    const { level: playerLevel, xpGainedInCurrentLevel, xpRequiredForCurrentLevel, addXp } = usePlayer(); // Add addXp
 
     if (!words || words.length === 0 || !words[currentIndex]) {
         return (

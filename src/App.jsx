@@ -8,6 +8,7 @@ import TamagotchiScreen from './screens/TamagotchiScreen';
 import { usePlayer } from './context/PlayerContext';
 import LevelUpNotification from './components/LevelUpNotification';
 
+
 const initialState = {
     status: 'idle', // 'idle', 'loading', 'playing', 'finished', 'tamagotchi'
     gameMode: 'normal',
@@ -191,13 +192,14 @@ const defaultWords = [
 
     const WordSwipeQuiz = () => {
     const [state, dispatch] = useReducer(reducer, initialState);
+    const { addXp, resetLevelUp } = usePlayer();
     const { 
         status, gameMode, difficulty, playerName, words, allWords, connectWords, 
         currentIndex, options, score, points, wrongAnswers, total, lives, matchedPairs, 
         stage, feedback, timeLeft, speedRunTimeLeft, connectTime, isTimerPaused, isSpeaking 
     } = state;
 
-    const { addXp } = usePlayer();
+
     const [dragStart, setDragStart] = useState(null);
     const [isDragging, setIsDragging] = useState(false);
     const [timerMode, setTimerMode] = useState(true);
@@ -616,7 +618,21 @@ const defaultWords = [
         dispatch({ type: 'CHECK_ANSWER', payload: { isCorrect } });
         
         if (isCorrect) {
-            addXp(1); // Award 1 XP for a correct answer
+            let xpAmount = 0;
+            switch (difficulty) {
+                case 'easy':
+                    xpAmount = 1;
+                    break;
+                case 'medium':
+                    xpAmount = 2;
+                    break;
+                case 'hard':
+                    xpAmount = 3;
+                    break;
+                default:
+                    xpAmount = 1; // Default to easy if difficulty is not set
+            }
+            addXp(xpAmount);
         }
         
         if (gameMode === 'speed') {
@@ -739,6 +755,7 @@ const defaultWords = [
             <LevelUpNotification />
         </div>
     );
+
 };
 
 
