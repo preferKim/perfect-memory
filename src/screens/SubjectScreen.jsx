@@ -27,7 +27,7 @@ const SubjectScreen = ({ onSubjectSelect, onSignUp, onLogin, onLogout, user, onN
     };
 
     const handleSubjectClick = (subject) => {
-        if (subject === 'english') {
+        if (subject === 'english' || subject === 'math') {
             onSubjectSelect(subject);
         } else {
             alert('아직 준비되지 않은 과목입니다.');
@@ -146,8 +146,8 @@ const SubjectScreen = ({ onSubjectSelect, onSignUp, onLogin, onLogout, user, onN
                     <Button onClick={() => handleSubjectClick('english')} variant="threedee" color="primary" className="w-full h-28 flex flex-col items-center justify-center">
                         <span className="text-2xl">🔤</span><br/>영어
                     </Button>
-                    <Button onClick={() => handleSubjectClick('math')} variant="threedee" color="danger" className="w-full h-28 flex flex-col items-center justify-center" disabled={true}>
-                        <span className="text-2xl">➕</span><br/>수학<br/><span className="text-sm font-light opacity-70">준비중</span>
+                    <Button onClick={() => handleSubjectClick('math')} variant="threedee" color="danger" className="w-full h-28 flex flex-col items-center justify-center">
+                        <span className="text-2xl">➕</span><br/>수학
                     </Button>
                     <Button onClick={() => handleSubjectClick('social')} variant="threedee" color="success" className="w-full h-28 flex flex-col items-center justify-center" disabled={true}>
                         <span className="text-2xl">🏛️</span><br/>사회<br/><span className="text-sm font-light opacity-70">준비중</span>

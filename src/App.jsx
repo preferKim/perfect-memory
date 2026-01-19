@@ -6,6 +6,8 @@ import RankingScreen from './screens/RankingScreen';
 import ConnectingGameScreen from './screens/ConnectingGameScreen';
 import SubjectScreen from './screens/SubjectScreen';
 import TamagotchiScreen from './screens/TamagotchiScreen';
+import MathSelectionScreen from './screens/MathSelectionScreen';
+import MathGameScreen from './screens/MathGameScreen';
 import { usePlayer } from './context/PlayerContext';
 import LevelUpNotification from './components/LevelUpNotification';
 
@@ -207,7 +209,7 @@ const defaultWords = [
     const [speedRankings, setSpeedRankings] = useState([]);
     const [user, setUser] = useState(null);
     const [currentDescription, setCurrentDescription] = useState('');
-    const [screen, setScreen] = useState('subjects'); // 'subjects' vs 'modes'
+    const [screen, setScreen] = useState('subjects'); // 'subjects', 'modes', 'math-selection'
 
     useEffect(() => {
         if (status === 'playing' && gameMode === 'normal' && state.levelDescriptions) {
@@ -724,9 +726,15 @@ const defaultWords = [
     const handleSubjectSelect = (subject) => {
         if (subject === 'english') {
             setScreen('modes');
+        } else if (subject === 'math') {
+            setScreen('math-selection');
         } else {
             alert('아직 준비되지 않았습니다.');
         }
+    };
+
+    const handleMathLevelSelect = (level) => {
+        setScreen('math-game');
     };
 
     const renderContent = () => {
@@ -739,6 +747,17 @@ const defaultWords = [
                 user={user}
                 onNavigate={handleNavigate}
             />;
+        }
+
+        if (screen === 'math-selection') {
+            return <MathSelectionScreen 
+                onLevelSelect={handleMathLevelSelect}
+                onBack={resetGame}
+            />;
+        }
+
+        if (screen === 'math-game') {
+            return <MathGameScreen onBack={resetGame} />;
         }
 
         switch (status) {

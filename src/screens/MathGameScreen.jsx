@@ -1,0 +1,168 @@
+import React, { useState, useEffect } from 'react';
+import { ArrowLeft, Check, X } from 'lucide-react';
+
+const MathGameScreen = ({ onBack }) => {
+  const [questions, setQuestions] = useState([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [isAnswered, setIsAnswered] = useState(false);
+  const [score, setScore] = useState(0);
+  const [gameFinished, setGameFinished] = useState(false);
+
+  useEffect(() => {
+    fetch('/words/math_problems.json')
+      .then(res => res.json())
+      .then(data => setQuestions(data))
+      .catch(error => console.error("Failed to load math problems:", error));
+  }, []);
+
+  const handleAnswerSelect = (option) => {
+    if (isAnswered) return;
+
+    setSelectedAnswer(option);
+    setIsAnswered(true);
+
+    if (option === questions[currentQuestionIndex].answer) {
+      setScore(score + 1);
+    }
+  };
+
+  const handleNextQuestion = () => {
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setSelectedAnswer(null);
+      setIsAnswered(false);
+    } else {
+      setGameFinished(true);
+    }
+  };
+
+  const restartGame = () => {
+    setCurrentQuestionIndex(0);
+    setSelectedAnswer(null);
+    setIsAnswered(false);
+    setScore(0);
+    setGameFinished(false);
+  };
+
+  if (questions.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        Loading...
+      </div>
+    );
+  }
+
+  if (gameFinished) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4 text-center">
+        <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
+            <h2 className="text-2xl font-bold mb-4">퀴즈 완료!</h2>
+            <p className="text-xl text-gray-700 mb-6">
+                총 {questions.length}문제 중 <span className="font-bold text-blue-600">{score}</span>개를 맞혔습니다!
+            </p>
+            <div className="flex gap-4">
+                <button
+                    onClick={onBack}
+                    className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-lg transition-colors"
+                >
+                    과목 선택으로
+                </button>
+                <button
+                    onClick={restartGame}
+                    className="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition-colors"
+                >
+                    다시 풀기
+                </button>
+            </div>
+        </div>
+      </div>
+    );
+  }
+
+  const currentQuestion = questions[currentQuestionIndex];
+  const progressPercentage = ((currentQuestionIndex + 1) / questions.length) * 100;
+
+  const getButtonClass = (option) => {
+    if (!isAnswered) {
+      return "bg-white hover:bg-gray-100 border-gray-300";
+    }
+    const isCorrect = option === currentQuestion.answer;
+    if (isCorrect) {
+      return "bg-green-100 border-green-500 text-green-700";
+    }
+    if (option === selectedAnswer && !isCorrect) {
+      return "bg-red-100 border-red-500 text-red-700";
+    }
+    return "bg-white border-gray-300 opacity-60";
+  };
+  
+  const getIcon = (option) => {
+      if (!isAnswered) return null;
+      const isCorrect = option === currentQuestion.answer;
+      if (isCorrect) return <Check className="text-green-600" />;
+      if (option === selectedAnswer && !isCorrect) return <X className="text-red-600" />;
+      return null;
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 md:p-8 flex flex-col items-center">
+        <div className="w-full max-w-3xl">
+            {/* Header */}
+            <div className="relative flex items-center justify-between mb-4">
+                <button onClick={onBack} className="p-2 rounded-full hover:bg-gray-200 transition-colors">
+                    <ArrowLeft size={20} className="text-gray-600" />
+                </button>
+                <div className="text-lg font-bold text-gray-700">
+                    수학 퀴즈
+                </div>
+                <div className="w-8"></div>
+            </div>
+
+            {/* Progress Bar */}
+            <div className="w-full bg-gray-200 rounded-full h-2.5 mb-6">
+                <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${progressPercentage}%` }}></div>
+            </div>
+
+            {/* Question Card */}
+            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-lg mb-6">
+                <p className="text-sm text-gray-500 mb-2">문제 {currentQuestionIndex + 1}/{questions.length}</p>
+                <p className="text-xl sm:text-2xl font-medium text-gray-800 leading-relaxed">
+                    {currentQuestion.problem}
+                </p>
+            </div>
+
+            {/* Options */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                {currentQuestion.options.map((option, index) => (
+                    <button
+                        key={index}
+                        onClick={() => handleAnswerSelect(option)}
+                        disabled={isAnswered}
+                        className={`w-full text-left p-4 rounded-xl border-2 transition-all flex justify-between items-center ${getButtonClass(option)}`}
+                    >
+                        <span className="font-medium text-gray-700">{option}</span>
+                        {getIcon(option)}
+                    </button>
+                ))}
+            </div>
+
+            {/* Explanation & Next Button */}
+            {isAnswered && (
+                <div className="bg-white p-6 rounded-2xl shadow-lg animate-fade-in">
+                    <h3 className="font-bold text-lg mb-2">{selectedAnswer === currentQuestion.answer ? "정답입니다!" : "오답입니다."}</h3>
+                    <p className="text-gray-600 mb-4">{currentQuestion.explanation}</p>
+                    <button
+                        onClick={handleNextQuestion}
+                        className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition-colors"
+                    >
+                        {currentQuestionIndex < questions.length - 1 ? "다음 문제" : "결과 보기"}
+                    </button>
+                </div>
+            )}
+        </div>
+    </div>
+  );
+};
+
+export default MathGameScreen;
