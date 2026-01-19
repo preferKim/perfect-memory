@@ -9,7 +9,7 @@ const mathTopics = [
         title: '1. 수와 연산', 
         icon: <Calculator size={20} />,
         elementary: '자연수, 분수, 소수, 사칙연산', 
-        middle: '정수, 유리수, 실수, 제곱근', 
+        middle: '정수, 유리수, 실수, 제곱근, 비례식', 
         high: '복소수, 지수와 로그' 
     },
     { 
@@ -17,9 +17,9 @@ const mathTopics = [
         level: 2,
         title: '2. 문자와 식 (대수)', 
         icon: <Sigma size={20} />,
-        elementary: '(규칙 찾기 등 기초 개념)', 
-        middle: '일차방정식, 부등식, 다항식', 
-        high: '다항식의 연산, 방정식과 부등식' 
+        elementary: '수의 규칙, 미지의 수, 식의 표현', 
+        middle: '일차방정식, 부등식, 다항식 연산(인수분해 개념 포함)', 
+        high: '다항식의 연산, 방정식과 부등식, 행렬, 명제' 
     },
     { 
         id: 'function', 
@@ -36,7 +36,7 @@ const mathTopics = [
         title: '4. 기하 (도형)', 
         icon: <Triangle size={20} />,
         elementary: '평면/입체도형의 성질, 합동', 
-        middle: '피타고라스, 삼각비, 원의 성질', 
+        middle: '피타고라스, 삼각비, 원의 성질, 공간좌표', 
         high: '도형의 방정식, 벡터' 
     },
     { 
