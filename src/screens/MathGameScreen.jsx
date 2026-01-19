@@ -8,15 +8,17 @@ const MathGameScreen = ({ onBack, difficulty, topicLevel }) => {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [score, setScore] = useState(0);
+  const [wrongAnswers, setWrongAnswers] = useState(0);
   const [gameFinished, setGameFinished] = useState(false);
   const [showHint, setShowHint] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
+  // Define loadQuestions function outside of useEffect to be callable by restartGame
+  const loadQuestions = () => {
     const selectedDifficulty = difficulty || 'easy';
     const selectedTopicLevel = topicLevel || 1; // Default to 1 if not provided
 
-    setIsLoading(true);
+    setIsLoading(true); // Always show loading when fetching
 
     fetch(`/words/math_${selectedDifficulty}.json`)
       .then(res => {
@@ -35,7 +37,10 @@ const MathGameScreen = ({ onBack, difficulty, topicLevel }) => {
               console.warn(`No questions found for topic level ${selectedTopicLevel} in difficulty ${selectedDifficulty}.`);
           }
         }
-        setQuestions(finalQuestions);
+        
+        // Shuffle and slice to get 10 random questions
+        const shuffled = [...finalQuestions].sort(() => 0.5 - Math.random());
+        setQuestions(shuffled.slice(0, 10));
         setIsLoading(false);
       })
       .catch(error => {
@@ -43,6 +48,10 @@ const MathGameScreen = ({ onBack, difficulty, topicLevel }) => {
         setQuestions([]);
         setIsLoading(false);
       });
+  };
+
+  useEffect(() => {
+    loadQuestions(); // Call loadQuestions when difficulty or topicLevel changes
   }, [difficulty, topicLevel]);
 
   const handleAnswerSelect = (option) => {
@@ -53,6 +62,8 @@ const MathGameScreen = ({ onBack, difficulty, topicLevel }) => {
 
     if (option === questions[currentQuestionIndex].answer) {
       setScore(score + 1);
+    } else {
+      setWrongAnswers(wrongAnswers + 1);
     }
   };
 
@@ -72,8 +83,10 @@ const MathGameScreen = ({ onBack, difficulty, topicLevel }) => {
     setSelectedAnswer(null);
     setIsAnswered(false);
     setScore(0);
+    setWrongAnswers(0);
     setGameFinished(false);
     setShowHint(false);
+    loadQuestions(); // Call loadQuestions to get a new set of questions
   };
 
   if (isLoading) {
@@ -109,7 +122,7 @@ const MathGameScreen = ({ onBack, difficulty, topicLevel }) => {
         <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
             <h2 className="text-2xl font-bold mb-4">퀴즈 완료!</h2>
             <p className="text-xl text-gray-700 mb-6">
-                총 {questions.length}문제 중 <span className="font-bold text-blue-600">{score}</span>개를 맞혔습니다!
+                총 {questions.length}문제 중 <span className="font-bold text-blue-600">{score}</span>개를 맞혔습니다! (오답: {wrongAnswers})
             </p>
             <div className="flex gap-4">
                 <button
@@ -163,8 +176,12 @@ const MathGameScreen = ({ onBack, difficulty, topicLevel }) => {
                 <button onClick={onBack} className="p-2 rounded-full hover:bg-gray-200 transition-colors">
                     <ArrowLeft size={20} className="text-gray-600" />
                 </button>
-                <div className="text-lg font-bold text-gray-700">
-                    수학 퀴즈
+                <div className="text-lg font-bold text-gray-700 flex items-center gap-4">
+                    <span>수학 퀴즈</span>
+                    <div className="flex items-center gap-2 text-sm">
+                        <span className="text-green-600 font-bold">O: {score}</span>
+                        <span className="text-red-600 font-bold">X: {wrongAnswers}</span>
+                    </div>
                 </div>
                 <div className="w-8"></div>
             </div>
@@ -175,30 +192,33 @@ const MathGameScreen = ({ onBack, difficulty, topicLevel }) => {
             </div>
 
             {/* Question Card */}
-            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-lg mb-6">
+            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-lg mb-3">
                 <p className="text-sm text-gray-500 mb-2">문제 {currentQuestionIndex + 1}/{questions.length}</p>
-                <div className="flex items-center gap-2 mb-4">
+                {/* Problem text */}
+                <div className="mb-2">
                     <p className="text-xl sm:text-2xl font-medium text-gray-800 leading-relaxed">
                         <MathRenderer text={currentQuestion.problem} />
                     </p>
-                    {currentQuestion.hint && (
-                        <button
-                            onClick={() => setShowHint(!showHint)}
-                            className="ml-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium hover:bg-blue-200 transition-colors"
-                        >
-                            {showHint ? "힌트 숨기기" : "힌트보기"}
-                        </button>
-                    )}
                 </div>
+                {/* Hint button - moved to next line and conditional rendering based on !showHint */}
+                {!showHint && currentQuestion.hint && (
+                    <button
+                        onClick={() => setShowHint(true)}
+                        className="mb-4 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium hover:bg-blue-200 transition-colors"
+                    >
+                        힌트보기
+                    </button>
+                )}
+                {/* Hint text - only shown if showHint is true */}
                 {showHint && currentQuestion.hint && (
-                    <p className="text-blue-600 text-sm italic mb-4">
+                    <p className="text-blue-600 text-sm italic mb-4 flex items-center">
                       <MathRenderer text={currentQuestion.hint} />
                     </p>
                 )}
             </div>
 
             {/* Options */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
                 {currentQuestion.options.map((option, index) => (
                     <button
                         key={index}
