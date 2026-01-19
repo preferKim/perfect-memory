@@ -1,20 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Check, X } from 'lucide-react';
 
-const MathGameScreen = ({ onBack }) => {
+const MathGameScreen = ({ onBack, difficulty, topicLevel }) => {
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [score, setScore] = useState(0);
   const [gameFinished, setGameFinished] = useState(false);
+  const [showHint, setShowHint] = useState(false);
 
   useEffect(() => {
-    fetch('/words/math_problems.json')
+    const selectedDifficulty = difficulty || 'easy';
+    const selectedTopicLevel = topicLevel || 1; // Default to 1 if not provided
+
+    fetch(`/words/math_${selectedDifficulty}.json`)
       .then(res => res.json())
-      .then(data => setQuestions(data))
-      .catch(error => console.error("Failed to load math problems:", error));
-  }, []);
+      .then(data => {
+        if (data.length === 0) {
+          console.warn(`No questions found for difficulty: ${selectedDifficulty}`);
+          setQuestions([]);
+        } else {
+          // Filter questions by topicLevel
+          const filteredQuestions = data.filter(q => q.level === selectedTopicLevel);
+          if (filteredQuestions.length === 0) {
+              console.warn(`No questions found for topic level ${selectedTopicLevel} in difficulty ${selectedDifficulty}.`);
+              // Maybe show a message to the user
+          }
+          setQuestions(filteredQuestions);
+        }
+      })
+      .catch(error => console.error(`Failed to load math problems for difficulty ${selectedDifficulty}:`, error));
+  }, [difficulty, topicLevel]);
 
   const handleAnswerSelect = (option) => {
     if (isAnswered) return;
@@ -32,6 +49,7 @@ const MathGameScreen = ({ onBack }) => {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedAnswer(null);
       setIsAnswered(false);
+      setShowHint(false); // Reset hint visibility
     } else {
       setGameFinished(true);
     }
@@ -43,6 +61,7 @@ const MathGameScreen = ({ onBack }) => {
     setIsAnswered(false);
     setScore(0);
     setGameFinished(false);
+    setShowHint(false); // Reset hint visibility
   };
 
   if (questions.length === 0) {
@@ -127,9 +146,22 @@ const MathGameScreen = ({ onBack }) => {
             {/* Question Card */}
             <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-lg mb-6">
                 <p className="text-sm text-gray-500 mb-2">문제 {currentQuestionIndex + 1}/{questions.length}</p>
-                <p className="text-xl sm:text-2xl font-medium text-gray-800 leading-relaxed">
-                    {currentQuestion.problem}
-                </p>
+                <div className="flex items-center gap-2 mb-4">
+                    <p className="text-xl sm:text-2xl font-medium text-gray-800 leading-relaxed">
+                        {currentQuestion.problem}
+                    </p>
+                    {currentQuestion.hint && (
+                        <button
+                            onClick={() => setShowHint(!showHint)}
+                            className="ml-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium hover:bg-blue-200 transition-colors"
+                        >
+                            {showHint ? "힌트 숨김" : "힌트보기"}
+                        </button>
+                    )}
+                </div>
+                {showHint && currentQuestion.hint && (
+                    <p className="text-blue-600 text-sm italic mb-4">{currentQuestion.hint}</p>
+                )}
             </div>
 
             {/* Options */}

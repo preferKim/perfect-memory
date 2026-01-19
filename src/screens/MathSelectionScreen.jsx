@@ -5,6 +5,7 @@ import PlayerStats from '../components/PlayerStats';
 const mathTopics = [
     { 
         id: 'number', 
+        level: 1,
         title: '1. 수와 연산', 
         icon: <Calculator size={20} />,
         elementary: '자연수, 분수, 소수, 사칙연산', 
@@ -13,6 +14,7 @@ const mathTopics = [
     },
     { 
         id: 'algebra', 
+        level: 2,
         title: '2. 문자와 식 (대수)', 
         icon: <Sigma size={20} />,
         elementary: '(규칙 찾기 등 기초 개념)', 
@@ -21,6 +23,7 @@ const mathTopics = [
     },
     { 
         id: 'function', 
+        level: 3,
         title: '3. 함수 (변화와 관계)', 
         icon: <TrendingUp size={20} />,
         elementary: '규칙과 대응, 비와 비율', 
@@ -29,6 +32,7 @@ const mathTopics = [
     },
     { 
         id: 'geometry', 
+        level: 4,
         title: '4. 기하 (도형)', 
         icon: <Triangle size={20} />,
         elementary: '평면/입체도형의 성질, 합동', 
@@ -37,6 +41,7 @@ const mathTopics = [
     },
     { 
         id: 'stats', 
+        level: 5,
         title: '5. 확률과 통계', 
         icon: <BarChart3 size={20} />,
         elementary: '표와 그래프, 평균, 가능성', 
@@ -47,8 +52,8 @@ const mathTopics = [
 
 const MathSelectionScreen = ({ onBack, onLevelSelect, user }) => {
 
-    const handleSelect = (topic, level) => {
-        onLevelSelect(level);
+    const handleSelect = (topicLevel, difficulty) => {
+        onLevelSelect(topicLevel, difficulty);
     };
 
     return (
@@ -83,7 +88,7 @@ const MathSelectionScreen = ({ onBack, onLevelSelect, user }) => {
                         
                         <div className="space-y-3">
                             <button 
-                                onClick={() => handleSelect(topic.id, 'elementary')}
+                                onClick={() => handleSelect(topic.level, 'elementary')}
                                 className="w-full text-left p-4 rounded-lg bg-black/20 hover:bg-primary/20 border border-white/5 hover:border-primary/50 transition-all group flex items-start"
                             >
                                 <span className="text-primary-light font-bold min-w-[60px] shrink-0">[초등]</span>
@@ -91,7 +96,7 @@ const MathSelectionScreen = ({ onBack, onLevelSelect, user }) => {
                             </button>
 
                             <button 
-                                onClick={() => handleSelect(topic.id, 'middle')}
+                                onClick={() => handleSelect(topic.level, 'middle')}
                                 className="w-full text-left p-4 rounded-lg bg-black/20 hover:bg-secondary/20 border border-white/5 hover:border-secondary/50 transition-all group flex items-start"
                             >
                                 <span className="text-secondary-light font-bold min-w-[60px] shrink-0">[중등]</span>
@@ -99,7 +104,7 @@ const MathSelectionScreen = ({ onBack, onLevelSelect, user }) => {
                             </button>
 
                             <button 
-                                onClick={() => handleSelect(topic.id, 'high')}
+                                onClick={() => handleSelect(topic.level, 'high')}
                                 className="w-full text-left p-4 rounded-lg bg-black/20 hover:bg-danger/20 border border-white/5 hover:border-danger/50 transition-all group flex items-start"
                             >
                                 <span className="text-danger-light font-bold min-w-[60px] shrink-0">[고등]</span>

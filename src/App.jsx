@@ -210,6 +210,8 @@ const defaultWords = [
     const [user, setUser] = useState(null);
     const [currentDescription, setCurrentDescription] = useState('');
     const [screen, setScreen] = useState('subjects'); // 'subjects', 'modes', 'math-selection'
+    const [mathDifficulty, setMathDifficulty] = useState('easy');
+    const [selectedTopicLevel, setSelectedTopicLevel] = useState(1);
 
     useEffect(() => {
         if (status === 'playing' && gameMode === 'normal' && state.levelDescriptions) {
@@ -310,6 +312,10 @@ const defaultWords = [
     const resetGame = () => {
         dispatch({ type: 'RESET_GAME' });
         setScreen('subjects');
+    };
+
+    const handleBackToMathSelection = () => {
+        setScreen('math-selection');
     };
 
     const handleRestart = () => {
@@ -733,7 +739,14 @@ const defaultWords = [
         }
     };
 
-    const handleMathLevelSelect = (level) => {
+    const handleMathLevelSelect = (topicLevel, difficulty) => {
+        const difficultyMap = {
+            elementary: 'easy',
+            middle: 'medium',
+            high: 'hard',
+        };
+        setMathDifficulty(difficultyMap[difficulty] || 'easy');
+        setSelectedTopicLevel(topicLevel);
         setScreen('math-game');
     };
 
@@ -757,7 +770,7 @@ const defaultWords = [
         }
 
         if (screen === 'math-game') {
-            return <MathGameScreen onBack={resetGame} />;
+            return <MathGameScreen onBack={handleBackToMathSelection} difficulty={mathDifficulty} topicLevel={selectedTopicLevel} />;
         }
 
         switch (status) {
