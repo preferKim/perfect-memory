@@ -3,7 +3,8 @@ import Button from '../components/Button';
 import { supabase } from '../supabaseClient';
 import { usePlayer } from '../context/PlayerContext';
 import PlayerStats from '../components/PlayerStats';
-import { ArrowLeft } from 'lucide-react'; // Import ArrowLeft
+import { ArrowLeft, Download } from 'lucide-react'; // Import ArrowLeft and Download
+import { usePwaInstall } from '../hooks/usePwaInstall';
 
 const HomeScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLoading, user, onNavigate, onBackToSubjects }) => {
     const [gameMode, setGameMode] = useState('normal');
@@ -13,6 +14,7 @@ const HomeScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLoading, user,
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [nickname, setNickname] = useState('');
+    const [promptInstall, isInstallable] = usePwaInstall();
 
     useEffect(() => {
         if (user?.user_metadata?.name) {
@@ -127,13 +129,21 @@ const HomeScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLoading, user,
 
     return (
         <div className="glass-card p-6 sm:p-12 text-center relative">
-            <div className="absolute top-4 left-4 z-10">
+            <div className="absolute top-4 left-4 z-10 flex gap-2">
                 <button
                     onClick={onBackToSubjects}
                     className="text-sm font-semibold text-gray-200 hover:text-white px-3 py-1.5 rounded-full border border-white/40 hover:border-white/80 bg-black/20 hover:bg-black/40 transition-all flex items-center"
                 >
                     <ArrowLeft size={16} className="mr-1" /> 과목선택하기
                 </button>
+                {isInstallable && (
+                  <button
+                      onClick={promptInstall}
+                      className="text-sm font-semibold text-gray-200 hover:text-white px-3 py-1.5 rounded-full border border-white/40 hover:border-white/80 bg-black/20 hover:bg-black/40 transition-all flex items-center"
+                  >
+                      <Download size={16} className="mr-1" /> 홈 화면에 추가
+                  </button>
+                )}
             </div>
             <div className="absolute top-4 right-4 z-10">
                 {!user ? (
