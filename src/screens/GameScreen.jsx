@@ -49,10 +49,10 @@ const GameScreen = ({
             className="transition-opacity duration-500 flex flex-col gap-2"
             style={{ opacity: 1 }}
         >
-            <PlayerStats className="mb-2" />
+            <PlayerStats />
             
             {/* 단어 영역 - 최상단 */}
-            <div className="glass-card p-8 text-center relative">
+            <div className="glass-card px-8 pt-8 pb-4 text-center relative">
                 <button
                     onClick={resetGame}
                     className="absolute left-4 top-4 text-gray-300 hover:text-white transition p-2"
@@ -63,7 +63,7 @@ const GameScreen = ({
                 </button>
 
                 
-                <div className="flex items-center justify-center gap-3 mb-2">
+                <div className="flex items-center justify-center gap-3 mb-1">
                     <div className="text-5xl font-bold text-white">
                         {words[currentIndex].english}
                     </div>
@@ -80,7 +80,7 @@ const GameScreen = ({
                 </div>
 
                 {words[currentIndex].pronunciation && (
-                    <div className="text-3xl text-primary-light font-mono tracking-wider mb-4">
+                    <div className="text-2xl text-primary-light font-mono tracking-wider mb-2">
                         {words[currentIndex].pronunciation}
                     </div>
                 )}
