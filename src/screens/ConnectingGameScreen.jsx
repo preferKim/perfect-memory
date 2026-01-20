@@ -21,6 +21,7 @@ const formatTime = (seconds) => {
 const ConnectingGameScreen = ({ words, lives, matchedPairs, onCheckAnswer, resetGame, time }) => {
     const [leftColumn, setLeftColumn] = useState([]);
     const [rightColumn, setRightColumn] = useState([]);
+    const [animate, setAnimate] = useState(false);
 
     const [selectedItem, setSelectedItem] = useState(null);
     const [incorrectPair, setIncorrectPair] = useState([]);
@@ -35,6 +36,8 @@ const ConnectingGameScreen = ({ words, lives, matchedPairs, onCheckAnswer, reset
         itemRefs.current = {};
         setSelectedItem(null);
         setIncorrectPair([]);
+        setAnimate(false); // Reset animation trigger
+        setTimeout(() => setAnimate(true), 100); // Trigger animation shortly after render
     }, [words]);
 
     const getNodePosition = (id) => {
@@ -83,26 +86,32 @@ const ConnectingGameScreen = ({ words, lives, matchedPairs, onCheckAnswer, reset
         setSelectedItem(null);
     };
 
-    const WordItem = ({ node }) => {
+    const WordItem = ({ node, animationDelay }) => {
         const id = `${node.type}-${node.word.english}`;
         const text = node.type === 'korean' ? node.word.korean : node.word.english;
         const isMatched = matchedPairs.includes(node.word.english);
         const isSelected = selectedItem && selectedItem.id === id;
         const isIncorrect = incorrectPair.includes(id);
 
+        const baseClasses = 'p-2 rounded-lg border-2 shadow-lg transition-all duration-300';
+        let stateClasses = '';
+
+        if (isMatched) {
+            stateClasses = 'bg-success-dark/50 border-success-dark/0 opacity-70 animate-success-glow pointer-events-none';
+        } else if (isSelected) {
+            stateClasses = 'bg-primary-dark/50 border-primary-light ring-2 ring-primary-light scale-105';
+        } else if (isIncorrect) {
+            stateClasses = 'bg-danger-dark/50 border-danger-light ring-2 ring-danger-light animate-shake';
+        } else {
+            stateClasses = 'bg-white/10 border-white/10 cursor-pointer transform hover:scale-105 hover:bg-white/20 hover:border-white/30';
+        }
+
         return (
             <div
                 ref={el => itemRefs.current[id] = el}
                 id={id}
-                className={`p-2 rounded-lg border-2 transition-all duration-300 ${
-                    isMatched 
-                        ? 'bg-success-dark/30 border-success-dark/0 opacity-60' 
-                        : isSelected
-                        ? 'bg-primary-dark/50 border-primary-light ring-2 ring-primary-light'
-                        : isIncorrect
-                        ? 'bg-danger-dark/50 border-danger-light ring-2 ring-danger-light'
-                        : 'bg-white/10 border-white/10 cursor-pointer hover:bg-white/20 hover:border-white/30'
-                }`}
+                className={`${baseClasses} ${stateClasses} ${animate ? 'animate-card-appear' : 'opacity-0'}`}
+                style={{ animationDelay }}
                 onClick={() => handleWordClick({ id, ...node })}
             >
                 <p className={`text-base font-semibold text-center ${isMatched ? 'text-gray-400' : 'text-white'}`}>{text}</p>
@@ -111,7 +120,7 @@ const ConnectingGameScreen = ({ words, lives, matchedPairs, onCheckAnswer, reset
     };
 
     return (
-        <div className="w-full max-w-4xl mx-auto p-4 flex flex-col gap-2">
+        <div className="w-full min-h-screen max-w-4xl mx-auto p-4 flex flex-col gap-2 bg-gradient-to-br from-aurora-100 via-aurora-300 to-aurora-400 animate-aurora">
             <PlayerStats className="mb-2" />
             <div className="glass-card flex justify-between items-center p-4">
                 <button onClick={resetGame} className="text-gray-300 hover:text-white p-2 rounded-full transition">
@@ -131,13 +140,21 @@ const ConnectingGameScreen = ({ words, lives, matchedPairs, onCheckAnswer, reset
             <div className="relative glass-card p-4">
                 <div className="grid grid-cols-2 gap-x-12 gap-y-2">
                     <div className="space-y-2">
-                        {leftColumn.map((item) => (
-                            <WordItem key={`korean-${item.word.english}`} node={item} />
+                        {leftColumn.map((item, index) => (
+                            <WordItem 
+                                key={`korean-${item.word.english}`} 
+                                node={item} 
+                                animationDelay={`${index * 50}ms`}
+                            />
                         ))}
                     </div>
                     <div className="space-y-2">
-                        {rightColumn.map((item) => (
-                            <WordItem key={`english-${item.word.english}`} node={item} />
+                        {rightColumn.map((item, index) => (
+                            <WordItem 
+                                key={`english-${item.word.english}`} 
+                                node={item} 
+                                animationDelay={`${(leftColumn.length + index) * 50}ms`}
+                            />
                         ))}
                     </div>
                 </div>
@@ -148,7 +165,16 @@ const ConnectingGameScreen = ({ words, lives, matchedPairs, onCheckAnswer, reset
                         const startPos = getNodePosition(`korean-${word.english}`);
                         const endPos = getNodePosition(`english-${word.english}`);
                         if (startPos && endPos) {
-                           return <line key={`line-${word.english}`} x1={startPos.x} y1={startPos.y} x2={endPos.x} y2={endPos.y} stroke="theme(colors.success.light)" strokeWidth="5" strokeLinecap="round" />
+                           return <line 
+                                key={`line-${word.english}`} 
+                                x1={startPos.x} y1={startPos.y} 
+                                x2={endPos.x} y2={endPos.y} 
+                                stroke="theme(colors.success.light)" 
+                                strokeWidth="5" 
+                                strokeLinecap="round" 
+                                strokeDasharray="1000"
+                                className="animate-draw-line"
+                            />
                         }
                         return null;
                     })}

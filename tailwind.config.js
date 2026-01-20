@@ -55,10 +55,31 @@ export default {
         aurora: {
           '0%, 100%': { backgroundPosition: '0% 50%' },
           '50%': { backgroundPosition: '100% 50%' },
-        }
+        },
+        'card-appear': {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        shake: {
+          '0%, 100%': { transform: 'translateX(0)' },
+          '10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-5px)' },
+          '20%, 40%, 60%, 80%': { transform: 'translateX(5px)' },
+        },
+        'success-glow': {
+          '0%, 100%': { boxShadow: '0 0 8px theme(colors.success.light / 0)' },
+          '50%': { boxShadow: '0 0 12px 6px theme(colors.success.light / 0.7)' },
+        },
+        'draw-line': {
+          '0%': { strokeDashoffset: '1000' },
+          '100%': { strokeDashoffset: '0' },
+        },
       },
       animation: {
         aurora: 'aurora 20s ease infinite',
+        'card-appear': 'card-appear 0.5s ease-out forwards',
+        shake: 'shake 0.5s ease-in-out',
+        'success-glow': 'success-glow 0.8s ease-in-out',
+        'draw-line': 'draw-line 1s ease-out forwards',
       }
     },
   },
