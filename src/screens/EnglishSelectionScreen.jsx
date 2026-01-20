@@ -6,7 +6,7 @@ import PlayerStats from '../components/PlayerStats';
 import { ArrowLeft, Download } from 'lucide-react'; // Import ArrowLeft and Download
 import { usePwaInstall } from '../hooks/usePwaInstall';
 
-const HomeScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLoading, user, onNavigate, onBackToSubjects }) => {
+const EnglishSelectionScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLoading, user, onNavigate, onBackToSubjects }) => {
     const [gameMode, setGameMode] = useState('normal');
     const [playerName, setPlayerName] = useState('');
     const [isAuthOpen, setIsAuthOpen] = useState(false);
@@ -270,4 +270,4 @@ const HomeScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLoading, user,
         </div>
     );
 };
-export default HomeScreen;
+export default EnglishSelectionScreen;
