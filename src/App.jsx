@@ -211,6 +211,7 @@ const defaultWords = [
     const [screen, setScreen] = useState('subjects'); // 'subjects', 'modes', 'math-selection'
     const [mathDifficulty, setMathDifficulty] = useState('easy');
     const [selectedTopicLevel, setSelectedTopicLevel] = useState(1);
+    const [mathGameKey, setMathGameKey] = useState(0);
 
     useEffect(() => {
         if (status === 'playing' && gameMode === 'normal' && state.levelDescriptions) {
@@ -413,6 +414,11 @@ const defaultWords = [
     const handleGameRestart = () => {
         dispatch({ type: 'TOGGLE_PAUSE' }); // Close pause menu
         startGame(playerName, difficulty, gameMode);
+    }
+
+    const handleMathGameRestart = () => {
+        setMathGameKey(prevKey => prevKey + 1);
+        dispatch({ type: 'TOGGLE_PAUSE' });
     }
     
     const togglePauseGame = () => {
@@ -784,7 +790,23 @@ const defaultWords = [
         }
 
         if (screen === 'math-game') {
-            return <MathGameScreen onBack={handleBackToMathSelection} difficulty={mathDifficulty} topicLevel={selectedTopicLevel} />;
+            return (
+                <div className="relative">
+                    {isPaused && (
+                        <PauseMenu 
+                            onResume={togglePauseGame} 
+                            onRestart={handleMathGameRestart}
+                            onExit={handleBackToMathSelection} 
+                        />
+                    )}
+                    <MathGameScreen 
+                        key={mathGameKey}
+                        onBack={togglePauseGame} 
+                        difficulty={mathDifficulty} 
+                        topicLevel={selectedTopicLevel} 
+                    />
+                </div>
+            );
         }
 
         switch (status) {
