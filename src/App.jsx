@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useReducer } from 'react';
 import { supabase } from './supabaseClient';
-import HomeScreen from './screens/HomeScreen';
+import EnglishSelectionScreen from './screens/EnglishSelectionScreen';
 import GameScreen from './screens/GameScreen';
 import RankingScreen from './screens/RankingScreen';
 import ConnectingGameScreen from './screens/ConnectingGameScreen';
@@ -778,9 +778,9 @@ const defaultWords = [
 
         switch (status) {
             case 'idle':
-                return <HomeScreen onStartGame={startGame} onSignUp={handleSignUp} onLogin={handleLogin} onLogout={handleLogout} isLoading={false} user={user} onNavigate={handleNavigate} onBackToSubjects={() => setScreen('subjects')} />;
+                return <EnglishSelectionScreen onStartGame={startGame} onSignUp={handleSignUp} onLogin={handleLogin} onLogout={handleLogout} isLoading={false} user={user} onNavigate={handleNavigate} onBackToSubjects={() => setScreen('subjects')} />;
             case 'loading':
-                return <HomeScreen onStartGame={startGame} onSignUp={handleSignUp} onLogin={handleLogin} onLogout={handleLogout} isLoading={true} user={user} onNavigate={handleNavigate} onBackToSubjects={() => setScreen('subjects')} />;
+                return <EnglishSelectionScreen onStartGame={startGame} onSignUp={handleSignUp} onLogin={handleLogin} onLogout={handleLogout} isLoading={true} user={user} onNavigate={handleNavigate} onBackToSubjects={() => setScreen('subjects')} />;
             case 'playing':
                 if (gameMode === 'connect') {
                     return <ConnectingGameScreen 
@@ -833,7 +833,7 @@ const defaultWords = [
             case 'tamagotchi':
                 return <TamagotchiScreen onBack={resetGame} points={points} user={user} updatePoints={updatePoints} />;
             default:
-                return <HomeScreen onStartGame={startGame} onSignUp={handleSignUp} onLogin={handleLogin} onLogout={handleLogout} isLoading={false} user={user} onNavigate={handleNavigate} />;
+                return <EnglishSelectionScreen onStartGame={startGame} onSignUp={handleSignUp} onLogin={handleLogin} onLogout={handleLogout} isLoading={false} user={user} onNavigate={handleNavigate} />;
         }
     };
 
