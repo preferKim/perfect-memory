@@ -18,6 +18,39 @@ const formatTime = (seconds) => {
     return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
 };
 
+const WordItem = ({ node, animationDelay, matchedPairs, selectedItem, incorrectPair, animate, handleWordClick, setItemRef }) => {
+    const id = `${node.type}-${node.word.english}`;
+    const text = node.type === 'korean' ? node.word.korean : node.word.english;
+    const isMatched = matchedPairs.includes(node.word.english);
+    const isSelected = selectedItem && selectedItem.id === id;
+    const isIncorrect = incorrectPair.includes(id);
+
+    const baseClasses = 'p-2 rounded-lg border-2 shadow-lg transition-all duration-300';
+    let stateClasses = '';
+
+    if (isMatched) {
+        stateClasses = 'bg-success-dark/50 border-success-dark/0 opacity-70 animate-success-glow pointer-events-none';
+    } else if (isSelected) {
+        stateClasses = 'bg-primary-dark/50 border-primary-light ring-2 ring-primary-light scale-105';
+    } else if (isIncorrect) {
+        stateClasses = 'bg-danger-dark/50 border-danger-light ring-2 ring-danger-light animate-shake';
+    } else {
+        stateClasses = 'bg-white/10 border-white/10 cursor-pointer transform hover:scale-105 hover:bg-white/20 hover:border-white/30';
+    }
+
+    return (
+        <div
+            ref={el => setItemRef(id, el)}
+            id={id}
+            className={`${baseClasses} ${stateClasses} ${animate ? 'animate-card-appear' : 'opacity-0'}`}
+            style={{ animationDelay }}
+            onClick={() => handleWordClick({ id, ...node })}
+        >
+            <p className={`text-base font-semibold text-center ${isMatched ? 'text-gray-400' : 'text-white'}`}>{text}</p>
+        </div>
+    );
+};
+
 const ConnectingGameScreen = ({ words, lives, matchedPairs, onCheckAnswer, resetGame, time }) => {
     const [leftColumn, setLeftColumn] = useState([]);
     const [rightColumn, setRightColumn] = useState([]);
@@ -86,37 +119,10 @@ const ConnectingGameScreen = ({ words, lives, matchedPairs, onCheckAnswer, reset
         setSelectedItem(null);
     };
 
-    const WordItem = ({ node, animationDelay }) => {
-        const id = `${node.type}-${node.word.english}`;
-        const text = node.type === 'korean' ? node.word.korean : node.word.english;
-        const isMatched = matchedPairs.includes(node.word.english);
-        const isSelected = selectedItem && selectedItem.id === id;
-        const isIncorrect = incorrectPair.includes(id);
-
-        const baseClasses = 'p-2 rounded-lg border-2 shadow-lg transition-all duration-300';
-        let stateClasses = '';
-
-        if (isMatched) {
-            stateClasses = 'bg-success-dark/50 border-success-dark/0 opacity-70 animate-success-glow pointer-events-none';
-        } else if (isSelected) {
-            stateClasses = 'bg-primary-dark/50 border-primary-light ring-2 ring-primary-light scale-105';
-        } else if (isIncorrect) {
-            stateClasses = 'bg-danger-dark/50 border-danger-light ring-2 ring-danger-light animate-shake';
-        } else {
-            stateClasses = 'bg-white/10 border-white/10 cursor-pointer transform hover:scale-105 hover:bg-white/20 hover:border-white/30';
+    const setItemRef = (id, el) => {
+        if (el) {
+            itemRefs.current[id] = el;
         }
-
-        return (
-            <div
-                ref={el => itemRefs.current[id] = el}
-                id={id}
-                className={`${baseClasses} ${stateClasses} ${animate ? 'animate-card-appear' : 'opacity-0'}`}
-                style={{ animationDelay }}
-                onClick={() => handleWordClick({ id, ...node })}
-            >
-                <p className={`text-base font-semibold text-center ${isMatched ? 'text-gray-400' : 'text-white'}`}>{text}</p>
-            </div>
-        );
     };
 
     return (
@@ -145,6 +151,12 @@ const ConnectingGameScreen = ({ words, lives, matchedPairs, onCheckAnswer, reset
                                 key={`korean-${item.word.english}`} 
                                 node={item} 
                                 animationDelay={`${index * 50}ms`}
+                                matchedPairs={matchedPairs}
+                                selectedItem={selectedItem}
+                                incorrectPair={incorrectPair}
+                                animate={animate}
+                                handleWordClick={handleWordClick}
+                                setItemRef={setItemRef}
                             />
                         ))}
                     </div>
@@ -154,6 +166,12 @@ const ConnectingGameScreen = ({ words, lives, matchedPairs, onCheckAnswer, reset
                                 key={`english-${item.word.english}`} 
                                 node={item} 
                                 animationDelay={`${(leftColumn.length + index) * 50}ms`}
+                                matchedPairs={matchedPairs}
+                                selectedItem={selectedItem}
+                                incorrectPair={incorrectPair}
+                                animate={animate}
+                                handleWordClick={handleWordClick}
+                                setItemRef={setItemRef}
                             />
                         ))}
                     </div>
