@@ -10,6 +10,7 @@ import MathSelectionScreen from './screens/MathSelectionScreen';
 import MathGameScreen from './screens/MathGameScreen';
 import { usePlayer } from './context/PlayerContext';
 import LevelUpNotification from './components/LevelUpNotification';
+import PauseMenu from './components/PauseMenu';
 
 
 const initialState = {
@@ -33,7 +34,7 @@ const initialState = {
     timeLeft: 5,
     speedRunTimeLeft: 100,
     connectTime: 0,
-    isTimerPaused: false,
+    isPaused: false,
     isSpeaking: false,
     levelDescriptions: null,
 };
@@ -75,7 +76,7 @@ function reducer(state, action) {
         case 'SET_LEVEL_DESCRIPTIONS':
             return { ...state, levelDescriptions: action.payload };
         case 'TICK':
-            if (state.isTimerPaused || (state.gameMode === 'normal' && state.isSpeaking)) return state;
+            if (state.isPaused || (state.gameMode === 'normal' && state.isSpeaking)) return state;
             if (state.gameMode === 'normal' && state.timeLeft > 0) {
                 return { ...state, timeLeft: state.timeLeft - 1 };
             }
@@ -161,8 +162,8 @@ function reducer(state, action) {
                 status: 'idle',
                 points: state.points, // Keep points on reset
             };
-        case 'PAUSE_TIMER':
-            return { ...state, isTimerPaused: !state.isTimerPaused };
+        case 'TOGGLE_PAUSE':
+            return { ...state, isPaused: !state.isPaused };
 
         case 'CHECK_CONNECT_ANSWER': {
             const { word1, word2 } = action.payload;
@@ -197,7 +198,7 @@ const defaultWords = [
     const { 
         status, gameMode, difficulty, playerName, words, allWords, connectWords, 
         currentIndex, options, score, points, wrongAnswers, total, lives, matchedPairs, 
-        stage, feedback, timeLeft, speedRunTimeLeft, connectTime, isTimerPaused, isSpeaking 
+        stage, feedback, timeLeft, speedRunTimeLeft, connectTime, isPaused, isSpeaking 
     } = state;
 
 
@@ -405,11 +406,24 @@ const defaultWords = [
         }
     }, [currentIndex, status, words]); // Depends on words loading and index changing
 
+    const handleExitToSelectionScreen = () => {
+        dispatch({ type: 'RESET_GAME' });
+    }
+
+    const handleGameRestart = () => {
+        dispatch({ type: 'TOGGLE_PAUSE' }); // Close pause menu
+        startGame(playerName, difficulty, gameMode);
+    }
+    
+    const togglePauseGame = () => {
+        dispatch({ type: 'TOGGLE_PAUSE' });
+    };
+
     useEffect(() => {
         const handleBackButton = (e) => {
             if (status === 'playing') {
                 e.preventDefault();
-                resetGame();
+                togglePauseGame();
             }
         };
 
@@ -421,7 +435,7 @@ const defaultWords = [
         return () => {
             window.removeEventListener('popstate', handleBackButton);
         };
-    }, [status]);
+    }, [status, togglePauseGame]);
 
     // Timers
     useEffect(() => {
@@ -432,7 +446,7 @@ const defaultWords = [
         return () => {
             if(timerRef.current) clearInterval(timerRef.current);
         };
-    }, [status, isTimerPaused]);
+    }, [status, isPaused]);
 
     // Timer-based events
     useEffect(() => {
@@ -711,11 +725,6 @@ const defaultWords = [
         }
     };
 
-
-    const togglePause = () => {
-        dispatch({ type: 'PAUSE_TIMER' });
-    };
-
     const getTimerColor = () => {
         const time = gameMode === 'speed' ? speedRunTimeLeft : timeLeft;
         if (gameMode === 'speed') {
@@ -790,36 +799,45 @@ const defaultWords = [
                         lives={lives}
                         onCheckAnswer={checkConnectAnswer}
                         matchedPairs={matchedPairs}
-                        resetGame={resetGame}
+                        resetGame={handleExitToSelectionScreen}
                         time={connectTime}
                     />;
                 }
                 return (
-                    <GameScreen
-                        words={words}
-                        currentIndex={currentIndex}
-                        stage={stage}
-                        score={score}
-                        wrongAnswers={wrongAnswers}
-                        total={total}
-                        timeLeft={gameMode === 'speed' ? speedRunTimeLeft : timeLeft}
-                        timerMode={timerMode}
-                        isTimerPaused={isTimerPaused}
-                        options={options}
-                        feedback={gameMode === 'speed' ? null : feedback}
-                        isDragging={isDragging}
-                        quizRef={quizRef}
-                        cardRef={cardRef}
-                        resetGame={resetGame}
-                        speakWord={speakWord}
-                        togglePause={togglePause}
-                        getTimerColor={getTimerColor}
-                        handleDragStart={handleDragStart}
-                        handleDragMove={handleDragMove}
-                        handleDragEnd={handleDragEnd}
-                        gameMode={gameMode}
-                        description={currentDescription}
-                    />
+                    <div className="relative">
+                        {isPaused && (
+                            <PauseMenu 
+                                onResume={togglePauseGame} 
+                                onRestart={handleGameRestart}
+                                onExit={handleExitToSelectionScreen} 
+                            />
+                        )}
+                        <GameScreen
+                            words={words}
+                            currentIndex={currentIndex}
+                            stage={stage}
+                            score={score}
+                            wrongAnswers={wrongAnswers}
+                            total={total}
+                            timeLeft={gameMode === 'speed' ? speedRunTimeLeft : timeLeft}
+                            timerMode={timerMode}
+                            isPaused={isPaused}
+                            options={options}
+                            feedback={gameMode === 'speed' ? null : feedback}
+                            isDragging={isDragging}
+                            quizRef={quizRef}
+                            cardRef={cardRef}
+                            resetGame={togglePauseGame}
+                            speakWord={speakWord}
+                            togglePause={togglePauseGame}
+                            getTimerColor={getTimerColor}
+                            handleDragStart={handleDragStart}
+                            handleDragMove={handleDragMove}
+                            handleDragEnd={handleDragEnd}
+                            gameMode={gameMode}
+                            description={currentDescription}
+                        />
+                    </div>
                 );
             case 'finished':
                 return <RankingScreen 
