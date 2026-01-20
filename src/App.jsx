@@ -318,6 +318,11 @@ const defaultWords = [
         setScreen('math-selection');
     };
 
+    const handleExitMathGame = () => {
+        togglePauseGame();
+        setScreen('math-selection');
+    }
+
     const handleRestart = () => {
         resetGame();
     };
@@ -799,7 +804,7 @@ const defaultWords = [
                         <PauseMenu 
                             onResume={togglePauseGame} 
                             onRestart={handleMathGameRestart}
-                            onExit={handleBackToMathSelection} 
+                            onExit={handleExitMathGame} 
                         />
                     )}
                     <MathGameScreen 

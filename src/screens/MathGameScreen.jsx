@@ -155,16 +155,16 @@ const MathGameScreen = ({ onBack, difficulty, topicLevel }) => {
 
   const getButtonClass = (option) => {
     if (!isAnswered) {
-      return "bg-white hover:bg-gray-100 border-gray-300";
+      return "bg-white/5 hover:bg-white/10 border-white/10";
     }
     const isCorrect = option === currentQuestion.answer;
     if (isCorrect) {
-      return "bg-green-100 border-green-500 text-green-700";
+      return "bg-green-500/50 border-green-500";
     }
     if (option === selectedAnswer && !isCorrect) {
-      return "bg-red-100 border-red-500 text-red-700";
+      return "bg-red-500/50 border-red-500";
     }
-    return "bg-white border-gray-300 opacity-60";
+    return "bg-white/5 border-white/10 opacity-60";
   };
   
   const getIcon = (option) => {
@@ -176,14 +176,14 @@ const MathGameScreen = ({ onBack, difficulty, topicLevel }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 md:p-8 flex flex-col items-center">
+    <div className="p-4 sm:p-6 md:p-8 flex flex-col items-center">
         <div className="w-full max-w-3xl">
             {/* Header */}
-            <div className="relative flex items-center justify-between mb-4">
-                <button onClick={onBack} className="p-2 rounded-full hover:bg-gray-200 transition-colors">
-                    <ArrowLeft size={20} className="text-gray-600" />
+            <div className="relative flex items-center justify-between mb-4 self-stretch">
+                <button onClick={onBack} className="p-2 rounded-full hover:bg-white/10 transition-colors">
+                    <ArrowLeft size={20} className="text-gray-300" />
                 </button>
-                <div className="text-lg font-bold text-gray-700 flex items-center gap-4">
+                <div className="text-lg font-bold text-white flex items-center gap-4">
                     <span>수학 퀴즈</span>
                     <div className="flex items-center gap-2 text-sm">
                         <span className="text-green-600 font-bold">O: {score}</span>
@@ -194,16 +194,16 @@ const MathGameScreen = ({ onBack, difficulty, topicLevel }) => {
             </div>
 
             {/* Progress Bar */}
-            <div className="w-full bg-gray-200 rounded-full h-2.5 mb-6">
+            <div className="w-full bg-white/10 rounded-full h-2.5 mb-6">
                 <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${progressPercentage}%` }}></div>
             </div>
 
             {/* Question Card */}
-            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-lg mb-3">
-                <p className="text-sm text-gray-500 mb-2">문제 {currentQuestionIndex + 1}/{questions.length}</p>
+            <div className="glass-card p-6 sm:p-8 rounded-2xl shadow-lg mb-3">
+                <p className="text-sm text-gray-300 mb-2">문제 {currentQuestionIndex + 1}/{questions.length}</p>
                 {/* Problem text */}
                 <div className="mb-2">
-                    <p className="text-xl sm:text-2xl font-medium text-gray-800 leading-relaxed">
+                    <p className="text-xl sm:text-2xl font-medium text-white leading-relaxed">
                         <MathRenderer text={currentQuestion.problem} />
                     </p>
                 </div>
@@ -218,7 +218,7 @@ const MathGameScreen = ({ onBack, difficulty, topicLevel }) => {
                 )}
                 {/* Hint text - only shown if showHint is true */}
                 {showHint && currentQuestion.hint && (
-                    <p className="text-blue-600 text-sm italic mb-4 flex items-center">
+                    <p className="text-white text-sm italic mb-4 flex items-center underline">
                       <MathRenderer text={currentQuestion.hint} />
                     </p>
                 )}
@@ -233,7 +233,7 @@ const MathGameScreen = ({ onBack, difficulty, topicLevel }) => {
                         disabled={isAnswered}
                         className={`w-full text-left p-4 rounded-xl border-2 transition-all flex justify-between items-center ${getButtonClass(option)}`}
                     >
-                        <span className="font-medium text-gray-700">
+                        <span className="font-medium text-white">
                           <MathRenderer text={option} />
                         </span>
                         {getIcon(option)}
@@ -243,9 +243,9 @@ const MathGameScreen = ({ onBack, difficulty, topicLevel }) => {
 
             {/* Explanation & Next Button */}
             {isAnswered && (
-                <div ref={explanationRef} className="bg-white p-6 rounded-2xl shadow-lg animate-fade-in">
-                    <h3 className="font-bold text-lg mb-2">{selectedAnswer === currentQuestion.answer ? "정답입니다!" : "오답입니다."}</h3>
-                    <p className="text-gray-600 mb-4">
+                <div ref={explanationRef} className="glass-card p-6 rounded-2xl shadow-lg animate-fade-in">
+                    <h3 className="font-bold text-lg mb-2 text-white">{selectedAnswer === currentQuestion.answer ? "정답입니다!" : "오답입니다."}</h3>
+                    <p className="text-gray-300 mb-4">
                       <MathRenderer text={currentQuestion.explanation} />
                     </p>
                     <button
