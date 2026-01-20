@@ -140,13 +140,17 @@ function reducer(state, action) {
             if (state.gameMode === 'speed') {
                 finalScore = state.score - (state.wrongAnswers * 5);
             } else if (state.gameMode === 'connect') {
+            if (state.lives > 0) { // Win condition: lives remaining
                 finalScore = state.lives * 10;
+            } else { // Lose condition: no lives remaining
+                finalScore = state.matchedPairs.length * 5;
             }
+        }
             
             const newTotalPoints = state.points + finalScore;
             
             if (action.payload.user) {
-                updatePoints(action.payload.user.id, newTotalPoints);
+                // The side effect is handled in a useEffect hook within the component
             }
 
             return { ...state, status: 'finished', points: newTotalPoints, score: finalScore };
@@ -164,15 +168,9 @@ function reducer(state, action) {
             const { word1, word2 } = action.payload;
             if (word1.english === word2.english) {
                 const newMatchedPairs = [...state.matchedPairs, word1.english];
-                if (newMatchedPairs.length === state.connectWords.length) {
-                    return { ...state, matchedPairs: newMatchedPairs, score: state.lives * 10, status: 'finished' };
-                }
                 return { ...state, matchedPairs: newMatchedPairs };
             }
             const newLives = state.lives - 1;
-            if (newLives <= 0) {
-                return { ...state, lives: newLives, score: state.matchedPairs.length * 5, status: 'finished' };
-            }
             return { ...state, lives: newLives };
         }
         default:
@@ -390,16 +388,8 @@ const defaultWords = [
             }
             addXp(xpAmount);
             // -------------------------
-            const newMatchedPairs = [...matchedPairs, word1.english];
-            if (newMatchedPairs.length === connectWords.length) {
-                dispatch({ type: 'FINISH_GAME', payload: { user } });
-            }
         } else {
             playWarningSound(); // Play wrong sound
-            const newLives = lives - 1;
-            if (newLives <= 0) {
-                dispatch({ type: 'FINISH_GAME', payload: { user } });
-            }
         }
     };
     
@@ -448,17 +438,30 @@ const defaultWords = [
     useEffect(() => {
         if (status !== 'playing') return;
 
-        if (gameMode === 'normal' && timerMode && !isTimerPaused && !feedback) {
-            if (timeLeft === 0) {
-                handleTimeout();
-            } else if (timeLeft <= 3) {
-                playWarningSound();
-            }
-        } else if (gameMode === 'speed' && speedRunTimeLeft === 0) {
+        if (gameMode === 'speed' && speedRunTimeLeft === 0) {
             setSpeedRankings(prev => [...prev, { name: playerName, score: score - (wrongAnswers * 5) }].sort((a, b) => b.score - a.score));
             dispatch({ type: 'FINISH_GAME', payload: { user } });
         }
     }, [timeLeft, speedRunTimeLeft, status]);
+
+    useEffect(() => {
+        if (status !== 'playing' || gameMode !== 'connect') return;
+    
+        // Check for win condition
+        if (connectWords.length > 0 && matchedPairs.length === connectWords.length) {
+            dispatch({ type: 'FINISH_GAME', payload: { user } });
+        }
+        // Check for lose condition
+        else if (lives <= 0) {
+            dispatch({ type: 'FINISH_GAME', payload: { user } });
+        }
+    }, [matchedPairs, lives, status, gameMode, connectWords, user]);
+
+    useEffect(() => {
+        if (status === 'finished' && user) {
+            updatePoints(user.id, points);
+        }
+    }, [status, user, points]);
 
 
     const updatePoints = async (userId, newPoints) => {
