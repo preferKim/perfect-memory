@@ -12,7 +12,7 @@ const GameScreen = ({
     total,
     timeLeft,
     timerMode,
-    isTimerPaused,
+    isPaused,
     options,
     feedback,
     isDragging,
@@ -54,7 +54,7 @@ const GameScreen = ({
             {/* 단어 영역 - 최상단 */}
             <div className="glass-card px-8 pt-8 pb-4 text-center relative">
                 <button
-                    onClick={resetGame}
+                    onClick={togglePause}
                     className="absolute left-4 top-4 text-gray-300 hover:text-white transition p-2"
                     title="그만하기"
                     aria-label="그만하기"
@@ -103,10 +103,10 @@ const GameScreen = ({
                                 <button
                                     onClick={togglePause}
                                     className="mt-2 p-2 bg-white/10 rounded-full hover:bg-white/20 transition text-gray-300"
-                                    title={isTimerPaused ? "계속" : "일시정지"}
-                                    aria-label={isTimerPaused ? "계속" : "일시정지"}
+                                    title={isPaused ? "계속" : "일시정지"}
+                                    aria-label={isPaused ? "계속" : "일시정지"}
                                 >
-                                    {isTimerPaused ? <Play size={20} /> : <Pause size={20} />}
+                                    {isPaused ? <Play size={20} /> : <Pause size={20} />}
                                 </button>
                             )}
                         </div>
@@ -175,19 +175,68 @@ const GameScreen = ({
                         onTouchMove={handleDragMove}
                         onTouchEnd={handleDragEnd}
                     >
-                        <div className={`absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900 rounded-full shadow-2xl transition-transform ${isDragging ? 'scale-95' : 'scale-100'}`}>
-                            <div className={`absolute inset-1 rounded-full border-2 transition-colors duration-300 ${isDragging ? 'border-primary-light shadow-[0_0_15px_theme(colors.primary.light)]' : 'border-gray-600'}`}></div>
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <div className="relative">
-                                    <div className="w-1 h-6 bg-gray-500 rounded-full absolute left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-40"></div>
-                                    <div className="w-6 h-1 bg-gray-500 rounded-full absolute left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-40"></div>
-                                    <div className={`text-2xl transform transition-transform ${isDragging ? 'scale-110' : 'scale-100'}`}>
-                                        {isDragging ? '🚀' : '🎮'}
-                                    </div>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <svg width="100%" height="100%" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="fish-body" x1="100" y1="300" x2="400" y2="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FF7F50" /> <stop offset="100%" stop-color="#FF4500" /> </linearGradient>
+    <linearGradient id="fish-fin" x1="200" y1="200" x2="400" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFA07A" /> 
+      <stop offset="100%" stop-color="#FF6347" />
+    </linearGradient>
+    <linearGradient id="bubble-grad" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#AEEEEE" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#E0FFFF" stop-opacity="0.1"/>
+    </linearGradient>
+    <filter id="soft-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="5"/>
+      <feOffset dx="2" dy="4" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
 
-                                </div>
-                            </div>
-                            <div className="absolute top-2 left-4 w-6 h-3 bg-white/10 rounded-[100%] rotate-[-20deg]"></div>
+  <rect width="512" height="512" rx="120" fill="#E6F7FF" />
+
+  <g filter="url(#soft-shadow)">
+    <g transform="translate(256, 180)">
+      <circle cx="0" cy="60" r="15" fill="url(#bubble-grad)">
+        <animate attributeName="cy" values="60;55;60" dur="2s" repeatCount="indefinite" />
+      </circle>
+      <circle cx="-20" cy="20" r="12" fill="url(#bubble-grad)" opacity="0.9"/>
+      <circle cx="0" cy="0" r="18" fill="url(#bubble-grad)" opacity="0.8"/>
+      <circle cx="25" cy="-10" r="14" fill="url(#bubble-grad)" opacity="0.7"/>
+      <circle cx="45" cy="-35" r="16" fill="url(#bubble-grad)" opacity="0.6"/>
+      <circle cx="35" cy="-65" r="12" fill="url(#bubble-grad)" opacity="0.5"/>
+      <circle cx="0" cy="-85" r="14" fill="url(#bubble-grad)" opacity="0.4">
+         <animate attributeName="r" values="14;20;14" dur="3s" repeatCount="indefinite" />
+         <animate attributeName="opacity" values="0.4;0;0.4" dur="3s" repeatCount="indefinite" />
+      </circle>
+      <circle cx="-35" cy="-75" r="10" fill="url(#bubble-grad)" opacity="0.3"/>
+    </g>
+
+    <g transform="translate(60, 280) rotate(-10)">
+      <path d="M 320 0 C 380 -40, 420 -80, 440 -40 C 460 0, 400 40, 320 40 C 400 80, 460 120, 440 160 C 420 200, 380 160, 320 100" fill="url(#fish-fin)" />
+      <path d="M 180 -60 C 220 -120, 280 -120, 300 -40" fill="url(#fish-fin)" />
+      <ellipse cx="200" cy="50" rx="160" ry="100" fill="url(#fish-body)" />
+      <path d="M 200 150 C 220 200, 260 220, 280 180" fill="url(#fish-fin)" />
+      
+      <circle cx="80" cy="20" r="30" fill="white" stroke="#FF4500" stroke-width="4"/>
+      <circle cx="140" cy="20" r="30" fill="white" stroke="#FF4500" stroke-width="4"/>
+      <circle cx="75" cy="25" r="8" fill="#0F172A" />
+      <circle cx="145" cy="15" r="8" fill="#0F172A" />
+      <ellipse cx="110" cy="80" rx="15" ry="10" fill="#7c2d12" />
+      <path d="M 180 -10 C 180 -10, 170 10, 190 20 C 210 30, 220 10, 220 -10" fill="#AEEEEE" opacity="0.8">
+         <animate attributeName="opacity" values="0.8;0.2;0.8" dur="1.5s" repeatCount="indefinite" />
+      </path>
+    </g>
+  </g>
+</svg>
                         </div>
                         {isDragging && (
                             <div className="absolute -inset-4 bg-primary/20 rounded-full blur-xl -z-10 animate-pulse"></div>
