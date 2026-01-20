@@ -21,12 +21,13 @@ const LevelUpNotification = () => {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="glass-card p-8 rounded-2xl text-center shadow-lg border border-primary-light animate-scale-in-out">
-        <Sparkles size={64} className="text-primary-light mx-auto mb-4 animate-bounce-y" />
-        <h2 className="text-5xl font-extrabold text-white mb-2 leading-tight">LEVEL UP!</h2>
-        <p className="text-3xl font-bold text-primary-light">레벨 {level} 달성!</p>
-        <p className="text-lg text-gray-300 mt-2">새로운 도전을 시작하세요!</p>
+    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
+      <div className="glass-card p-4 rounded-xl text-center shadow-lg border border-primary-light animate-scale-in-out">
+        <div className="flex items-center justify-center gap-2">
+          <Sparkles size={24} className="text-primary-light animate-bounce-y" />
+          <h2 className="text-lg font-bold text-white">LEVEL UP!</h2>
+          <p className="text-base text-primary-light">레벨 {level} 달성!</p>
+        </div>
       </div>
     </div>
   );
