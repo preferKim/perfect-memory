@@ -427,13 +427,16 @@ const defaultWords = [
 
     useEffect(() => {
         const handleBackButton = (e) => {
-            if (status === 'playing') {
+            if (status === 'playing' || screen === 'math-game') {
                 e.preventDefault();
                 togglePauseGame();
+            } else if (status === 'idle' && screen !== 'subjects') {
+                e.preventDefault();
+                setScreen('subjects');
             }
         };
 
-        if (status === 'playing') {
+        if (screen !== 'subjects') {
             window.history.pushState(null, '', window.location.href);
             window.addEventListener('popstate', handleBackButton);
         }
@@ -441,7 +444,7 @@ const defaultWords = [
         return () => {
             window.removeEventListener('popstate', handleBackButton);
         };
-    }, [status, togglePauseGame]);
+    }, [status, screen, togglePauseGame]);
 
     // Timers
     useEffect(() => {
