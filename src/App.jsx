@@ -8,6 +8,9 @@ import SubjectScreen from './screens/SubjectScreen';
 import TamagotchiScreen from './screens/TamagotchiScreen';
 import MathSelectionScreen from './screens/MathSelectionScreen';
 import MathGameScreen from './screens/MathGameScreen';
+import ClickerGame from './screens/playground/ClickerGame';
+import TypingGame from './screens/playground/TypingGame';
+import GuessingGame from './screens/playground/GuessingGame';
 import { usePlayer } from './context/PlayerContext';
 import LevelUpNotification from './components/LevelUpNotification';
 import PauseMenu from './components/PauseMenu';
@@ -758,7 +761,9 @@ const defaultWords = [
     };
 
     const handleSubjectSelect = (subject) => {
-        if (subject === 'english') {
+        if (subject.startsWith('playground-')) {
+            setScreen(subject);
+        } else if (subject === 'english') {
             setScreen('modes');
         } else if (subject === 'math') {
             setScreen('math-selection');
@@ -788,6 +793,18 @@ const defaultWords = [
                 user={user}
                 onNavigate={handleNavigate}
             />;
+        }
+
+        if (screen === 'playground-clicker') {
+            return <ClickerGame onBack={resetGame} />;
+        }
+
+        if (screen === 'playground-typing') {
+            return <TypingGame onBack={resetGame} />;
+        }
+
+        if (screen === 'playground-guessing') {
+            return <GuessingGame onBack={resetGame} />;
         }
 
         if (screen === 'math-selection') {

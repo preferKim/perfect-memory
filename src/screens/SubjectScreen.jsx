@@ -4,7 +4,9 @@ import HeaderSection from '../components/HeaderSection';
 
 const SubjectScreen = ({ onSubjectSelect, onSignUp, onLogin, onLogout, user, onNavigate }) => {
     const handleSubjectClick = (subject) => {
-        if (subject === 'english' || subject === 'math') {
+        if (subject.startsWith('playground-')) {
+            onSubjectSelect(subject);
+        } else if (subject === 'english' || subject === 'math') {
             onSubjectSelect(subject);
         } else {
             alert('아직 준비되지 않은 과목입니다.');
@@ -38,6 +40,21 @@ const SubjectScreen = ({ onSubjectSelect, onSignUp, onLogin, onLogout, user, onN
                     </Button>
                     <Button onClick={() => handleSubjectClick('science')} variant="threedee" color="speed" className="w-full h-28 flex flex-col items-center justify-center" disabled={true}>
                         <span className="text-2xl">🔬</span><br/>과학<br/><span className="text-sm font-light opacity-70">준비중</span>
+                    </Button>
+                </div>
+            </div>
+
+            <div className="mt-12">
+                <p className="text-xl font-bold text-white mb-4">놀이터</p>
+                <div className="grid grid-cols-3 gap-4 max-w-lg mx-auto">
+                    <Button onClick={() => handleSubjectClick('playground-clicker')} variant="threedee" color="secondary" className="w-full h-28 flex flex-col items-center justify-center">
+                        <span className="text-2xl">🖱️</span><br/>클릭 게임
+                    </Button>
+                    <Button onClick={() => handleSubjectClick('playground-typing')} variant="threedee" color="primary" className="w-full h-28 flex flex-col items-center justify-center">
+                        <span className="text-2xl">⌨️</span><br/>타이핑 게임
+                    </Button>
+                    <Button onClick={() => handleSubjectClick('playground-guessing')} variant="threedee" color="danger" className="w-full h-28 flex flex-col items-center justify-center">
+                        <span className="text-2xl">🤔</span><br/>숫자 맞추기
                     </Button>
                 </div>
             </div>
