@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, Check, X } from 'lucide-react';
 import MathRenderer from '../components/MathRenderer';
 
@@ -12,6 +12,13 @@ const MathGameScreen = ({ onBack, difficulty, topicLevel }) => {
   const [gameFinished, setGameFinished] = useState(false);
   const [showHint, setShowHint] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const explanationRef = useRef(null);
+
+  useEffect(() => {
+    if (isAnswered && explanationRef.current) {
+      explanationRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [isAnswered]);
 
   // Define loadQuestions function outside of useEffect to be callable by restartGame
   const loadQuestions = () => {
@@ -236,7 +243,7 @@ const MathGameScreen = ({ onBack, difficulty, topicLevel }) => {
 
             {/* Explanation & Next Button */}
             {isAnswered && (
-                <div className="bg-white p-6 rounded-2xl shadow-lg animate-fade-in">
+                <div ref={explanationRef} className="bg-white p-6 rounded-2xl shadow-lg animate-fade-in">
                     <h3 className="font-bold text-lg mb-2">{selectedAnswer === currentQuestion.answer ? "정답입니다!" : "오답입니다."}</h3>
                     <p className="text-gray-600 mb-4">
                       <MathRenderer text={currentQuestion.explanation} />

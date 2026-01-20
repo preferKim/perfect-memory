@@ -54,7 +54,7 @@ const RankingScreen = ({
     const renderSpeedModeResult = () => (
         <>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-white mb-4 leading-tight">
-                🏆 스피드 모드 랭킹 🏆
+                🏆 경쟁 모드 랭킹 🏆
             </h2>
             <p className="text-gray-300 mb-8">최고 점수에 도전하세요!</p>
 

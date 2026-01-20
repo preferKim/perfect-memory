@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Calculator, Sigma, TrendingUp, Triangle, BarChart3 } from 'lucide-react';
-import PlayerStats from '../components/PlayerStats';
+import HeaderSection from '../components/HeaderSection';
 
 const mathTopics = [
     { 
@@ -50,7 +50,7 @@ const mathTopics = [
     },
 ];
 
-const MathSelectionScreen = ({ onBack, onLevelSelect, user }) => {
+const MathSelectionScreen = ({ onBack, onLevelSelect, user, onSignUp, onLogin, onLogout, onNavigate }) => {
 
     const handleSelect = (topicLevel, difficulty) => {
         onLevelSelect(topicLevel, difficulty);
@@ -66,12 +66,13 @@ const MathSelectionScreen = ({ onBack, onLevelSelect, user }) => {
                     <ArrowLeft size={16} className="mr-1" /> 과목선택
                 </button>
             </div>
-            
-            {user && (
-                <div className="absolute top-4 right-4">
-                     <PlayerStats />
-                </div>
-            )}
+            <HeaderSection
+                onSignUp={onSignUp}
+                onLogin={onLogin}
+                onLogout={onLogout}
+                user={user}
+                onNavigate={onNavigate}
+            />
 
             <h2 className="text-3xl font-bold text-white mb-2 mt-8">수학 학습 영역 선택</h2>
             <p className="text-gray-300 mb-6">학습할 영역과 난이도를 선택하세요.</p>
