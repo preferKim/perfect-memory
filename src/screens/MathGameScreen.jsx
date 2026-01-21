@@ -185,9 +185,9 @@ const MathGameScreen = ({ onBack, difficulty, topicLevel }) => {
                 </button>
                 <div className="text-lg font-bold text-white flex items-center gap-4">
                     <span>수학 퀴즈</span>
-                    <div className="flex items-center gap-2 text-sm">
-                        <span className="text-green-600 font-bold">O: {score}</span>
-                        <span className="text-red-600 font-bold">X: {wrongAnswers}</span>
+                    <div className="flex items-center gap-3 text-sm bg-black/20 px-3 py-1 rounded-lg">
+                        <span className="text-green-400 font-bold">O: {score}</span>
+                        <span className="text-red-400 font-bold">X: {wrongAnswers}</span>
                     </div>
                 </div>
                 <div className="w-8"></div>
