@@ -215,15 +215,21 @@ const defaultWords = [
     const [screen, setScreen] = useState('subjects'); // 'subjects', 'modes', 'math-selection'
     const [mathDifficulty, setMathDifficulty] = useState('easy');
     const [selectedTopicLevel, setSelectedTopicLevel] = useState(1);
+    const appRef = useRef(null);
     const [mathGameKey, setMathGameKey] = useState(0);
 
     useEffect(() => {
         const setVh = () => {
-            const vh = window.innerHeight * 0.01;
-            document.documentElement.style.setProperty('--vh', `${vh}px`);
+            if (appRef.current) {
+                // Set the min-height directly to the window's inner height.
+                // This prevents the layout from shrinking when the mobile keyboard appears.
+                appRef.current.style.minHeight = `${window.innerHeight}px`;
+            }
         };
+
+        // Set the height initially and on any resize events.
         window.addEventListener('resize', setVh);
-        setVh(); // Initial set
+        setVh();
 
         return () => window.removeEventListener('resize', setVh);
     }, []);
@@ -932,7 +938,7 @@ const defaultWords = [
     };
 
     return (
-        <div className="w-full min-h-[calc(var(--vh,1vh)*100)] flex items-center justify-center overflow-x-hidden">
+        <div ref={appRef} className="w-full min-h-screen flex items-center justify-center overflow-x-hidden">
             <div className="max-w-2xl w-full">
                 {renderContent()}
             </div>
