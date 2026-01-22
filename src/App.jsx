@@ -11,6 +11,7 @@ import MathGameScreen from './screens/MathGameScreen';
 import ClickerGame from './screens/playground/ClickerGame';
 import TypingGame from './screens/playground/TypingGame';
 import GuessingGame from './screens/playground/GuessingGame';
+import PuzzleGame from './components/games/PuzzleGame';
 import { usePlayer } from './context/PlayerContext';
 import LevelUpNotification from './components/LevelUpNotification';
 import PauseMenu from './components/PauseMenu';
@@ -805,6 +806,10 @@ const defaultWords = [
 
         if (screen === 'playground-guessing') {
             return <GuessingGame onBack={resetGame} />;
+        }
+
+        if (screen === 'playground-puzzle') {
+            return <PuzzleGame onBack={resetGame} />;
         }
 
         if (screen === 'math-selection') {

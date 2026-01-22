@@ -33,3 +33,13 @@ body {
     border-radius: 1.5rem; /* 24px */
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.5); }
+  100% { transform: scale(0); }
+}
+
+.cell-matched {
+  animation: pop 0.3s ease-out forwards;
+}

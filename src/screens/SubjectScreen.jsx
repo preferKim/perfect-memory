@@ -66,6 +66,9 @@ const SubjectScreen = ({ onSubjectSelect, onSignUp, onLogin, onLogout, user, onN
                         <Button onClick={() => handleSubjectClick('playground-guessing')} variant="threedee" color="danger" className="w-full h-28 flex flex-col items-center justify-center">
                             <span className="text-2xl">🤔</span><br/>숫자 맞추기
                         </Button>
+                        <Button onClick={() => handleSubjectClick('playground-puzzle')} variant="threedee" color="warning" className="w-full h-28 flex flex-col items-center justify-center">
+                            <span className="text-2xl">🧩</span><br/>퍼즐 게임
+                        </Button>
                     </div>
                 </div>
             </div>
