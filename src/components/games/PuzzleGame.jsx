@@ -314,26 +314,26 @@ const PuzzleGame = ({ onBack }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-4 sm:p-6 md:p-8 flex flex-col items-center">
-      <div className="w-full max-w-2xl">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-2 sm:p-4 md:p-6 lg:p-8 flex flex-col items-center justify-center">
+      <div className="w-full max-w-[600px] px-2 sm:px-4">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-3 sm:mb-4 md:mb-6 gap-2">
           <button 
             onClick={onBack} 
-            className="p-2 rounded-full hover:bg-white/10 transition-colors"
+            className="p-1.5 sm:p-2 rounded-full hover:bg-white/10 transition-colors flex-shrink-0"
           >
-            <ArrowLeft size={24} className="text-gray-300" />
+            <ArrowLeft size={20} className="text-gray-300 sm:w-6 sm:h-6" />
           </button>
-          <h1 className="text-2xl font-bold text-white">퍼즐 게임</h1>
-          <div className="bg-white/10 px-4 py-2 rounded-lg">
-            <span className="text-xl font-bold text-white">점수: {score}</span>
+          <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-white whitespace-nowrap">퍼즐 게임</h1>
+          <div className="bg-white/10 px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-lg flex-shrink-0">
+            <span className="text-sm sm:text-base md:text-xl font-bold text-white whitespace-nowrap">점수: {score}</span>
           </div>
         </div>
 
         {/* Game Board */}
-        <div className="bg-black/30 rounded-2xl p-3 shadow-2xl backdrop-blur-sm">
+        <div className="bg-black/30 rounded-xl sm:rounded-2xl p-1.5 sm:p-2 md:p-3 shadow-2xl backdrop-blur-sm">
           <div 
-            className="grid gap-1"
+            className="grid gap-0.5 sm:gap-1"
             style={{ 
               gridTemplateColumns: `repeat(${BOARD_SIZE}, 1fr)`,
               aspectRatio: '1/1'
@@ -369,11 +369,11 @@ const PuzzleGame = ({ onBack }) => {
                     onTouchMove={(e) => handleTouchMove(e, r, c)}
                     onTouchEnd={(e) => handleTouchEnd(e, r, c)}
                     className={`
-                      w-full h-full rounded-lg transition-all duration-200
-                      flex items-center justify-center text-3xl sm:text-4xl
+                      w-full h-full rounded-md sm:rounded-lg transition-all duration-200
+                      flex items-center justify-center text-2xl sm:text-3xl md:text-4xl
                       select-none
                       ${isProcessing ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:scale-105 active:scale-95'}
-                      ${isSelected ? 'bg-yellow-400/40 ring-4 ring-yellow-300 scale-110' : 'bg-white/10 hover:bg-white/20'}
+                      ${isSelected ? 'bg-yellow-400/40 ring-2 sm:ring-4 ring-yellow-300 scale-110' : 'bg-white/10 hover:bg-white/20'}
                       ${isMatched ? 'animate-pulse bg-red-400/60' : ''}
                       ${isDragging ? 'opacity-30 scale-90' : ''}
                     `}
@@ -394,10 +394,13 @@ const PuzzleGame = ({ onBack }) => {
         </div>
 
         {/* Instructions */}
-        <div className="mt-6 text-center text-white/80 text-sm">
-          <p>같은 동물 3개 이상을 맞춰보세요!</p>
-          <p className="mt-1">🖱️ 클릭: 인접한 두 블록을 클릭해서 교환</p>
-          <p>👆 드래그: 블록을 드래그해서 인접한 블록에 드롭</p>
+        <div className="mt-3 sm:mt-4 md:mt-6 text-center text-white/80 text-xs sm:text-sm px-2">
+          <p className="font-medium">같은 동물 3개 이상을 맞춰보세요!</p>
+          <div className="mt-1 sm:mt-2 space-y-0.5 sm:space-y-1">
+            <p className="hidden sm:block">🖱️ 클릭: 인접한 두 블록을 클릭해서 교환</p>
+            <p className="hidden sm:block">👆 드래그: 블록을 드래그해서 인접한 블록에 드롭</p>
+            <p className="sm:hidden">탭하거나 드래그해서 블록을 교환하세요</p>
+          </div>
         </div>
       </div>
     </div>
