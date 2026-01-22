@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, Clock, Keyboard } from 'lucide-react';
 
 const words = ["React", "JavaScript", "Tailwind", "Vite", "Supabase", "Component", "Props", "State", "Hook"];
 
 const TypingGame = ({ onBack }) => {
+    const inputRef = useRef(null); // Ref for the input field
+
     const [difficulty, setDifficulty] = useState('easy');
     const [wordList, setWordList] = useState([]);
     const [currentWordObj, setCurrentWordObj] = useState({ english: '', korean: '' });
@@ -25,6 +27,8 @@ const TypingGame = ({ onBack }) => {
             const randomIndex = Math.floor(Math.random() * wordList.length);
             setCurrentWordObj(wordList[randomIndex]);
             setInputValue('');
+            // Ensure input is focused when a new word appears
+            inputRef.current?.focus();
         }
     };
 
@@ -74,6 +78,8 @@ const TypingGame = ({ onBack }) => {
 
     const toggleHintMode = () => {
         setIsHintModeOn(!isHintModeOn);
+        // Re-focus the input to keep the keyboard open on mobile
+        inputRef.current?.focus();
     };
 
     const handleChange = (e) => {
@@ -218,6 +224,7 @@ const TypingGame = ({ onBack }) => {
                     value={inputValue}
                     onChange={handleChange}
                     autoFocus
+                    ref={inputRef} // Attach ref here
                     className="w-full max-w-xs mx-auto px-4 py-3 text-center text-lg font-medium bg-white/5 border-2 border-white/10 rounded-xl text-white focus:ring-2 focus:ring-primary focus:border-primary transition"
                 />
             </footer>
