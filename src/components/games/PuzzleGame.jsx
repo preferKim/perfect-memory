@@ -13,7 +13,9 @@ const PuzzleGame = ({ onBack }) => {
   const [matchedCells, setMatchedCells] = useState(new Set());
   const [selectedCell, setSelectedCell] = useState(null);
   const [draggedCell, setDraggedCell] = useState(null);
+  const [touchStart, setTouchStart] = useState(null);
   const processingRef = useRef(false);
+  const touchMoveThreshold = 10; // 픽셀 단위 이동 임계값
 
   useEffect(() => {
     setBoard(createInitialBoard());
@@ -162,16 +164,82 @@ const PuzzleGame = ({ onBack }) => {
     e.stopPropagation();
     setDraggedCell({ r, c });
     
-    // 드래그 이미지 설정 (더 나은 시각적 피드백)
-    const dragImage = e.currentTarget.cloneNode(true);
-    dragImage.style.opacity = '0.8';
-    dragImage.style.transform = 'scale(1.1)';
-    document.body.appendChild(dragImage);
-    e.dataTransfer.setDragImage(dragImage, 25, 25);
-    setTimeout(() => document.body.removeChild(dragImage), 0);
+    // 즉시 드래그 시작되도록 설정
+    if (e.dataTransfer) {
+      // 드래그 이미지 설정 (더 나은 시각적 피드백)
+      const dragImage = e.currentTarget.cloneNode(true);
+      dragImage.style.opacity = '0.8';
+      dragImage.style.transform = 'scale(1.1)';
+      document.body.appendChild(dragImage);
+      e.dataTransfer.setDragImage(dragImage, 25, 25);
+      setTimeout(() => document.body.removeChild(dragImage), 0);
+      
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', `${r}-${c}`);
+    }
+  };
+
+  const handleTouchStart = (e, r, c) => {
+    if (isProcessing) return;
     
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', `${r}-${c}`);
+    const touch = e.touches[0];
+    setTouchStart({
+      r,
+      c,
+      startX: touch.clientX,
+      startY: touch.clientY,
+      element: e.currentTarget
+    });
+  };
+
+  const handleTouchMove = (e, r, c) => {
+    if (!touchStart || isProcessing) return;
+    
+    const touch = e.touches[0];
+    const deltaX = touch.clientX - touchStart.startX;
+    const deltaY = touch.clientY - touchStart.startY;
+    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    
+    // 임계값을 넘으면 드래그 시작
+    if (distance > touchMoveThreshold && !draggedCell) {
+      e.preventDefault();
+      setDraggedCell({ r: touchStart.r, c: touchStart.c });
+    }
+  };
+
+  const handleTouchEnd = async (e, r, c) => {
+    if (!touchStart || isProcessing) return;
+    
+    e.preventDefault();
+    
+    // 드래그가 시작되지 않았으면 클릭으로 처리
+    if (!draggedCell) {
+      await handleCellClick(touchStart.r, touchStart.c);
+      setTouchStart(null);
+      return;
+    }
+    
+    // 터치 종료 위치의 요소 찾기
+    const touch = e.changedTouches[0];
+    const element = document.elementFromPoint(touch.clientX, touch.clientY);
+    
+    if (element) {
+      const cellKey = element.getAttribute('data-cell');
+      if (cellKey) {
+        const [dropR, dropC] = cellKey.split('-').map(Number);
+        
+        const isAdjacent = 
+          (Math.abs(draggedCell.r - dropR) === 1 && draggedCell.c === dropC) ||
+          (Math.abs(draggedCell.c - dropC) === 1 && draggedCell.r === dropR);
+        
+        if (isAdjacent) {
+          await swapCells(draggedCell.r, draggedCell.c, dropR, dropC);
+        }
+      }
+    }
+    
+    setDraggedCell(null);
+    setTouchStart(null);
   };
 
   const handleDragOver = (e) => {
@@ -280,6 +348,7 @@ const PuzzleGame = ({ onBack }) => {
                 return (
                   <div
                     key={`${r}-${c}`}
+                    data-cell={`${r}-${c}`}
                     role="button"
                     tabIndex={0}
                     aria-label={`Cell ${r}-${c}`}
@@ -296,10 +365,13 @@ const PuzzleGame = ({ onBack }) => {
                     onDragEnter={handleDragEnter}
                     onDrop={(e) => handleDrop(e, r, c)}
                     onDragEnd={handleDragEnd}
+                    onTouchStart={(e) => handleTouchStart(e, r, c)}
+                    onTouchMove={(e) => handleTouchMove(e, r, c)}
+                    onTouchEnd={(e) => handleTouchEnd(e, r, c)}
                     className={`
                       w-full h-full rounded-lg transition-all duration-200
                       flex items-center justify-center text-3xl sm:text-4xl
-                      select-none touch-none
+                      select-none
                       ${isProcessing ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:scale-105 active:scale-95'}
                       ${isSelected ? 'bg-yellow-400/40 ring-4 ring-yellow-300 scale-110' : 'bg-white/10 hover:bg-white/20'}
                       ${isMatched ? 'animate-pulse bg-red-400/60' : ''}
@@ -309,7 +381,8 @@ const PuzzleGame = ({ onBack }) => {
                       transform: isMatched ? 'scale(0.8)' : isSelected ? 'scale(1.1)' : isDragging ? 'scale(0.9)' : 'scale(1)',
                       userSelect: 'none',
                       WebkitUserSelect: 'none',
-                      WebkitTouchCallout: 'none'
+                      WebkitTouchCallout: 'none',
+                      touchAction: 'none'
                     }}
                   >
                     {icon}
