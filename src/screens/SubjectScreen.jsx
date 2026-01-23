@@ -7,7 +7,7 @@ const SubjectScreen = ({ onSubjectSelect, onSignUp, onLogin, onLogout, user, onN
     const handleSubjectClick = (subject) => {
         if (subject.startsWith('playground-')) {
             onSubjectSelect(subject);
-        } else if (subject === 'english' || subject === 'math') {
+        } else if (subject === 'english' || subject === 'math' || subject === 'korean') {
             onSubjectSelect(subject);
         } else {
             alert('아직 준비되지 않은 과목입니다.');
@@ -32,8 +32,8 @@ const SubjectScreen = ({ onSubjectSelect, onSignUp, onLogin, onLogout, user, onN
                         <h2 className="text-2xl font-bold text-white">공부방</h2>
                     </div>
                     <div className="grid grid-cols-3 gap-4 max-w-lg mx-auto">
-                        <Button onClick={() => handleSubjectClick('korean')} variant="threedee" color="secondary" className="w-full h-28 flex flex-col items-center justify-center" disabled={true}>
-                            <span className="text-2xl">📖</span><br/>국어<br/><span className="text-sm font-light opacity-70">준비중</span>
+                        <Button onClick={() => handleSubjectClick('korean')} variant="threedee" color="secondary" className="w-full h-28 flex flex-col items-center justify-center">
+                            <span className="text-2xl">📖</span><br/>국어
                         </Button>
                         <Button onClick={() => handleSubjectClick('english')} variant="threedee" color="primary" className="w-full h-28 flex flex-col items-center justify-center">
                             <span className="text-2xl">🔤</span><br/>영어

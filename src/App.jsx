@@ -6,12 +6,15 @@ import RankingScreen from './screens/RankingScreen';
 import ConnectingGameScreen from './screens/ConnectingGameScreen';
 import SubjectScreen from './screens/SubjectScreen';
 import TamagotchiScreen from './screens/TamagotchiScreen';
+import KoreanSelectionScreen from './screens/KoreanSelectionScreen';
 import MathSelectionScreen from './screens/MathSelectionScreen';
 import MathGameScreen from './screens/MathGameScreen';
 import ClickerGame from './screens/playground/ClickerGame';
 import TypingGame from './screens/playground/TypingGame';
 import GuessingGame from './screens/playground/GuessingGame';
 import PuzzleGame from './components/games/PuzzleGame';
+import SpellingGame from './components/games/SpellingGame';
+import SpacingGame from './components/games/SpacingGame';
 import { usePlayer } from './context/PlayerContext';
 import LevelUpNotification from './components/LevelUpNotification';
 import PauseMenu from './components/PauseMenu';
@@ -785,6 +788,8 @@ const defaultWords = [
             setScreen('modes');
         } else if (subject === 'math') {
             setScreen('math-selection');
+        } else if (subject === 'korean') {
+            setScreen('korean-selection');
         } else {
             alert('아직 준비되지 않았습니다.');
         }
@@ -834,6 +839,23 @@ const defaultWords = [
                 onLevelSelect={handleMathLevelSelect}
                 onBack={resetGame}
             />;
+        }
+
+        if (screen === 'korean-selection') {
+            return <KoreanSelectionScreen
+                user={user}
+                onNavigate={handleNavigate}
+                onSelectGame={(gameType) => setScreen(`korean-${gameType}-game`)}
+                onBackToSubjects={() => setScreen('subjects')}
+            />;
+        }
+
+        if (screen === 'korean-spelling-game') {
+            return <SpellingGame onBack={() => setScreen('korean-selection')} />;
+        }
+
+        if (screen === 'korean-spacing-game') {
+            return <SpacingGame onBack={() => setScreen('korean-selection')} />;
         }
 
         if (screen === 'math-game') {
