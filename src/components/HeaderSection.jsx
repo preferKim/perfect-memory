@@ -108,12 +108,6 @@ const HeaderSection = ({ onSignUp, onLogin, onLogout, user, onNavigate }) => {
                     </button>
                 ) : (
                     <div className="flex items-center gap-2">
-                        <button
-                            onClick={() => onNavigate('tamagotchi')}
-                            className="text-sm font-semibold text-gray-200 hover:text-white px-4 py-1.5 rounded-full border border-white/40 hover:border-white/80 bg-black/20 hover:bg-black/40 transition-all"
-                        >
-                            다마고찌
-                        </button>
                         <button 
                             onClick={onLogout}
                             className="text-sm font-semibold text-gray-200 hover:text-white px-4 py-1.5 rounded-full border border-white/40 hover:border-white/80 bg-black/20 hover:bg-black/40 transition-all"
