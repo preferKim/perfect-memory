@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, CheckCircle, XCircle } from 'lucide-react';
 import Button from '../Button';
 
@@ -6,42 +6,56 @@ const SpacingGame = ({ onBack }) => {
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [score, setScore] = useState(0);
-    const [inputValue, setInputValue] = useState('');
     const [feedback, setFeedback] = useState(null); // 'correct', 'wrong', or null
     const [gameOver, setGameOver] = useState(false);
-    const inputRef = useRef(null);
+    const [spacings, setSpacings] = useState([]);
 
     useEffect(() => {
         fetch('/words/korean_spacing_easy.json')
             .then(res => res.json())
-            .then(data => setQuestions(data.sort(() => Math.random() - 0.5)))
+            .then(data => {
+                const shuffled = data.sort(() => Math.random() - 0.5);
+                setQuestions(shuffled);
+                if (shuffled.length > 0) {
+                    setSpacings(new Array(shuffled[0].question.length - 1).fill(false));
+                }
+            })
             .catch(err => console.error("Failed to load spacing questions:", err));
     }, []);
 
-    useEffect(() => {
-        if (!gameOver && questions.length > 0) {
-            inputRef.current?.focus();
-        }
-    }, [currentQuestionIndex, gameOver, questions]);
-
     const startNewGame = () => {
-        setQuestions(questions.sort(() => Math.random() - 0.5));
+        const shuffled = questions.sort(() => Math.random() - 0.5);
+        setQuestions(shuffled);
         setCurrentQuestionIndex(0);
         setScore(0);
-        setInputValue('');
         setFeedback(null);
         setGameOver(false);
+        if (shuffled.length > 0) {
+            setSpacings(new Array(shuffled[0].question.length - 1).fill(false));
+        }
     };
 
     const normalizeAnswer = (str) => {
         return str.trim().replace(/\s+/g, ' ');
     };
 
+    const buildAnswerFromSpacings = () => {
+        const question = questions[currentQuestionIndex].question;
+        let result = question[0];
+        for (let i = 0; i < spacings.length; i++) {
+            if (spacings[i]) {
+                result += ' ';
+            }
+            result += question[i + 1];
+        }
+        return result;
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         if (feedback) return;
 
-        const userAnswer = normalizeAnswer(inputValue);
+        const userAnswer = normalizeAnswer(buildAnswerFromSpacings());
         const correctAnswer = normalizeAnswer(questions[currentQuestionIndex].answer);
 
         if (userAnswer === correctAnswer) {
@@ -53,13 +67,23 @@ const SpacingGame = ({ onBack }) => {
 
         setTimeout(() => {
             if (currentQuestionIndex < questions.length - 1) {
-                setCurrentQuestionIndex(prev => prev + 1);
-                setInputValue('');
+                const nextIndex = currentQuestionIndex + 1;
+                setCurrentQuestionIndex(nextIndex);
+                setSpacings(new Array(questions[nextIndex].question.length - 1).fill(false));
                 setFeedback(null);
             } else {
                 setGameOver(true);
             }
         }, 2000);
+    };
+
+    const toggleSpace = (index) => {
+        if (feedback) return;
+        setSpacings(prevSpacings => {
+            const newSpacings = [...prevSpacings];
+            newSpacings[index] = !newSpacings[index];
+            return newSpacings;
+        });
     };
 
     if (questions.length === 0) {
@@ -69,12 +93,11 @@ const SpacingGame = ({ onBack }) => {
             </div>
         );
     }
-
-    const currentQuestion = questions[currentQuestionIndex];
     
     const renderFeedback = () => {
         if (!feedback) return null;
         
+        const currentQuestion = questions[currentQuestionIndex];
         let content;
         if (feedback === 'correct') {
             content = <CheckCircle size={80} className="text-white animate-pulse" />;
@@ -91,6 +114,28 @@ const SpacingGame = ({ onBack }) => {
         const bgColor = feedback === 'correct' ? 'bg-green-500/80' : 'bg-red-500/80';
         return <div className={`absolute inset-0 ${bgColor} flex items-center justify-center rounded-2xl`}>{content}</div>;
     }
+
+    const renderInteractiveQuestion = () => {
+        const question = questions[currentQuestionIndex].question;
+        const chars = question.split('');
+
+        return (
+            <div className="flex flex-wrap items-center justify-center cursor-pointer">
+                {chars.map((char, index) => (
+                    <React.Fragment key={index}>
+                        <span className="text-2xl sm:text-3xl text-white font-medium">{char}</span>
+                        {spacings[index] && <span className="text-2xl sm:text-3xl text-white font-medium px-1"> </span>}
+                        {index < chars.length - 1 && (
+                            <div 
+                                className="w-2 -ml-2 h-12" // Negative margin to overlap and not create space
+                                onClick={() => toggleSpace(index)}
+                            />
+                        )}
+                    </React.Fragment>
+                ))}
+            </div>
+        );
+    };
 
     return (
         <div className="glass-card p-6 sm:p-12 text-center relative flex flex-col items-center max-w-2xl mx-auto">
@@ -111,21 +156,13 @@ const SpacingGame = ({ onBack }) => {
             <div className="w-full">
                 {!gameOver ? (
                     <div className="w-full">
+                        <p className="text-white/90 text-xl mb-4 font-semibold">글자사이를 클릭해서 띄어쓰기</p>
                         <div className="bg-black/20 p-8 rounded-2xl mb-8 min-h-[120px] flex items-center justify-center relative border-2 border-white/10">
-                            <p className="text-2xl sm:text-3xl text-white font-medium leading-relaxed" style={{ wordBreak: 'keep-all' }}>{currentQuestion.question}</p>
+                            {renderInteractiveQuestion()}
                             {renderFeedback()}
                         </div>
                         
                         <form onSubmit={handleSubmit} className="flex flex-col items-center gap-4">
-                            <input
-                                ref={inputRef}
-                                type="text"
-                                value={inputValue}
-                                onChange={(e) => setInputValue(e.target.value)}
-                                placeholder="정답을 입력하세요"
-                                className="w-full max-w-lg mx-auto px-4 py-3 text-center text-lg font-medium bg-white/5 border-2 border-white/10 rounded-xl text-white focus:ring-2 focus:ring-primary focus:border-primary transition"
-                                disabled={!!feedback}
-                            />
                             <Button type="submit" variant="threedee" color="primary" disabled={!!feedback}>
                                 확인
                             </Button>
