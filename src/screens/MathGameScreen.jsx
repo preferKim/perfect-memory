@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, Check, X } from 'lucide-react';
 import MathRenderer from '../components/MathRenderer';
 
-const MathGameScreen = ({ onBack, difficulty, topicLevel }) => {
+const MathGameScreen = ({ onBack, difficulty, topicLevel, user, addXp }) => {
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -19,6 +19,16 @@ const MathGameScreen = ({ onBack, difficulty, topicLevel }) => {
       explanationRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }, [isAnswered]);
+
+  // Handle XP gain on game finish
+  useEffect(() => {
+    if (gameFinished && user && addXp) {
+      const xpGained = score * 5; // 5 XP for each correct answer
+      if (xpGained > 0) {
+        addXp(xpGained);
+      }
+    }
+  }, [gameFinished, user, addXp, score]);
 
   // Define loadQuestions function outside of useEffect to be callable by restartGame
   const loadQuestions = () => {

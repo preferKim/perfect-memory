@@ -5,7 +5,6 @@ import GameScreen from './screens/GameScreen';
 import RankingScreen from './screens/RankingScreen';
 import ConnectingGameScreen from './screens/ConnectingGameScreen';
 import SubjectScreen from './screens/SubjectScreen';
-import TamagotchiScreen from './screens/TamagotchiScreen';
 import KoreanSelectionScreen from './screens/KoreanSelectionScreen';
 import MathSelectionScreen from './screens/MathSelectionScreen';
 import MathGameScreen from './screens/MathGameScreen';
@@ -838,6 +837,11 @@ const defaultWords = [
             return <MathSelectionScreen 
                 onLevelSelect={handleMathLevelSelect}
                 onBack={resetGame}
+                user={user}
+                onSignUp={handleSignUp}
+                onLogin={handleLogin}
+                onLogout={handleLogout}
+                onNavigate={handleNavigate}
             />;
         }
 
@@ -873,6 +877,8 @@ const defaultWords = [
                         onBack={togglePauseGame} 
                         difficulty={mathDifficulty} 
                         topicLevel={selectedTopicLevel} 
+                        user={user}
+                        addXp={addXp}
                     />
                 </div>
             );
