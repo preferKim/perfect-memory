@@ -14,6 +14,7 @@ import GuessingGame from './screens/playground/GuessingGame';
 import PuzzleGame from './components/games/PuzzleGame';
 import SpellingGame from './components/games/SpellingGame';
 import SpacingGame from './components/games/SpacingGame';
+import ChosungGame from './components/games/ChosungGame';
 import { usePlayer } from './context/PlayerContext';
 import LevelUpNotification from './components/LevelUpNotification';
 import PauseMenu from './components/PauseMenu';
@@ -860,6 +861,16 @@ const defaultWords = [
 
         if (screen === 'korean-spacing-game') {
             return <SpacingGame onBack={() => setScreen('korean-selection')} />;
+        }
+
+        if (screen === 'korean-chosung-game') {
+            return <ChosungGame 
+                onGameEnd={(finalScore) => {
+                    alert(`게임 종료! 최종 점수: ${finalScore}`);
+                    setScreen('korean-selection');
+                }}
+                onBack={() => setScreen('korean-selection')}
+            />;
         }
 
         if (screen === 'math-game') {
