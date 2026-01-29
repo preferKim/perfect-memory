@@ -7,6 +7,7 @@ import ConnectingGameScreen from './screens/ConnectingGameScreen';
 import SubjectScreen from './screens/SubjectScreen';
 import KoreanSelectionScreen from './screens/KoreanSelectionScreen';
 import LiteraryTermsScreen from './screens/LiteraryTermsScreen';
+import LiteraryTermsQuiz from './screens/LiteraryTermsQuiz';
 import MathSelectionScreen from './screens/MathSelectionScreen';
 import MathGameScreen from './screens/MathGameScreen';
 import ClickerGame from './screens/playground/ClickerGame';
@@ -859,7 +860,14 @@ const defaultWords = [
         }
 
         if (screen === 'literary_terms') {
-            return <LiteraryTermsScreen onBackToSelection={() => setScreen('korean-selection')} />;
+            return <LiteraryTermsScreen 
+                onBackToSelection={() => setScreen('korean-selection')}
+                onStartQuiz={() => setScreen('literary_terms_quiz')}
+            />;
+        }
+
+        if (screen === 'literary_terms_quiz') {
+            return <LiteraryTermsQuiz onBack={() => setScreen('literary_terms')} />;
         }
 
         if (screen === 'korean-spelling-game') {

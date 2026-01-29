@@ -51,11 +51,12 @@ const ChosungGame = ({ onGameEnd, onBack }) => {
     }, [currentQuestionIndex, questions, feedback]);
 
     // Added useEffect for auto-focus
+    // Added useEffect for auto-focus and maintain focus on hint
     useEffect(() => {
         if (inputRef.current) {
             inputRef.current.focus();
         }
-    }, [currentQuestionIndex, questions]);
+    }, [currentQuestionIndex, questions, showHint]); // Added showHint to dependencies
     
     const handleNextQuestion = (isCorrect) => {
         if (isCorrect) {
@@ -97,7 +98,8 @@ const ChosungGame = ({ onGameEnd, onBack }) => {
     const currentQuestion = questions[currentQuestionIndex];
 
     return (
-        <div className="text-center w-full max-w-2xl mx-auto">
+        <div className="text-center w-full max-w-2xl mx-auto flex flex-col h-screen">
+            {/* Header */}
             <div className="w-full flex justify-between items-center mb-4">
                 <div className="w-1/4 text-left">
                     <button
@@ -117,48 +119,53 @@ const ChosungGame = ({ onGameEnd, onBack }) => {
                 </div>
             </div>
 
-            <div className="bg-black/10 p-2 rounded-lg mb-4 flex justify-around text-xs sm:text-sm text-gray-300">
-                <span className="flex items-center"><Star size={14} className="mr-1.5 text-yellow-400"/>난이도: {renderDifficulty(currentQuestion.level)}</span>
-                <span className="flex items-center">남은 시간: {timeLeft}초</span>
-                <span className="flex items-center">진행: {currentQuestionIndex + 1}/{questions.length}</span>
-            </div>
-            
-            <div className="glass-card p-8 rounded-lg mb-6 max-w-md mx-auto">
-                <p className="text-2xl font-semibold text-gray-300 mb-2">카테고리: {currentQuestion.category}</p>
-                <p className="text-5xl font-bold tracking-[.2em] mb-4">{currentQuestion.chosung}</p>
+            {/* Scrollable Content Area */}
+            <div className="flex-grow overflow-y-auto pb-4"> 
+                <div className="bg-black/10 p-2 rounded-lg mb-4 flex justify-around text-xs sm:text-sm text-gray-300">
+                    <span className="flex items-center"><Star size={14} className="mr-1.5 text-yellow-400"/>난이도: {renderDifficulty(currentQuestion.level)}</span>
+                    <span className="flex items-center">남은 시간: {timeLeft}초</span>
+                    <span className="flex items-center">진행: {currentQuestionIndex + 1}/{questions.length}</span>
+                </div>
                 
-                {!showHint && (
-                    <Button onClick={() => setShowHint(true)} variant="flat" color="gray" className="mt-2 text-sm px-4 py-2">
-                        힌트 보기 💡
-                    </Button>
-                )}
-                {showHint && (
-                    <p className="text-lg text-primary-light mt-2">힌트: {currentQuestion.hint}</p>
-                )}
+                <div className="glass-card p-8 rounded-lg mb-6 max-w-md mx-auto">
+                    <p className="text-2xl font-semibold text-gray-300 mb-2">카테고리: {currentQuestion.category}</p>
+                    <p className="text-5xl font-bold tracking-[.2em] mb-4">{currentQuestion.chosung}</p>
+                    
+                    {!showHint && (
+                        <Button onClick={() => setShowHint(true)} variant="flat" color="gray" className="mt-2 text-sm px-4 py-2">
+                            힌트 보기 💡
+                        </Button>
+                    )}
+                    {showHint && (
+                        <p className="text-lg text-primary-light mt-2">힌트: {currentQuestion.hint}</p>
+                    )}
+                </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="flex gap-2 justify-center max-w-md mx-auto">
-                <input
-                    type="text"
-                    value={userInput}
-                    onChange={(e) => setUserInput(e.target.value)}
-                    className="text-2xl text-center bg-transparent border-2 border-white/50 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-primary-light flex-grow"
-                    ref={inputRef} // Added ref
-                    // autoFocus // Removed autoFocus
-                    disabled={feedback.startsWith('정답') || feedback.startsWith('시간 초과')}
-                />
-                <Button 
-                    type="submit" 
-                    variant="threedee" 
-                    color="primary"
-                    className="flex-shrink-0"
-                    disabled={feedback.startsWith('정답') || feedback.startsWith('시간 초과')}
-                >
-                    제출
-                </Button>
-            </form>
-            
-            {feedback && <p className={`mt-4 text-xl font-bold ${feedback.includes('정답') ? 'text-green-400' : 'text-red-400'}`}>{feedback}</p>}
+            {/* Input and Feedback Area (fixed at bottom of flex container) */}
+            <div className="p-4 bg-gray-900/80 sticky bottom-0 z-10"> {/* Added sticky footer for input/feedback */}
+                <form onSubmit={handleSubmit} className="flex gap-2 w-full">
+                    <input
+                        type="text"
+                        value={userInput}
+                        onChange={(e) => setUserInput(e.target.value)}
+                        className="text-2xl text-center bg-transparent border-2 border-white/50 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-primary-light w-4/5" // Changed flex-grow to w-4/5
+                        ref={inputRef}
+                        disabled={feedback.startsWith('정답') || feedback.startsWith('시간 초과')}
+                    />
+                    <Button 
+                        type="submit" 
+                        variant="threedee" 
+                        color="primary"
+                        className="flex-shrink-0"
+                        disabled={feedback.startsWith('정답') || feedback.startsWith('시간 초과')}
+                    >
+                        제출
+                    </Button>
+                </form>
+                
+                {feedback && <p className={`mt-4 text-xl font-bold ${feedback.includes('정답') ? 'text-green-400' : 'text-red-400'}`}>{feedback}</p>}
+            </div>
         </div>
     );
 };

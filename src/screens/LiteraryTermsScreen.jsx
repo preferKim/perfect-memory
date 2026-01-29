@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Button from '../components/Button';
 import { ArrowLeft, BookOpen } from 'lucide-react';
 
-const LiteraryTermsScreen = ({ onBackToSelection }) => {
+const LiteraryTermsScreen = ({ onBackToSelection, onStartQuiz }) => {
     const [terms, setTerms] = useState([]);
     const [selectedTerm, setSelectedTerm] = useState(null); // null means showing list, object means showing detail
 
@@ -95,12 +95,12 @@ const LiteraryTermsScreen = ({ onBackToSelection }) => {
             {/* Quiz Button Section */}
             <div className="w-full mb-8">
                 <Button 
-                    onClick={() => alert('퀴즈 기능은 준비중입니다.')}
+                    onClick={onStartQuiz}
                     variant="threedee" 
                     color="primary"
-                    className="w-full h-28 text-2xl"
+                    className="w-full h-28 text-2xl flex flex-col justify-center items-center"
                 >
-                    📝 문학 개념어 퀴즈 <br/> <span className="text-sm">(준비중)</span>
+                    📝<span className="mt-2">문학 개념어 퀴즈</span>
                 </Button>
             </div>
 
