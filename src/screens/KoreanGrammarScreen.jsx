@@ -46,7 +46,8 @@ const KoreanGrammarScreen = ({ onBackToSelection, onStartQuiz }) => {
                 {/* Term Details */}
                 <div className="overflow-y-auto pr-2 -mr-2 flex-grow">
                     <div className="glass-card p-6 sm:p-8 rounded-lg mb-6 w-full text-left bg-black/20">
-                        <h3 className="text-3xl font-bold text-primary-light mb-4">{selectedTerm.term}</h3>
+                        <h3 className="text-3xl font-bold text-primary-light mb-2">{selectedTerm.term}</h3>
+                        <p className="text-xl font-semibold text-primary-light mb-4">{selectedTerm.hanja} ({selectedTerm.hanja_meaning})</p>
                         <p className="text-lg text-gray-200 mb-6 leading-relaxed">{selectedTerm.description}</p>
                         
                         {selectedTerm.examples && selectedTerm.examples.length > 0 && (
@@ -114,9 +115,12 @@ const KoreanGrammarScreen = ({ onBackToSelection, onStartQuiz }) => {
                                 onClick={() => setSelectedTerm(term)}
                                 variant="threedee" 
                                 color="normal"
-                                className="w-full h-24 text-base p-1 flex items-center justify-center"
+                                className="w-full h-24 text-base p-1 flex flex-col justify-center text-center"
                             >
-                                {term.term}
+                                <>
+                                    <span className="text-lg font-bold underline">{term.term}</span>
+                                    {`(${term.hanja_meaning.split(',')[0]})`}
+                                </>
                             </Button>
                         ))}
                     </div>
