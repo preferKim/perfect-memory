@@ -92,19 +92,36 @@ const LiteraryTermsScreen = ({ onBackToSelection }) => {
                 </div>
             </div>
 
-            {/* Terms List */}
-            <div className="grid grid-cols-2 gap-4 w-full"> {/* Always 2 columns for terms */}
-                {terms.map((term, index) => (
-                    <Button 
-                        key={index} 
-                        onClick={() => setSelectedTerm(term)}
-                        variant="threedee" 
-                        color="normal" // Using 'normal' color for term buttons
-                        className="w-full h-24 text-xl flex items-center justify-center"
-                    >
-                        {term.term.split(' ')[0]} {/* Display only the Korean term */}
-                    </Button>
-                ))}
+            {/* Quiz Button Section */}
+            <div className="w-full mb-8">
+                <Button 
+                    onClick={() => alert('퀴즈 기능은 준비중입니다.')}
+                    variant="threedee" 
+                    color="primary"
+                    className="w-full h-28 text-2xl"
+                >
+                    📝 문학 개념어 퀴즈 <br/> <span className="text-sm">(준비중)</span>
+                </Button>
+            </div>
+
+            {/* Learning Area Section */}
+            <div className="w-full">
+                <h3 className="text-xl font-bold text-white mb-4">
+                    <span className="inline-block border-b-2 border-primary-light pb-1">학습 영역</span>
+                </h3>
+                <div className="grid grid-cols-4 gap-2 w-full">
+                    {terms.map((term, index) => (
+                        <Button 
+                            key={index} 
+                            onClick={() => setSelectedTerm(term)}
+                            variant="threedee" 
+                            color="normal"
+                            className="w-full h-20 text-base p-1 flex items-center justify-center"
+                        >
+                            {term.term.split(' ')[0]}
+                        </Button>
+                    ))}
+                </div>
             </div>
         </div>
     );
