@@ -34,6 +34,8 @@ const Button = ({
         normal: 'bg-normal-light text-gray-800 shadow-lg scale-105',
         connect: 'bg-connect-light text-gray-800 shadow-lg scale-105',
         inactive: 'bg-white/10 text-white hover:bg-white/20',
+        warning:
+            'bg-warning text-white hover:bg-warning-dark shadow-[0_4px_0_theme(colors.warning.dark)]',
     };
 
     let selectedVariantClass, selectedColorClass;

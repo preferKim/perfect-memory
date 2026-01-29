@@ -6,6 +6,9 @@ import RankingScreen from './screens/RankingScreen';
 import ConnectingGameScreen from './screens/ConnectingGameScreen';
 import SubjectScreen from './screens/SubjectScreen';
 import KoreanSelectionScreen from './screens/KoreanSelectionScreen';
+import KoreanGrammarScreen from './screens/KoreanGrammarScreen';
+import LiteraryTermsScreen from './screens/LiteraryTermsScreen';
+import LiteraryTermsQuiz from './screens/LiteraryTermsQuiz';
 import MathSelectionScreen from './screens/MathSelectionScreen';
 import MathGameScreen from './screens/MathGameScreen';
 import ClickerGame from './screens/playground/ClickerGame';
@@ -15,6 +18,7 @@ import PuzzleGame from './components/games/PuzzleGame';
 import SpellingGame from './components/games/SpellingGame';
 import SpacingGame from './components/games/SpacingGame';
 import ChosungGame from './components/games/ChosungGame';
+import GrammarQuiz from './components/games/GrammarQuiz';
 import { usePlayer } from './context/PlayerContext';
 import LevelUpNotification from './components/LevelUpNotification';
 import PauseMenu from './components/PauseMenu';
@@ -778,6 +782,10 @@ const defaultWords = [
     const handleNavigate = (screen) => {
         if (screen === 'tamagotchi') {
             dispatch({ type: 'GO_TO_TAMAGOTCHI' });
+        } else if (screen === 'literary_terms') {
+            setScreen('literary_terms');
+        } else if (screen === 'korean_grammar') {
+            setScreen('korean_grammar');
         }
     };
 
@@ -853,6 +861,28 @@ const defaultWords = [
                 onSelectGame={(gameType) => setScreen(`korean-${gameType}-game`)}
                 onBackToSubjects={() => setScreen('subjects')}
             />;
+        }
+
+        if (screen === 'korean_grammar') {
+            return <KoreanGrammarScreen 
+                onBackToSelection={() => setScreen('korean-selection')}
+                onStartQuiz={() => setScreen('korean_grammar_quiz')}
+            />;
+        }
+
+        if (screen === 'korean_grammar_quiz') {
+            return <GrammarQuiz onBack={() => setScreen('korean_grammar')} />;
+        }
+
+        if (screen === 'literary_terms') {
+            return <LiteraryTermsScreen 
+                onBackToSelection={() => setScreen('korean-selection')}
+                onStartQuiz={() => setScreen('literary_terms_quiz')}
+            />;
+        }
+
+        if (screen === 'literary_terms_quiz') {
+            return <LiteraryTermsQuiz onBack={() => setScreen('literary_terms')} />;
         }
 
         if (screen === 'korean-spelling-game') {

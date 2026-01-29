@@ -42,7 +42,7 @@ const KoreanSelectionScreen = ({ user, onNavigate, onSelectGame, onBackToSubject
                         onClick={() => handleGameStart('spelling')}
                         variant="threedee"
                         color="primary"
-                        className="w-full h-32 text-xl flex flex-col justify-center items-center"
+                        className="w-full h-32 text-lg flex flex-col justify-center items-center"
                     >
                         📝 맞춤법
                     </Button>
@@ -50,7 +50,7 @@ const KoreanSelectionScreen = ({ user, onNavigate, onSelectGame, onBackToSubject
                         onClick={() => handleGameStart('spacing')}
                         variant="threedee"
                         color="secondary"
-                        className="w-full h-32 text-xl flex flex-col justify-center items-center"
+                        className="w-full h-32 text-lg flex flex-col justify-center items-center"
                     >
                         ✍️ 띄어쓰기
                     </Button>
@@ -58,7 +58,7 @@ const KoreanSelectionScreen = ({ user, onNavigate, onSelectGame, onBackToSubject
                         onClick={() => handleGameStart('chosung')}
                         variant="threedee"
                         color="success" // Changed from 'green' to 'success'
-                        className="w-full h-32 text-xl flex flex-col justify-center items-center"
+                        className="w-full h-32 text-lg flex flex-col justify-center items-center"
                     >
                         🧐 초성 퀴즈
                     </Button>
@@ -66,7 +66,7 @@ const KoreanSelectionScreen = ({ user, onNavigate, onSelectGame, onBackToSubject
                         onClick={() => handleComingSoon('문장 따라쓰기')}
                         variant="threedee"
                         color="gray"
-                        className="w-full h-32 text-2xl"
+                        className="w-full h-32 text-lg"
                     >
                         🖋️<br/>문장 따라쓰기<br/><span className="text-sm">(준비중)</span>
                     </Button>
@@ -78,18 +78,26 @@ const KoreanSelectionScreen = ({ user, onNavigate, onSelectGame, onBackToSubject
                 </p>
                 <div className="grid grid-cols-2 gap-4 max-w-2xl mx-auto mb-10">
                     <Button
-                        onClick={() => handleComingSoon('문학 개념어')}
+                        onClick={() => onNavigate('literary_terms')}
                         variant="threedee"
-                        color="gray"
-                        className="w-full h-32 text-2xl"
+                        color="normal"
+                        className="w-full h-32 text-lg flex flex-col justify-center items-center"
                     >
-                        📚<br/>문학 개념어<br/><span className="text-sm">(준비중)</span>
+                        📚 문학 개념어
+                    </Button>
+                    <Button
+                        onClick={() => onNavigate('korean_grammar')}
+                        variant="threedee"
+                        color="warning"
+                        className="w-full h-32 text-lg flex flex-col justify-center items-center"
+                    >
+                        ⚖️ 문법기본(품사)
                     </Button>
                     <Button
                         onClick={() => handleComingSoon('비문학 요약 훈련')}
                         variant="threedee"
                         color="gray"
-                        className="w-full h-32 text-2xl"
+                        className="w-full h-32 text-lg"
                     >
                         📰<br/>비문학 요약 훈련<br/><span className="text-sm">(준비중)</span>
                     </Button>
@@ -97,7 +105,7 @@ const KoreanSelectionScreen = ({ user, onNavigate, onSelectGame, onBackToSubject
                         onClick={() => handleComingSoon('한자어 뿌리 찾기')}
                         variant="threedee"
                         color="gray"
-                        className="w-full h-32 text-2xl"
+                        className="w-full h-32 text-lg"
                     >
                         🗄️<br/>한자어 뿌리 찾기<br/><span className="text-sm">(준비중)</span>
                     </Button>
@@ -112,7 +120,7 @@ const KoreanSelectionScreen = ({ user, onNavigate, onSelectGame, onBackToSubject
                         onClick={() => handleComingSoon('자동 오답노트')}
                         variant="threedee"
                         color="gray"
-                        className="w-full h-32 text-2xl"
+                        className="w-full h-32 text-lg"
                     >
                         📋<br/>자동 오답노트<br/><span className="text-sm">(준비중)</span>
                     </Button>
@@ -120,7 +128,7 @@ const KoreanSelectionScreen = ({ user, onNavigate, onSelectGame, onBackToSubject
                         onClick={() => handleComingSoon('지문 끊어읽기')}
                         variant="threedee"
                         color="gray"
-                        className="w-full h-32 text-2xl"
+                        className="w-full h-32 text-lg"
                     >
                         ✂️<br/>지문 끊어읽기<br/><span className="text-sm">(준비중)</span>
                     </Button>

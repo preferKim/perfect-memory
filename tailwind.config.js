@@ -36,6 +36,11 @@ export default {
           DEFAULT: '#f783ac',
           dark: '#f06595',
         },
+        warning: {
+          light: '#ffe0b2',
+          DEFAULT: '#ff9800',
+          dark: '#ef6c00',
+        },
         google: {
           DEFAULT: '#ffffff',
           dark: '#e0e0e0',
