@@ -1,31 +1,34 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ArrowLeft, Lightbulb, BookOpen } from 'lucide-react';
+import { ArrowLeft, Lightbulb, BookOpen, CheckCircle, XCircle } from 'lucide-react';
 import Button from '../Button';
 
 const GrammarQuiz = ({ onBack }) => {
     const [questions, setQuestions] = useState([]);
+    const [grammarTerms, setGrammarTerms] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedWords, setSelectedWords] = useState([]);
     const [score, setScore] = useState(0);
     const [feedback, setFeedback] = useState(null); // 'correct', 'incorrect', or null
     const [isFinished, setIsFinished] = useState(false);
+    const [termDetails, setTermDetails] = useState(null);
 
     useEffect(() => {
-        const fetchQuestions = async () => {
+        const fetchAndSetData = async () => {
             try {
-                const response = await fetch('/words/korean_grammar_quiz.json');
-                if (!response.ok) {
-                    throw new Error('Failed to load quiz data');
-                }
-                const data = await response.json();
-                // Shuffle questions for variety
-                setQuestions(data.sort(() => Math.random() - 0.5));
+                // Fetch questions
+                const questionsResponse = await fetch('/words/korean_grammar_quiz.json');
+                const questionsData = await questionsResponse.json();
+                setQuestions(questionsData.sort(() => Math.random() - 0.5));
+
+                // Fetch grammar terms
+                const termsResponse = await fetch('/words/korean_grammar_terms.json');
+                const termsData = await termsResponse.json();
+                setGrammarTerms(termsData);
             } catch (error) {
-                console.error("Error fetching quiz data:", error);
-                // Handle error, maybe show a message to the user
+                console.error("Error fetching data:", error);
             }
         };
-        fetchQuestions();
+        fetchAndSetData();
     }, []);
 
     const currentQuestion = questions[currentQuestionIndex];
@@ -52,6 +55,11 @@ const GrammarQuiz = ({ onBack }) => {
         } else {
             setFeedback('incorrect');
         }
+        
+        // Find and set term details
+        const termName = currentQuestion.term;
+        const details = grammarTerms.find(t => t.term === termName);
+        setTermDetails(details);
     };
 
     const nextQuestion = () => {
@@ -59,6 +67,7 @@ const GrammarQuiz = ({ onBack }) => {
             setCurrentQuestionIndex(prev => prev + 1);
             setSelectedWords([]);
             setFeedback(null);
+            setTermDetails(null); // Reset details
         } else {
             setIsFinished(true);
         }
@@ -69,6 +78,7 @@ const GrammarQuiz = ({ onBack }) => {
         setSelectedWords([]);
         setScore(0);
         setFeedback(null);
+        setTermDetails(null); // Reset details
         setIsFinished(false);
         // Reshuffle questions on restart
         setQuestions(prev => [...prev].sort(() => Math.random() - 0.5));
@@ -153,10 +163,40 @@ const GrammarQuiz = ({ onBack }) => {
                         </Button>
                     ) : (
                         <div className="w-full animate-fade-in">
+                            <p className={`text-2xl font-bold mb-4 flex items-center justify-center ${feedback === 'correct' ? 'text-green-400' : 'text-red-400'}`}>
+                                {feedback === 'correct' ? (
+                                    <>
+                                        <CheckCircle size={28} className="mr-2" /> 정답입니다!
+                                    </>
+                                ) : (
+                                    <>
+                                        <XCircle size={28} className="mr-2" /> 오답입니다.
+                                    </>
+                                )}
+                            </p>
                             {currentQuestion.explain && (
                                 <div className="bg-black/20 p-4 rounded-xl mb-4 text-left border border-white/10">
                                     <h3 className="font-bold text-lg text-blue-300 flex items-center mb-2"><BookOpen size={18} className="mr-2"/>해설</h3>
                                     <p className="text-sm text-gray-200">{currentQuestion.explain}</p>
+                                </div>
+                            )}
+                            {feedback !== null && termDetails && (
+                                <div className="bg-black/20 p-4 rounded-xl mt-4 text-left border border-white/10 animate-fade-in">
+                                    <h3 className="font-bold text-lg text-green-300 flex items-center mb-2"><BookOpen size={18} className="mr-2"/>'<strong>{termDetails.term}</strong>' 개념 다시보기</h3>
+                                    <div className="border-t border-white/20 pt-2 mt-2">
+                                        <p className="text-md font-semibold text-primary-light mb-2">{termDetails.hanja} ({termDetails.hanja_meaning})</p>
+                                        <p className="text-sm text-gray-200 mb-3 leading-relaxed">{termDetails.description}</p>
+                                        {termDetails.examples && termDetails.examples.length > 0 && (
+                                            <div>
+                                                <h4 className="text-sm font-semibold text-white mb-2">예시:</h4>
+                                                <ul className="list-disc list-inside text-sm text-gray-300">
+                                                    {termDetails.examples.map((example, index) => (
+                                                        <li key={index}>"{example.quote}"</li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             )}
                             <Button onClick={nextQuestion} variant="threedee" color="primary" className="w-full mt-4">
