@@ -806,12 +806,16 @@ const defaultWords = [
     };
 
     const handleMathLevelSelect = (topicLevel, difficulty) => {
-        const difficultyMap = {
-            elementary: 'easy',
-            middle: 'medium',
-            high: 'hard',
-        };
-        setMathDifficulty(difficultyMap[difficulty] || 'easy');
+        if (difficulty === 'jsj50day') {
+            setMathDifficulty('jsj50day');
+        } else {
+            const difficultyMap = {
+                elementary: 'easy',
+                middle: 'medium',
+                high: 'hard',
+            };
+            setMathDifficulty(difficultyMap[difficulty] || 'easy');
+        }
         setSelectedTopicLevel(topicLevel);
         setScreen('math-game');
     };

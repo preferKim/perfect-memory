@@ -33,29 +33,35 @@ const MathGameScreen = ({ onBack, difficulty, topicLevel, user, addXp }) => {
   // Define loadQuestions function outside of useEffect to be callable by restartGame
   const loadQuestions = () => {
     const selectedDifficulty = difficulty || 'easy';
-    const selectedTopicLevel = topicLevel || 1; // Default to 1 if not provided
+    const selectedTopicLevel = topicLevel || 1;
 
-    setIsLoading(true); // Always show loading when fetching
+    setIsLoading(true);
 
-    fetch(`/words/math_${selectedDifficulty}.json`)
+    const filePath = selectedDifficulty === 'jsj50day'
+      ? '/words/math_jsj50day.json'
+      : `/words/math_${selectedDifficulty}.json`;
+
+    fetch(filePath)
       .then(res => {
         if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
+          throw new Error(`HTTP error! status: ${res.status}`);
         }
         return res.json();
       })
       .then(data => {
         let finalQuestions = [];
-        if (data.length === 0) {
-          console.warn(`No questions found in file for difficulty: ${selectedDifficulty}`);
-        } else {
-          finalQuestions = data.filter(q => q.level === selectedTopicLevel);
-          if (finalQuestions.length === 0) {
-              console.warn(`No questions found for topic level ${selectedTopicLevel} in difficulty ${selectedDifficulty}.`);
+        if (data.length > 0) {
+          if (selectedDifficulty === 'jsj50day') {
+            finalQuestions = data.filter(q => q.stage === selectedTopicLevel);
+          } else {
+            finalQuestions = data.filter(q => q.level === selectedTopicLevel);
           }
         }
         
-        // Shuffle and slice to get 10 random questions
+        if (finalQuestions.length === 0) {
+          console.warn(`No questions found for topic level ${selectedTopicLevel} in difficulty ${selectedDifficulty}.`);
+        }
+        
         const shuffled = [...finalQuestions].sort(() => 0.5 - Math.random());
         setQuestions(shuffled.slice(0, 10));
         setIsLoading(false);
