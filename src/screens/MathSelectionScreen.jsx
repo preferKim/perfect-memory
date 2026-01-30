@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Calculator, Sigma, TrendingUp, Triangle, BarChart3, BookOpen } from 'lucide-react';
+import { ArrowLeft, Calculator, Sigma, TrendingUp, Triangle, BarChart3, BookOpen, X as XIcon } from 'lucide-react';
 import HeaderSection from '../components/HeaderSection';
+import MathRenderer from '../components/MathRenderer';
+
 
 const mathTopics = [
     { 
@@ -100,40 +102,56 @@ const seungjeCurriculum = [
 ];
 
 
-const MathSelectionScreen = ({ onBack, onLevelSelect, user, onSignUp, onLogin, onLogout, onNavigate }) => {
+const MathSelectionScreen = ({ onBack, onLevelSelect, onLectureSelect, user, onSignUp, onLogin, onLogout, onNavigate }) => {
     const [activeTab, setActiveTab] = useState('level');
     const [availableStages, setAvailableStages] = useState(null);
+    const [objectives, setObjectives] = useState({});
 
     useEffect(() => {
         if (activeTab === 'seungje') {
-            fetch('/words/math_jsj50day.json')
-                .then(res => res.json())
-                .then(data => {
-                    const stages = new Set(data.map(item => item.stage));
-                    setAvailableStages(stages);
-                })
-                .catch(error => {
-                    console.error("Failed to load seungje curriculum data:", error);
-                    setAvailableStages(new Set()); // On error, assume no stages are available
-                });
+            // Fetch objectives and available stages when the seungje tab is active
+            const fetchSeungjeData = async () => {
+                try {
+                    const [objectivesRes, stagesRes] = await Promise.all([
+                        fetch('/words/math_jsj50day_objectives.json'),
+                        fetch('/words/math_jsj50day.json')
+                    ]);
+                    
+                    if (!objectivesRes.ok || !stagesRes.ok) {
+                        throw new Error('Failed to load Seungje math data');
+                    }
+                    
+                    const objectivesData = await objectivesRes.json();
+                    const stagesData = await stagesRes.json();
+                    
+                    setObjectives(objectivesData);
+                    
+                    if (Array.isArray(stagesData)) {
+                        const stageSet = new Set(stagesData.map(q => q.stage));
+                        setAvailableStages(stageSet);
+                    }
+                } catch (error) {
+                    console.error("Error fetching Seungje math data:", error);
+                    setAvailableStages(new Set()); // Set to empty set on error
+                }
+            };
+            
+            fetchSeungjeData();
         }
     }, [activeTab]);
 
-    const handleSelect = (topicId, difficulty) => {
+    const handleTopicSelect = (topicId, difficulty) => {
         if (activeTab === 'level') {
             onLevelSelect(topicId, difficulty);
         } else {
-            if (availableStages === null) {
-                // Data is still loading
-                return;
-            }
-
             const stage = parseInt(topicId.split('_')[1]);
-            
-            if (availableStages.has(stage)) {
-                onLevelSelect(stage, 'jsj50day');
-            } else {
-                alert('문제 준비중입니다.');
+            const lecture = seungjeCurriculum.find(item => item.id === topicId);
+            if (lecture && availableStages) {
+                onLectureSelect(
+                    { stage: stage, title: lecture.title },
+                    objectives[stage],
+                    availableStages.has(stage)
+                );
             }
         }
     };
@@ -191,7 +209,7 @@ const MathSelectionScreen = ({ onBack, onLevelSelect, user, onSignUp, onLogin, o
                             
                             <div className="space-y-3">
                                 <button 
-                                    onClick={() => handleSelect(topic.level, 'elementary')}
+                                    onClick={() => handleTopicSelect(topic.level, 'elementary')}
                                     className="w-full text-left p-4 rounded-lg bg-black/20 hover:bg-primary/20 border border-white/5 hover:border-primary/50 transition-all group flex items-start"
                                 >
                                     <span className="text-primary-light font-bold min-w-[60px] shrink-0">[초등]</span>
@@ -199,7 +217,7 @@ const MathSelectionScreen = ({ onBack, onLevelSelect, user, onSignUp, onLogin, o
                                 </button>
 
                                 <button 
-                                    onClick={() => handleSelect(topic.level, 'middle')}
+                                    onClick={() => handleTopicSelect(topic.level, 'middle')}
                                     className="w-full text-left p-4 rounded-lg bg-black/20 hover:bg-secondary/20 border border-white/5 hover:border-secondary/50 transition-all group flex items-start"
                                 >
                                     <span className="text-secondary-light font-bold min-w-[60px] shrink-0">[중등]</span>
@@ -207,7 +225,7 @@ const MathSelectionScreen = ({ onBack, onLevelSelect, user, onSignUp, onLogin, o
                                 </button>
 
                                 <button 
-                                    onClick={() => handleSelect(topic.level, 'high')}
+                                    onClick={() => handleTopicSelect(topic.level, 'high')}
                                     className="w-full text-left p-4 rounded-lg bg-black/20 hover:bg-danger/20 border border-white/5 hover:border-danger/50 transition-all group flex items-start"
                                 >
                                     <span className="text-danger-light font-bold min-w-[60px] shrink-0">[고등]</span>
@@ -224,7 +242,7 @@ const MathSelectionScreen = ({ onBack, onLevelSelect, user, onSignUp, onLogin, o
                     {seungjeCurriculum.map((item) => (
                         <button 
                             key={item.id}
-                            onClick={() => handleSelect(item.id)}
+                            onClick={() => handleTopicSelect(item.id)}
                             className="w-full text-left p-4 rounded-lg bg-black/20 hover:bg-white/20 border border-white/10 hover:border-white/30 transition-all group"
                         >
                             <div className="flex items-center gap-3">
