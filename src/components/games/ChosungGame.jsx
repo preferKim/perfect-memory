@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from '../Button';
 import { ArrowLeft, Star } from 'lucide-react';
 
-const ChosungGame = ({ onGameEnd, onBack }) => {
+const ChosungGame = () => {
+    const navigate = useNavigate();
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [userInput, setUserInput] = useState('');
@@ -76,7 +78,7 @@ const ChosungGame = ({ onGameEnd, onBack }) => {
                 setShowHint(false); // Reset showHint for new question
             } else {
                 const finalScore = isCorrect ? score + 10 + timeLeft : score;
-                onGameEnd(finalScore); // End game
+                navigate('/korean/chosung-result', { state: { score: finalScore } }); // End game
             }
         }, 1500);
     };
@@ -103,7 +105,7 @@ const ChosungGame = ({ onGameEnd, onBack }) => {
             <div className="w-full flex justify-between items-center mb-4">
                 <div className="w-1/4 text-left">
                     <button
-                        onClick={onBack}
+                        onClick={() => navigate(-1)}
                         className="text-gray-200 hover:text-white transition p-2"
                         title="뒤로가기"
                         aria-label="Back to Korean selection"

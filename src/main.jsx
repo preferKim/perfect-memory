@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom';
 import 'katex/dist/katex.min.css';
 import './index.css'
 import App from './App.jsx'
@@ -7,8 +8,10 @@ import { PlayerProvider } from './context/PlayerContext.jsx'; // Add PlayerProvi
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <PlayerProvider> {/* Wrap App with PlayerProvider */}
-      <App />
-    </PlayerProvider>
+    <BrowserRouter>
+      <PlayerProvider> {/* Wrap App with PlayerProvider */}
+        <App />
+      </PlayerProvider>
+    </BrowserRouter>
   </StrictMode>,
 )

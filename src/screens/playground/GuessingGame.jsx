@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Hash } from 'lucide-react';
 import Button from '../../components/Button';
 
 const GUESS_LIMIT = 5;
 
-const GuessingGame = ({ onBack }) => {
+const GuessingGame = () => {
+    const navigate = useNavigate();
     const [targetNumber, setTargetNumber] = useState(0);
     const [guess, setGuess] = useState('');
     const [message, setMessage] = useState('1과 100 사이의 숫자를 맞춰보세요!');
@@ -71,7 +73,7 @@ const GuessingGame = ({ onBack }) => {
     return (
         <div className="glass-card p-6 sm:p-12 text-center relative flex flex-col items-center">
             <button
-                onClick={onBack}
+                onClick={() => navigate(-1)}
                 className="absolute top-4 left-4 text-gray-200 hover:text-white transition p-2"
                 title="Back"
                 aria-label="Back"

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 import { ArrowLeft, BookOpen } from 'lucide-react';
 
-const LiteraryTermsScreen = ({ onBackToSelection, onStartQuiz }) => {
+const LiteraryTermsScreen = () => {
+    const navigate = useNavigate();
     const [terms, setTerms] = useState([]);
     const [selectedTerm, setSelectedTerm] = useState(null); // null means showing list, object means showing detail
 
@@ -76,7 +78,7 @@ const LiteraryTermsScreen = ({ onBackToSelection, onStartQuiz }) => {
             <div className="w-full flex justify-between items-center mb-4">
                 <div className="w-1/4 text-left">
                     <button
-                        onClick={onBackToSelection} // Go back to Korean selection screen
+                        onClick={() => navigate('/korean')} // Go back to Korean selection screen
                         className="text-gray-200 hover:text-white transition p-2"
                         title="국어 선택으로"
                         aria-label="Back to Korean selection screen"
@@ -95,7 +97,7 @@ const LiteraryTermsScreen = ({ onBackToSelection, onStartQuiz }) => {
             {/* Quiz Button Section */}
             <div className="w-full mb-8">
                 <Button 
-                    onClick={onStartQuiz}
+                    onClick={() => navigate('/korean/literary-terms-quiz')}
                     variant="threedee" 
                     color="primary"
                     className="w-full h-28 text-2xl flex flex-col justify-center items-center"

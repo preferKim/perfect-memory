@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, CheckCircle, XCircle, HelpCircle, Star, BookOpen, Lightbulb } from 'lucide-react';
 import Button from '../Button';
 
-const SpellingGame = ({ onBack }) => {
+const SpellingGame = () => {
+    const navigate = useNavigate();
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [score, setScore] = useState(0);
@@ -106,7 +108,7 @@ const SpellingGame = ({ onBack }) => {
                 <div className="w-full flex justify-between items-center mb-4">
                     <div className="w-1/4">
                         <button
-                            onClick={onBack}
+                            onClick={() => navigate(-1)}
                             className="text-gray-200 hover:text-white transition p-2"
                             title="뒤로가기"
                             aria-label="Back to Korean selection"

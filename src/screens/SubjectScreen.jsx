@@ -1,14 +1,18 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { BookOpen, Gamepad2, Target, Keyboard, Hash, Puzzle } from 'lucide-react';
 import Button from '../components/Button';
 import HeaderSection from '../components/HeaderSection';
 
-const SubjectScreen = ({ onSubjectSelect, onSignUp, onLogin, onLogout, user, onNavigate }) => {
+const SubjectScreen = ({ onSignUp, onLogin, onLogout, user }) => {
+    const navigate = useNavigate();
+
     const handleSubjectClick = (subject) => {
         if (subject.startsWith('playground-')) {
-            onSubjectSelect(subject);
+            const game = subject.split('-')[1];
+            navigate(`/playground/${game}`);
         } else if (subject === 'english' || subject === 'math' || subject === 'korean') {
-            onSubjectSelect(subject);
+            navigate(`/${subject}`);
         } else {
             alert('아직 준비되지 않은 과목입니다.');
         }
@@ -21,7 +25,6 @@ const SubjectScreen = ({ onSubjectSelect, onSignUp, onLogin, onLogout, user, onN
                 onLogin={onLogin}
                 onLogout={onLogout}
                 user={user}
-                onNavigate={onNavigate}
             />
 
             <div className="space-y-5">

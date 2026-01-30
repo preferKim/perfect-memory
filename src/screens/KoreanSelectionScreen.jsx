@@ -1,15 +1,22 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import HeaderSection from '../components/HeaderSection';
 import { ArrowLeft } from 'lucide-react';
 import Button from '../components/Button';
-const KoreanSelectionScreen = ({ user, onNavigate, onSelectGame, onBackToSubjects }) => {
+
+const KoreanSelectionScreen = ({ user }) => {
+    const navigate = useNavigate();
 
     const handleGameStart = (gameType) => {
         if (gameType === 'spelling' || gameType === 'spacing' || gameType === 'chosung') {
-            onSelectGame(gameType);
+            navigate(`/korean/${gameType}`);
         } else {
             console.log(`Attempted to start game: ${gameType}, but it's not implemented yet.`);
         }
+    };
+
+    const handleNavigate = (path) => {
+        navigate(path);
     };
 
     const handleComingSoon = (featureName) => {
@@ -20,7 +27,7 @@ const KoreanSelectionScreen = ({ user, onNavigate, onSelectGame, onBackToSubject
         <div className="glass-card p-6 sm:p-12 text-center relative">
             <div className="absolute top-4 left-4 z-10">
                 <button
-                    onClick={onBackToSubjects}
+                    onClick={() => navigate('/')}
                     className="text-sm font-semibold text-gray-200 hover:text-white px-3 py-1.5 rounded-full border border-white/40 hover:border-white/80 bg-black/20 hover:bg-black/40 transition-all flex items-center"
                 >
                     <ArrowLeft size={16} className="mr-1" /> 과목선택
@@ -29,7 +36,7 @@ const KoreanSelectionScreen = ({ user, onNavigate, onSelectGame, onBackToSubject
             
             <HeaderSection
                 user={user}
-                onNavigate={onNavigate}
+                onNavigate={(screen) => handleNavigate(`/${screen}`)} // Assuming onNavigate was for top-level screens
             />
 
             <div className="mb-6 mt-8">
@@ -78,7 +85,7 @@ const KoreanSelectionScreen = ({ user, onNavigate, onSelectGame, onBackToSubject
                 </p>
                 <div className="grid grid-cols-2 gap-4 max-w-2xl mx-auto mb-10">
                     <Button
-                        onClick={() => onNavigate('korean_grammar')}
+                        onClick={() => handleNavigate('/korean/grammar')}
                         variant="threedee"
                         color="warning"
                         className="w-full h-32 text-lg flex flex-col justify-center items-center"
@@ -86,7 +93,7 @@ const KoreanSelectionScreen = ({ user, onNavigate, onSelectGame, onBackToSubject
                         ⚖️ 문법기본(품사)
                     </Button>
                     <Button
-                        onClick={() => onNavigate('literary_terms')}
+                        onClick={() => handleNavigate('/korean/literary-terms')}
                         variant="threedee"
                         color="normal"
                         className="w-full h-32 text-lg flex flex-col justify-center items-center"

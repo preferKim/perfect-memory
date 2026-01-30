@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Heart, BookOpen } from 'lucide-react';
 import Button from '../components/Button';
 
-const LiteraryTermsQuiz = ({ onBack }) => {
+const LiteraryTermsQuiz = () => {
+    const navigate = useNavigate();
     const nextButtonRef = useRef(null); // Ref for the "Next Question" button
     const [allTerms, setAllTerms] = useState([]);
     const [quizQuestions, setQuizQuestions] = useState([]);
@@ -116,7 +118,7 @@ const LiteraryTermsQuiz = ({ onBack }) => {
                 <Button onClick={handleRestart} variant="threedee" color="secondary" className="mt-4">
                     다시하기
                 </Button>
-                <Button onClick={onBack} variant="threedee" color="gray" className="mt-2">
+                <Button onClick={() => navigate(-1)} variant="threedee" color="gray" className="mt-2">
                     나가기
                 </Button>
             </div>
@@ -130,7 +132,7 @@ const LiteraryTermsQuiz = ({ onBack }) => {
             {/* Header */}
             <div className="w-full flex justify-between items-center mb-4">
                 <div className="w-1/4 text-left">
-                    <button onClick={onBack} className="text-gray-200 hover:text-white transition p-2" title="뒤로가기">
+                    <button onClick={() => navigate(-1)} className="text-gray-200 hover:text-white transition p-2" title="뒤로가기">
                         <ArrowLeft size={24} />
                     </button>
                 </div>

@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Lightbulb, BookOpen, CheckCircle, XCircle } from 'lucide-react';
 import Button from '../Button';
 
-const GrammarQuiz = ({ onBack }) => {
+const GrammarQuiz = () => {
+    const navigate = useNavigate();
     const [questions, setQuestions] = useState([]);
     const [grammarTerms, setGrammarTerms] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -97,7 +99,7 @@ const GrammarQuiz = ({ onBack }) => {
                 </p>
                 <div className="flex justify-center gap-4">
                     <Button onClick={restartQuiz} variant="threedee" color="primary">다시 풀기</Button>
-                    <Button onClick={onBack} variant="threedee" color="normal">돌아가기</Button>
+                    <Button onClick={() => navigate(-1)} variant="threedee" color="normal">돌아가기</Button>
                 </div>
             </div>
         );
@@ -108,7 +110,7 @@ const GrammarQuiz = ({ onBack }) => {
             <div className="w-full flex justify-between items-center mb-4">
                 <div className="w-1/4">
                     <button
-                        onClick={onBack}
+                        onClick={() => navigate(-1)}
                         className="text-gray-200 hover:text-white transition p-2"
                         title="뒤로가기"
                         aria-label="Back to selection"

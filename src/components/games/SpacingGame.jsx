@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, HelpCircle, Star, BookOpen, Lightbulb, CheckCircle, XCircle } from 'lucide-react';
 import Button from '../Button';
 
-const SpacingGame = ({ onBack }) => {
+const SpacingGame = () => {
+    const navigate = useNavigate();
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [score, setScore] = useState(0);
@@ -151,7 +153,7 @@ const SpacingGame = ({ onBack }) => {
             <div className="w-full">
                 <div className="w-full flex justify-between items-center mb-4">
                     <div className="w-1/4">
-                        <button onClick={onBack} className="text-gray-200 hover:text-white transition p-2" title="뒤로가기">
+                        <button onClick={() => navigate(-1)} className="text-gray-200 hover:text-white transition p-2" title="뒤로가기">
                             <ArrowLeft size={24} />
                         </button>
                     </div>

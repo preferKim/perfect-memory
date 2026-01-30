@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Calculator, Sigma, TrendingUp, Triangle, BarChart3, BookOpen, X as XIcon } from 'lucide-react';
 import HeaderSection from '../components/HeaderSection';
 import MathRenderer from '../components/MathRenderer';
@@ -102,7 +103,8 @@ const seungjeCurriculum = [
 ];
 
 
-const MathSelectionScreen = ({ onBack, onLevelSelect, onLectureSelect, user, onSignUp, onLogin, onLogout, onNavigate }) => {
+const MathSelectionScreen = ({ user, onSignUp, onLogin, onLogout }) => {
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('level');
     const [availableStages, setAvailableStages] = useState(null);
     const [objectives, setObjectives] = useState({});
@@ -142,17 +144,10 @@ const MathSelectionScreen = ({ onBack, onLevelSelect, onLectureSelect, user, onS
 
     const handleTopicSelect = (topicId, difficulty) => {
         if (activeTab === 'level') {
-            onLevelSelect(topicId, difficulty);
+            navigate('/math/game', { state: { topicLevel: topicId, difficulty } });
         } else {
-            const stage = parseInt(topicId.split('_')[1]);
-            const lecture = seungjeCurriculum.find(item => item.id === topicId);
-            if (lecture && availableStages) {
-                onLectureSelect(
-                    { stage: stage, title: lecture.title },
-                    objectives[stage],
-                    availableStages.has(stage)
-                );
-            }
+            // topicId is now the lecture id, e.g., 'seungje_01'
+            navigate(`/math/jsj50day/${topicId}`);
         }
     };
 
@@ -160,7 +155,7 @@ const MathSelectionScreen = ({ onBack, onLevelSelect, onLectureSelect, user, onS
         <div className="glass-card p-6 sm:p-8 text-center relative max-w-4xl w-full mx-auto">
              <div className="absolute top-4 left-4 z-10">
                 <button
-                    onClick={onBack}
+                    onClick={() => navigate(-1)}
                     className="text-sm font-semibold text-gray-200 hover:text-white px-3 py-1.5 rounded-full border border-white/40 hover:border-white/80 bg-black/20 hover:bg-black/40 transition-all flex items-center"
                 >
                     <ArrowLeft size={16} className="mr-1" /> 과목선택
@@ -171,7 +166,6 @@ const MathSelectionScreen = ({ onBack, onLevelSelect, onLectureSelect, user, onS
                 onLogin={onLogin}
                 onLogout={onLogout}
                 user={user}
-                onNavigate={onNavigate}
             />
 
             <h2 className="text-3xl font-bold text-white mb-2 mt-8">수학 학습 영역 선택</h2>
