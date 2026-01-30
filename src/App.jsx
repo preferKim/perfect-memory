@@ -11,6 +11,7 @@ import LiteraryTermsScreen from './screens/LiteraryTermsScreen';
 import LiteraryTermsQuiz from './screens/LiteraryTermsQuiz';
 import MathSelectionScreen from './screens/MathSelectionScreen';
 import MathGameScreen from './screens/MathGameScreen';
+import ObjectiveScreen from './screens/ObjectiveScreen';
 import ClickerGame from './screens/playground/ClickerGame';
 import TypingGame from './screens/playground/TypingGame';
 import GuessingGame from './screens/playground/GuessingGame';
@@ -220,12 +221,13 @@ const defaultWords = [
     const [speedRankings, setSpeedRankings] = useState([]);
     const [user, setUser] = useState(null);
     const [currentDescription, setCurrentDescription] = useState('');
-    const [screen, setScreen] = useState('subjects'); // 'subjects', 'modes', 'math-selection'
+    const [screen, setScreen] = useState('subjects'); // 'subjects', 'modes', 'math-selection', 'math-objective'
     const [mathDifficulty, setMathDifficulty] = useState('easy');
     const [selectedTopicLevel, setSelectedTopicLevel] = useState(1);
     const [chosungScore, setChosungScore] = useState(0);
     const appRef = useRef(null);
     const [mathGameKey, setMathGameKey] = useState(0);
+    const [selectedLecture, setSelectedLecture] = useState(null);
 
     useEffect(() => {
         const setVh = () => {
@@ -806,14 +808,27 @@ const defaultWords = [
     };
 
     const handleMathLevelSelect = (topicLevel, difficulty) => {
-        const difficultyMap = {
-            elementary: 'easy',
-            middle: 'medium',
-            high: 'hard',
-        };
-        setMathDifficulty(difficultyMap[difficulty] || 'easy');
+        if (difficulty === 'jsj50day') {
+            setMathDifficulty('jsj50day');
+        } else {
+            const difficultyMap = {
+                elementary: 'easy',
+                middle: 'medium',
+                high: 'hard',
+            };
+            setMathDifficulty(difficultyMap[difficulty] || 'easy');
+        }
         setSelectedTopicLevel(topicLevel);
         setScreen('math-game');
+    };
+
+    const handleLectureSelect = (lecture, objective, isStageAvailable) => {
+        setSelectedLecture({
+            ...lecture,
+            objective,
+            isStageAvailable
+        });
+        setScreen('math-objective');
     };
 
     const renderContent = () => {
@@ -847,12 +862,23 @@ const defaultWords = [
         if (screen === 'math-selection') {
             return <MathSelectionScreen 
                 onLevelSelect={handleMathLevelSelect}
+                onLectureSelect={handleLectureSelect}
                 onBack={resetGame}
                 user={user}
                 onSignUp={handleSignUp}
                 onLogin={handleLogin}
                 onLogout={handleLogout}
                 onNavigate={handleNavigate}
+            />;
+        }
+
+        if (screen === 'math-objective') {
+            return <ObjectiveScreen
+                lecture={selectedLecture}
+                objective={selectedLecture.objective}
+                isStageAvailable={selectedLecture.isStageAvailable}
+                onStart={() => handleMathLevelSelect(selectedLecture.stage, 'jsj50day')}
+                onBack={() => setScreen('math-selection')}
             />;
         }
 
