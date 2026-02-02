@@ -7,6 +7,7 @@ import EnglishSelectionScreen from './screens/EnglishSelectionScreen';
 import KoreanSelectionScreen from './screens/KoreanSelectionScreen';
 import MathSelectionScreen from './screens/MathSelectionScreen';
 import SocialSelectionScreen from './screens/SocialSelectionScreen';
+import ScienceSelectionScreen from './screens/ScienceSelectionScreen';
 import ObjectiveScreen from './screens/ObjectiveScreen';
 import GameScreen from './screens/GameScreen';
 import RankingScreen from './screens/RankingScreen';
@@ -15,6 +16,7 @@ import GrammarQuiz from './components/games/GrammarQuiz';
 import LiteraryTermsScreen from './screens/LiteraryTermsScreen';
 import LiteraryTermsQuiz from './screens/LiteraryTermsQuiz';
 import SocialQuizScreen from './screens/SocialQuizScreen';
+import ScienceQuizScreen from './screens/ScienceQuizScreen';
 import SpellingGame from './components/games/SpellingGame';
 import SpacingGame from './components/games/SpacingGame';
 import ChosungGame from './components/games/ChosungGame';
@@ -49,6 +51,8 @@ function App() {
           <Route path="/korean" element={<KoreanSelectionScreen />} />
           <Route path="/social" element={<SocialSelectionScreen />} />
           <Route path="/social/:difficulty" element={<SocialQuizScreen />} />
+          <Route path="/science" element={<ScienceSelectionScreen />} />
+          <Route path="/science/:difficulty" element={<ScienceQuizScreen />} />
 
           {/* Math */}
           <Route path="/math/jsj50day/:lectureId" element={<ObjectiveScreen />} />

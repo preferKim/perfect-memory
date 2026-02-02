@@ -11,7 +11,7 @@ const SubjectScreen = ({ onSignUp, onLogin, onLogout, user }) => {
         if (subject.startsWith('playground-')) {
             const game = subject.split('-')[1];
             navigate(`/playground/${game}`);
-        } else if (subject === 'english' || subject === 'math' || subject === 'korean' || subject === 'social') {
+        } else if (subject === 'english' || subject === 'math' || subject === 'korean' || subject === 'social' || subject === 'science') {
             navigate(`/${subject}`);
         } else {
             alert('아직 준비되지 않은 과목입니다.');
@@ -47,8 +47,8 @@ const SubjectScreen = ({ onSignUp, onLogin, onLogout, user }) => {
                         <Button onClick={() => handleSubjectClick('social')} variant="threedee" color="success" className="w-full h-28 flex flex-col items-center justify-center">
                             <span className="text-2xl">🏛️</span><br/>사회
                         </Button>
-                        <Button onClick={() => handleSubjectClick('science')} variant="threedee" color="speed" className="w-full h-28 flex flex-col items-center justify-center" disabled={true}>
-                            <span className="text-2xl">🔬</span><br/>과학<br/><span className="text-sm font-light opacity-70">준비중</span>
+                        <Button onClick={() => handleSubjectClick('science')} variant="threedee" color="speed" className="w-full h-28 flex flex-col items-center justify-center">
+                            <span className="text-2xl">🔬</span><br/>과학
                         </Button>
                     </div>
                 </div>

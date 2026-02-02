@@ -1,0 +1,336 @@
+{
+  "title": "고등 과학 개념 완성",
+  "description": "고등학교 통합과학 및 과학 탐구(물리학, 화학, 생명과학, 지구과학) 영역의 필수 개념과 원리를 다루는 심화 학습 데이터입니다.",
+  "questions": [
+    {
+      "questionNumber": 1,
+      "question": "생명 중심 원리(Central Dogma)에 따라 유전 정보가 흐르는 순서로 옳은 것은?",
+      "answerOptions": [
+        { "text": "DNA → RNA → 단백질", "rationale": "DNA의 유전 정보는 전사되어 RNA가 되고, RNA의 정보가 번역되어 단백질이 합성됩니다.", "isCorrect": true },
+        { "text": "단백질 → RNA → DNA", "rationale": "일반적인 유전 정보의 흐름과 반대입니다.", "isCorrect": false },
+        { "text": "RNA → DNA → 단백질", "rationale": "역전사 바이러스 등 특수한 경우를 제외하고는 일반적이지 않습니다.", "isCorrect": false },
+        { "text": "DNA → 단백질 → RNA", "rationale": "단백질이 RNA를 만들지는 않습니다.", "isCorrect": false }
+      ],
+      "hint": "핵 속의 설계도(DNA)를 복사해서 공장(리보솜)으로 가져가 제품(단백질)을 만듭니다."
+    },
+    {
+      "questionNumber": 2,
+      "question": "주기율표에서 같은 족(Group)에 속하는 원소들이 화학적 성질이 비슷한 이유는 무엇입니까?",
+      "answerOptions": [
+        { "text": "원자 번호가 비슷해서", "rationale": "같은 족이라도 원자 번호 차이는 큽니다.", "isCorrect": false },
+        { "text": "원자량이 비슷해서", "rationale": "원자량은 성질의 주기성과 직접적인 관련이 적습니다.", "isCorrect": false },
+        { "text": "원자가 전자(최외각 전자) 수가 같아서", "rationale": "화학 반응에 참여하는 원자가 전자 수가 같으면 결합 방식 등 화학적 성질이 비슷합니다.", "isCorrect": true },
+        { "text": "중성자 수가 같아서", "rationale": "중성자는 화학적 성질보다 물리적 성질(질량)에 영향을 줍니다.", "isCorrect": false }
+      ],
+      "hint": "가장 바깥쪽 껍질에 있는 전자의 개수를 확인해 보세요."
+    },
+    {
+      "questionNumber": 3,
+      "question": "뉴턴의 운동 제3법칙(작용 반작용의 법칙)에 대한 설명으로 옳은 예시는?",
+      "answerOptions": [
+        { "text": "버스가 급정거하면 승객이 앞으로 쏠린다.", "rationale": "이는 관성의 법칙(제1법칙)입니다.", "isCorrect": false },
+        { "text": "수영 선수가 물을 뒤로 밀면 몸이 앞으로 나아간다.", "rationale": "손이 물을 미는 힘(작용)과 물이 손을 미는 힘(반작용)에 의해 추진력을 얻습니다.", "isCorrect": true },
+        { "text": "힘을 가할수록 물체의 가속도가 커진다.", "rationale": "이는 가속도의 법칙(제2법칙)입니다.", "isCorrect": false },
+        { "text": "책상 위에 놓인 책이 정지해 있다.", "rationale": "이는 힘의 평형 상태입니다.", "isCorrect": false }
+      ],
+      "hint": "내가 벽을 밀면 벽도 나를 밉니다."
+    },
+    {
+      "questionNumber": 4,
+      "question": "판 구조론에서 해양판이 대륙판 아래로 파고드는 경계(수렴형 경계)에서 주로 형성되는 지형은?",
+      "answerOptions": [
+        { "text": "해령", "rationale": "해령은 판이 멀어지는 발산형 경계에서 생깁니다.", "isCorrect": false },
+        { "text": "해구", "rationale": "밀도가 큰 해양판이 섭입하면서 깊은 골짜기인 해구가 형성됩니다.", "isCorrect": true },
+        { "text": "열곡대", "rationale": "열곡대는 대륙판이 갈라지는 곳에서 생깁니다.", "isCorrect": false },
+        { "text": "변환 단층", "rationale": "판이 서로 어긋나는 보존형 경계에서 생깁니다.", "isCorrect": false }
+      ],
+      "hint": "바다 밑의 아주 깊은 골짜기를 생각해보세요."
+    },
+    {
+      "questionNumber": 5,
+      "question": "다음 중 산화-환원 반응에 대한 설명으로 옳은 것은?",
+      "answerOptions": [
+        { "text": "산소를 얻는 반응은 환원이다.", "rationale": "산소를 얻는 것은 산화입니다.", "isCorrect": false },
+        { "text": "전자를 잃는 반응은 산화이다.", "rationale": "전자를 잃으면 산화수가 증가하므로 산화입니다.", "isCorrect": true },
+        { "text": "산화와 환원은 따로 일어날 수 있다.", "rationale": "산화와 환원은 항상 동시에 일어납니다(동시성).", "isCorrect": false },
+        { "text": "수소를 얻는 반응은 산화이다.", "rationale": "수소를 얻는 것은 환원입니다.", "isCorrect": false }
+      ],
+      "hint": "전자를 잃으면 (+)가 되고, 이를 산화라고 합니다."
+    },
+    {
+      "questionNumber": 6,
+      "question": "충격량(Impulse)과 운동량(Momentum)의 관계에 대한 설명으로 옳은 것은?",
+      "answerOptions": [
+        { "text": "충격량은 운동량의 변화량과 같다.", "rationale": "물체가 받은 충격량(I)은 운동량의 변화량(ΔP)과 같습니다.", "isCorrect": true },
+        { "text": "충격량은 힘을 시간으로 나눈 값이다.", "rationale": "충격량은 힘과 시간의 곱(F×t)입니다.", "isCorrect": false },
+        { "text": "운동량이 클수록 항상 충격력이 크다.", "rationale": "충격력은 멈추는 시간 등 상황에 따라 다릅니다.", "isCorrect": false },
+        { "text": "충격량의 단위는 N(뉴턴)이다.", "rationale": "충격량의 단위는 N·s 또는 kg·m/s입니다.", "isCorrect": false }
+      ],
+      "hint": "I = FΔt = Δ(mv)"
+    },
+    {
+      "questionNumber": 7,
+      "question": "혈당량이 높을 때 이자에서 분비되어 혈당을 낮추는 호르몬은?",
+      "answerOptions": [
+        { "text": "글루카곤", "rationale": "글루카곤은 혈당을 높이는 역할을 합니다.", "isCorrect": false },
+        { "text": "인슐린", "rationale": "인슐린은 포도당을 글리코젠으로 합성하여 혈당을 낮춥니다.", "isCorrect": true },
+        { "text": "아드레날린", "rationale": "혈당을 높이고 심장 박동을 촉진합니다.", "isCorrect": false },
+        { "text": "티록신", "rationale": "물질대사를 촉진하는 호르몬입니다.", "isCorrect": false }
+      ],
+      "hint": "당뇨병 환자가 주사로 맞기도 하는 호르몬입니다."
+    },
+    {
+      "questionNumber": 8,
+      "question": "우주가 팽창하고 있다는 증거로, 멀리 있는 은하일수록 스펙트럼의 흡수선이 붉은색 쪽으로 치우치는 현상은?",
+      "answerOptions": [
+        { "text": "청색 편이", "rationale": "가까워질 때 나타나는 현상입니다.", "isCorrect": false },
+        { "text": "적색 편이", "rationale": "멀어지는 천체의 빛 파장이 길어져 붉은색 쪽으로 치우치는 도플러 효과입니다.", "isCorrect": true },
+        { "text": "우주 배경 복사", "rationale": "빅뱅 우주론의 증거이지만 팽창 속도와는 직접적 맥락이 다릅니다.", "isCorrect": false },
+        { "text": "광전 효과", "rationale": "빛의 입자성을 증명하는 현상입니다.", "isCorrect": false }
+      ],
+      "hint": "파장이 길어지면(에너지가 낮아지면) 가시광선 중 어떤 색에 가까워질까요?"
+    },
+    {
+      "questionNumber": 9,
+      "question": "공유 결합 물질의 일반적인 특징이 아닌 것은?",
+      "answerOptions": [
+        { "text": "대부분 분자로 존재한다.", "rationale": "맞습니다. (예: 물, 이산화탄소)", "isCorrect": false },
+        { "text": "고체 상태에서 전기 전도성이 없다.", "rationale": "전자가 공유되어 있어 이동이 자유롭지 않습니다.", "isCorrect": false },
+        { "text": "액체 상태에서도 전기 전도성이 없다.", "rationale": "이온화되지 않으므로 전기가 통하지 않는 것이 일반적입니다.", "isCorrect": false },
+        { "text": "녹는점과 끓는점이 매우 높다.", "rationale": "공유 결합 물질(분자성 물질)은 분자 간 인력이 약해 녹는점이 비교적 낮습니다. (단, 다이아몬드 같은 공유 결정 제외)", "isCorrect": true }
+      ],
+      "hint": "소금(이온 결합)에 비해 설탕(공유 결합)은 불에 쉽게 녹거나 탑니다."
+    },
+    {
+      "questionNumber": 10,
+      "question": "반도체에 불순물을 섞어 전기 전도성을 높이는 과정을 무엇이라 합니까?",
+      "answerOptions": [
+        { "text": "도핑(Doping)", "rationale": "순수 반도체에 13족이나 15족 원소를 첨가하여 전하 나르개를 늘리는 과정입니다.", "isCorrect": true },
+        { "text": "코팅", "rationale": "겉면을 덮는 것입니다.", "isCorrect": false },
+        { "text": "증착", "rationale": "박막을 만드는 공정 중 하나입니다.", "isCorrect": false },
+        { "text": "정류", "rationale": "교류를 직류로 바꾸는 작용입니다.", "isCorrect": false }
+      ],
+      "hint": "스포츠 선수들이 약물을 복용하는 것과 같은 용어를 씁니다."
+    },
+    {
+      "questionNumber": 11,
+      "question": "감수 분열(생식 세포 분열)의 결과로 만들어진 딸세포의 염색체 수는 모세포의 얼마입니까?",
+      "answerOptions": [
+        { "text": "2배", "rationale": "염색체 수가 늘어나는 분열은 없습니다.", "isCorrect": false },
+        { "text": "같다", "rationale": "이는 체세포 분열의 결과입니다.", "isCorrect": false },
+        { "text": "절반(1/2)", "rationale": "감수 분열을 거치면 염색체 수가 반으로 줄어듭니다(2n -> n).", "isCorrect": true },
+        { "text": "4분의 1", "rationale": "틀린 설명입니다.", "isCorrect": false }
+      ],
+      "hint": "정자와 난자가 만나서 다시 원래의 수가 되어야 하므로 미리 반으로 줄여놓습니다."
+    },
+    {
+      "questionNumber": 12,
+      "question": "전자기 유도 현상에서 유도 전류의 방향은 자속의 변화를 방해하는 방향으로 생긴다는 법칙은?",
+      "answerOptions": [
+        { "text": "옴의 법칙", "rationale": "V=IR에 관한 법칙입니다.", "isCorrect": false },
+        { "text": "앙페르 법칙", "rationale": "전류에 의한 자기장의 방향에 관한 법칙입니다.", "isCorrect": false },
+        { "text": "렌츠의 법칙", "rationale": "자석이 다가오면 밀어내고, 멀어지면 당기는 방향으로 전류가 흐른다는 법칙입니다.", "isCorrect": true },
+        { "text": "보일의 법칙", "rationale": "기체의 압력과 부피에 관한 법칙입니다.", "isCorrect": false }
+      ],
+      "hint": "자연은 변화를 싫어한다는 '청개구리 법칙'이라고도 합니다."
+    },
+    {
+      "questionNumber": 13,
+      "question": "화학에서 입자의 수를 세는 단위인 1몰(mole)에 해당하는 입자의 수(아보가드로수)는?",
+      "answerOptions": [
+        { "text": "6.02 × 10의 23승", "rationale": "탄소 원자 12g에 들어있는 원자 수와 같습니다.", "isCorrect": true },
+        { "text": "3.14 × 10의 23승", "rationale": "파이(π)와 관련된 숫자가 아닙니다.", "isCorrect": false },
+        { "text": "1.60 × 10의 -19승", "rationale": "전자의 기본 전하량입니다.", "isCorrect": false },
+        { "text": "9.8", "rationale": "중력 가속도 상수입니다.", "isCorrect": false }
+      ],
+      "hint": "매우 큰 수입니다. 6으로 시작합니다."
+    },
+    {
+      "questionNumber": 14,
+      "question": "지질 시대를 구분하는 기준으로 가장 적절한 것은?",
+      "answerOptions": [
+        { "text": "해수면의 높이 변화", "rationale": "보조적인 자료는 될 수 있으나 주된 기준은 아닙니다.", "isCorrect": false },
+        { "text": "생물계의 급격한 변화(화석)", "rationale": "대멸종이나 새로운 생물의 출현 등 화석의 변화가 가장 큰 기준입니다.", "isCorrect": true },
+        { "text": "지층의 두께", "rationale": "퇴적 환경에 따라 다릅니다.", "isCorrect": false },
+        { "text": "암석의 색깔", "rationale": "구분 기준이 아닙니다.", "isCorrect": false }
+      ],
+      "hint": "고생대, 중생대를 나눌 때 공룡 멸종 같은 사건을 봅니다."
+    },
+    {
+      "questionNumber": 15,
+      "question": "생태계의 에너지 흐름에 대한 설명으로 옳은 것은?",
+      "answerOptions": [
+        { "text": "에너지는 순환한다.", "rationale": "물질은 순환하지만 에너지는 한 방향으로 흐르고 결국 열로 빠져나갑니다.", "isCorrect": false },
+        { "text": "상위 영양 단계로 갈수록 에너지 양이 증가한다.", "rationale": "호흡량 등으로 소실되어 상위 단계로 갈수록 줄어듭니다(10% 법칙).", "isCorrect": false },
+        { "text": "상위 영양 단계로 갈수록 에너지 양이 감소한다.", "rationale": "피라미드 형태를 이룹니다.", "isCorrect": true },
+        { "text": "모든 에너지는 소비자에서 생산자로 이동한다.", "rationale": "생산자 -> 소비자 방향입니다.", "isCorrect": false }
+      ],
+      "hint": "풀을 먹는 토끼보다 토끼를 먹는 독수리의 개체 수가 훨씬 적은 이유와 같습니다."
+    },
+    {
+      "questionNumber": 16,
+      "question": "태양 정도 질량의 별이 진화의 마지막 단계에서 형성하는 천체는?",
+      "answerOptions": [
+        { "text": "블랙홀", "rationale": "태양보다 질량이 훨씬 큰(약 25배 이상) 별의 최후입니다.", "isCorrect": false },
+        { "text": "중성자별", "rationale": "태양보다 질량이 큰(약 8~25배) 별의 최후입니다.", "isCorrect": false },
+        { "text": "백색 왜성", "rationale": "적색 거성 단계를 거쳐 외곽 물질을 날려보내고(행성상 성운) 남은 중심핵입니다.", "isCorrect": true },
+        { "text": "초신성", "rationale": "질량이 큰 별이 폭발하는 현상입니다.", "isCorrect": false }
+      ],
+      "hint": "크기는 지구 정도지만 밀도가 매우 높은 하얀 별입니다."
+    },
+    {
+      "questionNumber": 17,
+      "question": "자유 낙하하는 물체에서 보존되는 에너지는? (공기 저항 무시)",
+      "answerOptions": [
+        { "text": "운동 에너지", "rationale": "속력이 빨라지므로 증가합니다.", "isCorrect": false },
+        { "text": "퍼텐셜(위치) 에너지", "rationale": "높이가 낮아지므로 감소합니다.", "isCorrect": false },
+        { "text": "역학적 에너지", "rationale": "위치 에너지가 감소한 만큼 운동 에너지가 증가하여 합은 일정합니다.", "isCorrect": true },
+        { "text": "전기 에너지", "rationale": "관련 없습니다.", "isCorrect": false }
+      ],
+      "hint": "운동 에너지와 위치 에너지를 합친 것입니다."
+    },
+    {
+      "questionNumber": 18,
+      "question": "항원-항체 반응의 특이성에 대한 설명으로 옳은 것은?",
+      "answerOptions": [
+        { "text": "하나의 항체는 모든 항원과 결합한다.", "rationale": "항체는 특정 항원하고만 결합합니다.", "isCorrect": false },
+        { "text": "하나의 항체는 특정 항원하고만 결합한다.", "rationale": "열쇠와 자물쇠처럼 입체 구조가 맞는 항원하고만 반응합니다.", "isCorrect": true },
+        { "text": "항체는 항원을 직접 분해한다.", "rationale": "결합하여 무력화하거나 식균 작용을 돕습니다.", "isCorrect": false },
+        { "text": "항원은 우리 몸에서 생성되는 방어 물질이다.", "rationale": "항원은 외부에서 침입한 이물질이고, 항체가 방어 물질입니다.", "isCorrect": false }
+      ],
+      "hint": "자물쇠에는 맞는 열쇠가 따로 있습니다."
+    },
+    {
+      "questionNumber": 19,
+      "question": "다음 중 온실 효과를 일으키는 주요 온실 기체(Greenhouse Gas)가 아닌 것은?",
+      "answerOptions": [
+        { "text": "이산화탄소(CO₂)", "rationale": "대표적인 온실 기체입니다.", "isCorrect": false },
+        { "text": "메테인(CH₄)", "rationale": "강력한 온실 기체입니다.", "isCorrect": false },
+        { "text": "수증기(H₂O)", "rationale": "자연적인 온실 효과에 가장 큰 기여를 합니다.", "isCorrect": false },
+        { "text": "질소(N₂)", "rationale": "질소는 대기의 78%를 차지하지만 온실 효과를 일으키지 않습니다.", "isCorrect": true }
+      ],
+      "hint": "공기 중에 가장 많지만, 지구 온난화의 원인으로 지목되지는 않는 기체입니다."
+    },
+    {
+      "questionNumber": 20,
+      "question": "산과 염기가 반응하여 물과 염이 생성되는 반응을 무엇이라 합니까?",
+      "answerOptions": [
+        { "text": "중화 반응", "rationale": "H+와 OH-가 만나 물이 되면서 산성과 염기성이 사라지는 반응입니다.", "isCorrect": true },
+        { "text": "연소 반응", "rationale": "산소와 결합하여 빛과 열을 내는 반응입니다.", "isCorrect": false },
+        { "text": "치환 반응", "rationale": "자리를 바꾸는 반응입니다.", "isCorrect": false },
+        { "text": "분해 반응", "rationale": "나뉘는 반응입니다.", "isCorrect": false }
+      ],
+      "hint": "서로의 성질을 없애서 중간으로 만든다는 뜻입니다."
+    },
+    {
+      "questionNumber": 21,
+      "question": "양자 역학에서 전자가 원자핵 주위의 특정 공간에서 발견될 확률을 나타낸 함수 또는 모형은?",
+      "answerOptions": [
+        { "text": "전자 껍질", "rationale": "보어의 모형에서 사용하는 용어입니다.", "isCorrect": false },
+        { "text": "오비탈(Orbital)", "rationale": "현대 원자 모형에서 전자의 존재 확률 분포를 나타낸 것입니다.", "isCorrect": true },
+        { "text": "궤도(Orbit)", "rationale": "행성처럼 정해진 길을 도는 것은 보어 모형의 개념입니다.", "isCorrect": false },
+        { "text": "스펙트럼", "rationale": "빛의 띠입니다.", "isCorrect": false }
+      ],
+      "hint": "s, p, d, f 등으로 표시하며 구름 모양으로 그립니다."
+    },
+    {
+      "questionNumber": 22,
+      "question": "파동의 중첩 원리에 의해 두 파동이 만날 때 진폭이 커지거나 작아지는 현상은?",
+      "answerOptions": [
+        { "text": "굴절", "rationale": "진행 방향이 꺾이는 것입니다.", "isCorrect": false },
+        { "text": "간섭", "rationale": "보강 간섭(커짐)과 상쇄 간섭(작아짐)이 있습니다.", "isCorrect": true },
+        { "text": "분산", "rationale": "빛이 색깔별로 나뉘는 것입니다.", "isCorrect": false },
+        { "text": "반사", "rationale": "되돌아 나오는 것입니다.", "isCorrect": false }
+      ],
+      "hint": "소음 제거 이어폰(노이즈 캔슬링)의 원리입니다."
+    },
+    {
+      "questionNumber": 23,
+      "question": "효소(Enzyme)의 주성분과 기능에 대한 설명으로 옳은 것은?",
+      "answerOptions": [
+        { "text": "탄수화물로 되어 있으며 에너지를 낸다.", "rationale": "효소는 주로 단백질입니다.", "isCorrect": false },
+        { "text": "단백질로 되어 있으며 활성화 에너지를 낮춘다.", "rationale": "생체 촉매로서 활성화 에너지를 낮추어 반응 속도를 빠르게 합니다.", "isCorrect": true },
+        { "text": "지방으로 되어 있으며 체온을 유지한다.", "rationale": "틀린 설명입니다.", "isCorrect": false },
+        { "text": "무기질로 되어 있으며 뼈를 구성한다.", "rationale": "틀린 설명입니다.", "isCorrect": false }
+      ],
+      "hint": "생체 촉매 역할을 하며, 열에 약해 고열에서는 기능을 잃습니다."
+    },
+    {
+      "questionNumber": 24,
+      "question": "동태평양 페루 연안의 표층 수온이 평년보다 높아지는 현상은?",
+      "answerOptions": [
+        { "text": "엘니뇨", "rationale": "무역풍이 약화되어 동태평양 수온이 상승하는 현상입니다.", "isCorrect": true },
+        { "text": "라니냐", "rationale": "반대로 수온이 평년보다 낮아지는 현상입니다.", "isCorrect": false },
+        { "text": "해일", "rationale": "거대한 파도입니다.", "isCorrect": false },
+        { "text": "용승", "rationale": "심층수가 올라오는 현상으로 엘니뇨 때는 용승이 약화됩니다.", "isCorrect": false }
+      ],
+      "hint": "스페인어로 '남자 아이(아기 예수)'라는 뜻입니다."
+    },
+    {
+      "questionNumber": 25,
+      "question": "다음 중 극성 분자에 해당하는 것은?",
+      "answerOptions": [
+        { "text": "메테인(CH₄)", "rationale": "정사면체 구조로 대칭이라 무극성입니다.", "isCorrect": false },
+        { "text": "이산화탄소(CO₂)", "rationale": "직선형 구조로 대칭이라 무극성입니다.", "isCorrect": false },
+        { "text": "물(H₂O)", "rationale": "굽은형 구조로 전하 분포가 비대칭이라 극성입니다.", "isCorrect": true },
+        { "text": "산소(O₂)", "rationale": "같은 원자끼리의 결합이라 무극성입니다.", "isCorrect": false }
+      ],
+      "hint": "전자레인지가 음식 속의 '이것'을 진동시켜 열을 냅니다."
+    },
+    {
+      "questionNumber": 26,
+      "question": "신경계에서 뉴런과 뉴런 사이의 틈(시냅스)에서 신호를 전달하는 화학 물질은?",
+      "answerOptions": [
+        { "text": "호르몬", "rationale": "혈액을 타고 이동하는 신호 물질입니다.", "isCorrect": false },
+        { "text": "효소", "rationale": "촉매입니다.", "isCorrect": false },
+        { "text": "신경 전달 물질", "rationale": "아세틸콜린, 도파민 등이 있으며 시냅스 틈으로 분비됩니다.", "isCorrect": true },
+        { "text": "항체", "rationale": "면역 반응 물질입니다.", "isCorrect": false }
+      ],
+      "hint": "도파민, 세로토닌 같은 물질을 통칭합니다."
+    },
+    {
+      "questionNumber": 27,
+      "question": "물체에 안전장치(에어백, 범퍼)를 설치하여 충돌 시간을 길게 하면 충격력이 줄어드는 원리는?",
+      "answerOptions": [
+        { "text": "충격량이 줄어들기 때문이다.", "rationale": "충격량 자체는 변하지 않습니다.", "isCorrect": false },
+        { "text": "운동량 변화량이 줄어들기 때문이다.", "rationale": "운동량 변화량(=충격량)은 같습니다.", "isCorrect": false },
+        { "text": "시간이 길어져 평균 힘(충격력)이 작아지기 때문이다.", "rationale": "I=F×t에서 I가 일정할 때 t가 커지면 F는 작아집니다.", "isCorrect": true },
+        { "text": "속도가 빨라지기 때문이다.", "rationale": "관련 없습니다.", "isCorrect": false }
+      ],
+      "hint": "같은 매를 맞아도 푹신한 곳에 맞으면 덜 아픈 이유입니다."
+    },
+    {
+      "questionNumber": 28,
+      "question": "케플러의 행성 운동 법칙 중, 행성과 태양을 연결하는 선분이 같은 시간 동안 휩쓸고 지나간 면적은 일정하다는 법칙은?",
+      "answerOptions": [
+        { "text": "제1법칙 (타원 궤도의 법칙)", "rationale": "궤도 모양에 대한 법칙입니다.", "isCorrect": false },
+        { "text": "제2법칙 (면적 속도 일정의 법칙)", "rationale": "행성의 공전 속도가 근일점에서 빠르고 원일점에서 느리다는 것을 설명합니다.", "isCorrect": true },
+        { "text": "제3법칙 (조화의 법칙)", "rationale": "공전 주기의 제곱은 긴반지름의 세제곱에 비례한다는 법칙입니다.", "isCorrect": false },
+        { "text": "만유인력의 법칙", "rationale": "뉴턴의 법칙입니다.", "isCorrect": false }
+      ],
+      "hint": "태양에 가까울 때는 빨리 돌고 멀 때는 천천히 돕니다."
+    },
+    {
+      "questionNumber": 29,
+      "question": "생물 다양성을 보전하기 위한 협약 중, 습지 보호를 목적으로 하는 국제 협약은?",
+      "answerOptions": [
+        { "text": "람사르 협약", "rationale": "물새 서식지로서 중요한 습지를 보호하는 협약입니다.", "isCorrect": true },
+        { "text": "교토 의정서", "rationale": "온실가스 감축 관련입니다.", "isCorrect": false },
+        { "text": "몬트리올 의정서", "rationale": "오존층 파괴 물질 규제 관련입니다.", "isCorrect": false },
+        { "text": "런던 협약", "rationale": "해양 오염 방지(폐기물 투기 금지) 관련입니다.", "isCorrect": false }
+      ],
+      "hint": "우리나라의 우포늪, 순천만 등이 이 협약에 등록되어 있습니다."
+    },
+    {
+      "questionNumber": 30,
+      "question": "다음 중 알칼리 금속(1족)의 성질이 아닌 것은?",
+      "answerOptions": [
+        { "text": "물과 격렬하게 반응하여 수소 기체를 발생시킨다.", "rationale": "알칼리 금속의 대표적 특징입니다.", "isCorrect": false },
+        { "text": "은백색 광택을 띠며 칼로 잘릴 만큼 무르다.", "rationale": "밀도가 작고 무른 금속입니다.", "isCorrect": false },
+        { "text": "공기 중에서 산소와 반응하여 광택을 잃는다.", "rationale": "반응성이 매우 커서 산화가 잘 됩니다.", "isCorrect": false },
+        { "text": "비활성 기체처럼 매우 안정하다.", "rationale": "반응성이 매우 커서 불안정합니다. 비활성 기체는 18족입니다.", "isCorrect": true }
+      ],
+      "hint": "물에 넣으면 펑 하고 터질 정도로 성격이 급한(반응성이 큰) 금속입니다."
+    }
+  ]
+}
