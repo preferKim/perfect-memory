@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import HeaderSection from '../components/HeaderSection';
 import { ArrowLeft, Download } from 'lucide-react'; // Import ArrowLeft and Download
 import { usePwaInstall } from '../hooks/usePwaInstall';
 import Button from '../components/Button';
 
-const EnglishSelectionScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLoading, user, onNavigate, onBackToSubjects }) => {
+const EnglishSelectionScreen = ({ onSignUp, onLogin, onLogout, isLoading, user }) => {
+    const navigate = useNavigate();
     const [gameMode, setGameMode] = useState('normal');
     const [playerName, setPlayerName] = useState('');
     const [promptInstall, isInstallable] = usePwaInstall();
@@ -75,7 +77,7 @@ const EnglishSelectionScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLo
 
             }
 
-            onStartGame(nameToUse, difficulty, gameMode);
+            navigate('/game', { state: { name: nameToUse, level: difficulty, mode: gameMode } });
 
         };
 
@@ -89,7 +91,7 @@ const EnglishSelectionScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLo
 
                     <button
 
-                        onClick={onBackToSubjects}
+                        onClick={() => navigate('/')}
 
                         className="text-sm font-semibold text-gray-200 hover:text-white px-3 py-1.5 rounded-full border border-white/40 hover:border-white/80 bg-black/20 hover:bg-black/40 transition-all flex items-center"
 
@@ -126,8 +128,6 @@ const EnglishSelectionScreen = ({ onStartGame, onSignUp, onLogin, onLogout, isLo
                     onLogout={onLogout}
 
                     user={user}
-
-                    onNavigate={onNavigate}
 
                 />
 

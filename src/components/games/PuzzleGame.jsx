@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Puzzle } from 'lucide-react';
 
 const BOARD_SIZE = 8;
@@ -6,7 +7,8 @@ const ANIMAL_ICONS = ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '�
 
 const getRandomIcon = () => ANIMAL_ICONS[Math.floor(Math.random() * ANIMAL_ICONS.length)];
 
-const PuzzleGame = ({ onBack }) => {
+const PuzzleGame = () => {
+  const navigate = useNavigate();
   const [board, setBoard] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [score, setScore] = useState(0);
@@ -319,7 +321,7 @@ const PuzzleGame = ({ onBack }) => {
         {/* Header */}
         <div className="flex items-center justify-between mb-3 sm:mb-4 md:mb-6 gap-2">
           <button 
-            onClick={onBack} 
+            onClick={() => navigate(-1)} 
             className="p-1.5 sm:p-2 rounded-full hover:bg-white/10 transition-colors flex-shrink-0"
           >
             <ArrowLeft size={20} className="text-gray-300 sm:w-6 sm:h-6" />

@@ -1,0 +1,556 @@
+{
+  "title": "고등 사회 탐구 마스터 50제",
+  "description": "고등학교 사회, 윤리, 지리, 역사 교과 과정의 핵심 심화 내용을 다루는 4지선다형 퀴즈입니다.",
+  "questions": [
+    {
+      "questionNumber": 1,
+      "question": "롤스(J. Rawls)가 주장한 '정의론'에서, 자신의 타고난 재능이나 사회적 지위를 모르는 상태를 가정하는 개념은?",
+      "answerOptions": [
+        { "text": "무지의 베일", "isCorrect": true },
+        { "text": "최대 다수의 최대 행복", "isCorrect": false },
+        { "text": "정언 명령", "isCorrect": false },
+        { "text": "중용", "isCorrect": false }
+      ],
+      "hint": "공정한 합의를 위해 내가 부자인지 가난한지조차 모르는 가상의 장막을 칩니다."
+    },
+    {
+      "questionNumber": 2,
+      "question": "다음 중 '외부 효과'에 대한 설명으로 가장 적절한 것은?",
+      "answerOptions": [
+        { "text": "어떤 경제 주체의 활동이 제3자에게 의도하지 않은 이익이나 손해를 주는 현상이다.", "isCorrect": true },
+        { "text": "모든 재화가 시장에서 효율적으로 배분되는 상태이다.", "isCorrect": false },
+        { "text": "독점 기업이 가격을 마음대로 결정하는 현상이다.", "isCorrect": false },
+        { "text": "정부의 개입으로 인해 시장의 효율성이 떨어지는 현상이다.", "isCorrect": false }
+      ],
+      "hint": "양봉업자가 과수원 주인에게 도움을 주는 것(외부 경제)이나 공장 매연(외부 불경제)이 예시입니다."
+    },
+    {
+      "questionNumber": 3,
+      "question": "사회·문화 현상을 연구하는 관점 중, 사회를 하나의 유기체로 보고 각 부분이 사회 전체의 존속과 통합에 기여한다고 보는 관점은?",
+      "answerOptions": [
+        { "text": "갈등론", "isCorrect": false },
+        { "text": "상징적 상호작용론", "isCorrect": false },
+        { "text": "기능론", "isCorrect": true },
+        { "text": "교환 이론", "isCorrect": false }
+      ],
+      "hint": "사회를 살아있는 생물(몸)에 비유합니다."
+    },
+    {
+      "questionNumber": 4,
+      "question": "헌법재판소의 권한 중, 법률이 헌법에 위반되는지 여부를 심판하여 효력을 상실시키는 것은?",
+      "answerOptions": [
+        { "text": "헌법 소원 심판", "isCorrect": false },
+        { "text": "위헌 법률 심판", "isCorrect": true },
+        { "text": "권한 쟁의 심판", "isCorrect": false },
+        { "text": "탄핵 심판", "isCorrect": false }
+      ],
+      "hint": "재판 중인 사건에 적용될 법률이 헌법에 어긋난다고 생각될 때 법원이 제청합니다."
+    },
+    {
+      "questionNumber": 5,
+      "question": "지리 정보 시스템(GIS) 분석 기법 중, 서로 다른 주제의 지도를 겹쳐서 입지 선정 등에 활용하는 기법은?",
+      "answerOptions": [
+        { "text": "중첩 분석(Overlay Analysis)", "isCorrect": true },
+        { "text": "버퍼 분석", "isCorrect": false },
+        { "text": "네트워크 분석", "isCorrect": false },
+        { "text": "가시권 분석", "isCorrect": false }
+      ],
+      "hint": "땅값 지도, 경사도 지도, 교통 지도를 '겹쳐서' 봅니다."
+    },
+    {
+      "questionNumber": 6,
+      "question": "칸트(I. Kant)의 윤리 사상에서, 행위의 결과보다 행위의 동기와 의무를 중시하는 입장은?",
+      "answerOptions": [
+        { "text": "공리주의", "isCorrect": false },
+        { "text": "의무론", "isCorrect": true },
+        { "text": "덕 윤리", "isCorrect": false },
+        { "text": "배려 윤리", "isCorrect": false }
+      ],
+      "hint": "결과가 좋더라도 동기가 나쁘면 도덕적이지 않다고 봅니다."
+    },
+    {
+      "questionNumber": 7,
+      "question": "조선 후기, 쌀로 세금을 걷게 하여 특산물 납부의 폐단을 시정한 제도는?",
+      "answerOptions": [
+        { "text": "영정법", "isCorrect": false },
+        { "text": "균역법", "isCorrect": false },
+        { "text": "대동법", "isCorrect": true },
+        { "text": "직전법", "isCorrect": false }
+      ],
+      "hint": "광해군 때 경기도에서 처음 실시되었으며 '공인'이 등장하는 계기가 되었습니다."
+    },
+    {
+      "questionNumber": 8,
+      "question": "다음 중 '비배제성'과 '비경합성'을 특징으로 하여 시장에서 충분히 공급되지 않는 재화는?",
+      "answerOptions": [
+        { "text": "사유재", "isCorrect": false },
+        { "text": "공공재", "isCorrect": true },
+        { "text": "공유 자원", "isCorrect": false },
+        { "text": "요금재", "isCorrect": false }
+      ],
+      "hint": "국방 서비스나 등대, 가로등이 대표적입니다."
+    },
+    {
+      "questionNumber": 9,
+      "question": "문화 변동의 요인 중, 다른 사회의 문화 요소가 전파되어 새로운 문화가 만들어지는 '자극 전파'의 예시는?",
+      "answerOptions": [
+        { "text": "한자의 전래", "isCorrect": false },
+        { "text": "이두와 구결", "isCorrect": true },
+        { "text": "케이팝(K-POP)의 유행", "isCorrect": false },
+        { "text": "햄버거와 김치 버거", "isCorrect": false }
+      ],
+      "hint": "아이디어만 전해져서 새로운 발명을 자극하는 것입니다."
+    },
+    {
+      "questionNumber": 10,
+      "question": "석회암 지대에서 빗물이나 지하수의 용식 작용으로 형성되는 지형은?",
+      "answerOptions": [
+        { "text": "카르스트 지형", "isCorrect": true },
+        { "text": "화산 지형", "isCorrect": false },
+        { "text": "해안 지형", "isCorrect": false },
+        { "text": "건조 지형", "isCorrect": false }
+      ],
+      "hint": "단양, 영월, 삼척 등 시멘트 공업이 발달한 곳에서 볼 수 있습니다."
+    },
+    {
+      "questionNumber": 11,
+      "question": "벤담(J. Bentham)의 공리주의에서 도덕적 판단의 기준이 되는 것은?",
+      "answerOptions": [
+        { "text": "동기의 순수성", "isCorrect": false },
+        { "text": "쾌락의 양적 계산", "isCorrect": true },
+        { "text": "절대적 명령", "isCorrect": false },
+        { "text": "중용의 덕", "isCorrect": false }
+      ],
+      "hint": "행복은 곧 쾌락이며, 이것은 계산 가능하다고 보았습니다."
+    },
+    {
+      "questionNumber": 12,
+      "question": "국제 무역 이론 중, 한 나라가 두 재화 모두 절대 우위에 있더라도, 기회비용이 더 작은 재화에 특화하여 교역하면 이익을 얻는다는 이론은?",
+      "answerOptions": [
+        { "text": "절대 우위론", "isCorrect": false },
+        { "text": "비교 우위론", "isCorrect": true },
+        { "text": "보호 무역론", "isCorrect": false },
+        { "text": "제품 수명 주기 이론", "isCorrect": false }
+      ],
+      "hint": "데이비드 리카도가 주장했습니다."
+    },
+    {
+      "questionNumber": 13,
+      "question": "관료제의 역기능 중, 수단인 규칙과 절차가 오히려 목적이 되어버리는 현상은?",
+      "answerOptions": [
+        { "text": "목적 전치 현상", "isCorrect": true },
+        { "text": "인간 소외", "isCorrect": false },
+        { "text": "레드 테이프(Red Tape)", "isCorrect": false },
+        { "text": "피터의 원리", "isCorrect": false }
+      ],
+      "hint": "본말이 전도되었다고도 합니다."
+    },
+    {
+      "questionNumber": 14,
+      "question": "형사 재판에서 피고인의 유죄가 확정되기 전까지는 무죄로 추정한다는 원칙은?",
+      "answerOptions": [
+        { "text": "죄형 법정주의", "isCorrect": false },
+        { "text": "일사부재리의 원칙", "isCorrect": false },
+        { "text": "무죄 추정의 원칙", "isCorrect": true },
+        { "text": "적법 절차의 원칙", "isCorrect": false }
+      ],
+      "hint": "아무리 흉악범이라도 판결 전에는 죄인이 아닙니다."
+    },
+    {
+      "questionNumber": 15,
+      "question": "도시의 기온이 주변 교외 지역보다 높게 나타나는 현상은?",
+      "answerOptions": [
+        { "text": "열섬 현상", "isCorrect": true },
+        { "text": "온실 효과", "isCorrect": false },
+        { "text": "스모그 현상", "isCorrect": false },
+        { "text": "역전층 현상", "isCorrect": false }
+      ],
+      "hint": "도시가 섬처럼 뜨겁다고 해서 붙여진 이름입니다."
+    },
+    {
+      "questionNumber": 16,
+      "question": "맹자가 주장한 성선설의 근거로, 남의 불행을 차마 보지 못하는 마음은?",
+      "answerOptions": [
+        { "text": "측은지심", "isCorrect": true },
+        { "text": "수오지심", "isCorrect": false },
+        { "text": "사양지심", "isCorrect": false },
+        { "text": "시비지심", "isCorrect": false }
+      ],
+      "hint": "우물에 빠지려는 아이를 볼 때 드는 마음입니다."
+    },
+    {
+      "questionNumber": 17,
+      "question": "1919년 3·1 운동의 영향으로 수립되어, 우리나라 최초의 민주 공화제 정부 형태를 띤 조직은?",
+      "answerOptions": [
+        { "text": "대한 자강회", "isCorrect": false },
+        { "text": "대한민국 임시 정부", "isCorrect": true },
+        { "text": "신민회", "isCorrect": false },
+        { "text": "독립 협회", "isCorrect": false }
+      ],
+      "hint": "지금 우리 헌법 전문에도 법통을 계승한다고 명시되어 있습니다."
+    },
+    {
+      "questionNumber": 18,
+      "question": "수요의 가격 탄력성이 '1'보다 큰 경우(탄력적)에 대한 설명으로 옳은 것은?",
+      "answerOptions": [
+        { "text": "가격이 오르면 판매 수입이 증가한다.", "isCorrect": false },
+        { "text": "가격 변화에 대해 수요량이 민감하게 반응한다.", "isCorrect": true },
+        { "text": "필수품일 가능성이 높다.", "isCorrect": false },
+        { "text": "수요 곡선이 수직선에 가깝다.", "isCorrect": false }
+      ],
+      "hint": "사치품처럼 가격이 조금만 올라도 사람들이 안 사려고 하는 경우입니다."
+    },
+    {
+      "questionNumber": 19,
+      "question": "근대화를 설명하는 이론 중, 제3세계의 저발전 원인을 선진국(중심부)에 대한 종속 관계에서 찾는 이론은?",
+      "answerOptions": [
+        { "text": "근대화론", "isCorrect": false },
+        { "text": "종속 이론", "isCorrect": true },
+        { "text": "순환론", "isCorrect": false },
+        { "text": "진화론", "isCorrect": false }
+      ],
+      "hint": "발전하지 못하는 것은 능력이 없어서가 아니라 구조적으로 착취당하기 때문이라고 봅니다."
+    },
+    {
+      "questionNumber": 20,
+      "question": "판 구조론에서 두 판이 서로 멀어지는 경계에서 형성되는 지형은?",
+      "answerOptions": [
+        { "text": "해구", "isCorrect": false },
+        { "text": "습곡 산맥", "isCorrect": false },
+        { "text": "해령", "isCorrect": true },
+        { "text": "호상 열도", "isCorrect": false }
+      ],
+      "hint": "바다 밑에 있는 산맥으로, 새로운 지각이 만들어지는 곳입니다."
+    },
+    {
+      "questionNumber": 21,
+      "question": "도가 사상(노자, 장자)에서 강조하는 이상적인 삶의 태도는?",
+      "answerOptions": [
+        { "text": "인(仁)과 예(禮)", "isCorrect": false },
+        { "text": "무위자연", "isCorrect": true },
+        { "text": "자비", "isCorrect": false },
+        { "text": "금욕", "isCorrect": false }
+      ],
+      "hint": "억지로 하지 않고 스스로 그러한 대로 둡니다."
+    },
+    {
+      "questionNumber": 22,
+      "question": "경제 지표 중, 물가 상승분을 제거하여 생산량의 변동만을 반영한 GDP는?",
+      "answerOptions": [
+        { "text": "명목 GDP", "isCorrect": false },
+        { "text": "실질 GDP", "isCorrect": true },
+        { "text": "1인당 GDP", "isCorrect": false },
+        { "text": "잠재 GDP", "isCorrect": false }
+      ],
+      "hint": "경제 성장률을 구할 때 사용합니다."
+    },
+    {
+      "questionNumber": 23,
+      "question": "일탈 행동 이론 중, 사회적으로 인정된 목표와 이를 달성하기 위한 제도적 수단 사이의 괴리(불일치)에서 원인을 찾는 이론은?",
+      "answerOptions": [
+        { "text": "아노미 이론(머튼)", "isCorrect": true },
+        { "text": "차별적 교제 이론", "isCorrect": false },
+        { "text": "낙인 이론", "isCorrect": false },
+        { "text": "사회 유대 이론", "isCorrect": false }
+      ],
+      "hint": "돈을 벌고 싶지만(목표), 취직이 안 될 때(수단 결여) 도둑질을 하게 되는 경우입니다."
+    },
+    {
+      "questionNumber": 24,
+      "question": "민법상 불법 행위가 성립하기 위한 요건이 아닌 것은?",
+      "answerOptions": [
+        { "text": "가해자의 고의 또는 과실", "isCorrect": false },
+        { "text": "위법성", "isCorrect": false },
+        { "text": "손해의 발생", "isCorrect": false },
+        { "text": "형사 처벌", "isCorrect": true }
+      ],
+      "hint": "감옥에 가지 않더라도 손해 배상은 해야 할 수 있습니다."
+    },
+    {
+      "questionNumber": 25,
+      "question": "지구 온난화 해결을 위해 채택된 국제 협약으로, 탄소 배출권 거래제 등의 도입 근거가 된 것은?",
+      "answerOptions": [
+        { "text": "람사르 협약", "isCorrect": false },
+        { "text": "교토 의정서", "isCorrect": true },
+        { "text": "몬트리올 의정서", "isCorrect": false },
+        { "text": "바젤 협약", "isCorrect": false }
+      ],
+      "hint": "1997년 일본의 옛 수도에서 채택되었습니다."
+    },
+    {
+      "questionNumber": 26,
+      "question": "프랑스 혁명의 사상적 배경이 된 루소(J. J. Rousseau)의 주장은?",
+      "answerOptions": [
+        { "text": "왕권신수설", "isCorrect": false },
+        { "text": "사회 계약론(일반 의지)", "isCorrect": true },
+        { "text": "보이지 않는 손", "isCorrect": false },
+        { "text": "사회 진화론", "isCorrect": false }
+      ],
+      "hint": "인간은 자유롭게 태어났으나 도처에 사슬에 묶여 있다."
+    },
+    {
+      "questionNumber": 27,
+      "question": "1894년 동학 농민 운동 당시 농민군이 전주 화약을 체결한 후, 자치적으로 개혁을 추진하기 위해 설치한 기구는?",
+      "answerOptions": [
+        { "text": "집강소", "isCorrect": true },
+        { "text": "교정청", "isCorrect": false },
+        { "text": "군국기무처", "isCorrect": false },
+        { "text": "통리기무아문", "isCorrect": false }
+      ],
+      "hint": "폐정 개혁안을 실천했습니다."
+    },
+    {
+      "questionNumber": 28,
+      "question": "다음 중 '스태그플레이션(Stagflation)'의 상태를 바르게 설명한 것은?",
+      "answerOptions": [
+        { "text": "경기 호황과 물가 안정이 동시에 나타난다.", "isCorrect": false },
+        { "text": "경기 침체와 물가 상승이 동시에 나타난다.", "isCorrect": true },
+        { "text": "경기 침체와 물가 하락이 동시에 나타난다.", "isCorrect": false },
+        { "text": "경기 호황과 물가 상승이 동시에 나타난다.", "isCorrect": false }
+      ],
+      "hint": "경제가 어려운데 물가까지 오르는 최악의 상황입니다."
+    },
+    {
+      "questionNumber": 29,
+      "question": "문화의 속성 중, 문화 요소들이 상호 유기적으로 연결되어 있어 한 부분의 변동이 다른 부분에 연쇄적인 영향을 미치는 것은?",
+      "answerOptions": [
+        { "text": "공유성", "isCorrect": false },
+        { "text": "학습성", "isCorrect": false },
+        { "text": "총체성", "isCorrect": true },
+        { "text": "축적성", "isCorrect": false }
+      ],
+      "hint": "스마트폰의 발명이 생활 양식, 산업, 언어 습관 등 모든 분야를 바꾼 것을 생각해보세요."
+    },
+    {
+      "questionNumber": 30,
+      "question": "열대 우림 기후(Af) 지역의 특징으로 옳은 것은?",
+      "answerOptions": [
+        { "text": "건기와 우기가 뚜렷하게 구분된다.", "isCorrect": false },
+        { "text": "연중 고온 다습하며 스콜이 내린다.", "isCorrect": true },
+        { "text": "상록 활엽수림보다는 침엽수림이 발달한다.", "isCorrect": false },
+        { "text": "토양의 영양분이 매우 풍부하다.", "isCorrect": false }
+      ],
+      "hint": "아마존 정글을 상상해보세요."
+    },
+    {
+      "questionNumber": 31,
+      "question": "에피쿠로스 학파가 추구한 쾌락의 진정한 의미는?",
+      "answerOptions": [
+        { "text": "순간적이고 육체적인 쾌락", "isCorrect": false },
+        { "text": "지속적이고 정신적인 쾌락(아타락시아)", "isCorrect": true },
+        { "text": "공공의 이익을 위한 쾌락", "isCorrect": false },
+        { "text": "신의 뜻에 따르는 기쁨", "isCorrect": false }
+      ],
+      "hint": "마음의 동요가 없는 평온한 상태입니다."
+    },
+    {
+      "questionNumber": 32,
+      "question": "기업의 이윤 극대화 조건은?",
+      "answerOptions": [
+        { "text": "한계 수입(MR) = 한계 비용(MC)", "isCorrect": true },
+        { "text": "총수입이 극대화될 때", "isCorrect": false },
+        { "text": "평균 비용이 최소화될 때", "isCorrect": false },
+        { "text": "총비용이 최소화될 때", "isCorrect": false }
+      ],
+      "hint": "더 만들어도 이득이 없고, 덜 만들면 손해인 딱 그 지점입니다."
+    },
+    {
+      "questionNumber": 33,
+      "question": "사회 보장 제도 중, 국가가 보험료를 부담할 능력이 없는 저소득층에게 최저 생활을 보장해 주는 제도는?",
+      "answerOptions": [
+        { "text": "사회 보험", "isCorrect": false },
+        { "text": "공공 부조", "isCorrect": true },
+        { "text": "사회 서비스", "isCorrect": false },
+        { "text": "민간 보험", "isCorrect": false }
+      ],
+      "hint": "수혜자가 비용을 부담하지 않는 것이 특징입니다."
+    },
+    {
+      "questionNumber": 34,
+      "question": "기본권 침해 시, 법원에 위헌 법률 심판 제청을 신청했으나 기각된 경우 헌법재판소에 직접 청구하는 것은?",
+      "answerOptions": [
+        { "text": "권리 구제형 헌법 소원", "isCorrect": false },
+        { "text": "위헌 심사형 헌법 소원", "isCorrect": true },
+        { "text": "탄핵 소추", "isCorrect": false },
+        { "text": "행정 심판", "isCorrect": false }
+      ],
+      "hint": "법원이 안 해주니 내가 직접 간다는 의미입니다."
+    },
+    {
+      "questionNumber": 35,
+      "question": "선진국을 중심으로 나타나는 '역도시화(Counter-urbanization)' 현상의 원인은?",
+      "answerOptions": [
+        { "text": "이촌 향도 현상의 심화", "isCorrect": false },
+        { "text": "도시 환경 악화와 지가 상승", "isCorrect": true },
+        { "text": "도심의 재개발", "isCorrect": false },
+        { "text": "2차 산업의 발달", "isCorrect": false }
+      ],
+      "hint": "복잡하고 비싼 도시가 싫어서 귀농하거나 교외로 나가는 현상입니다."
+    },
+    {
+      "questionNumber": 36,
+      "question": "불교에서 말하는 '연기(緣起)'설의 핵심 의미는?",
+      "answerOptions": [
+        { "text": "모든 존재는 신의 창조물이다.", "isCorrect": false },
+        { "text": "모든 존재는 원인과 조건에 의해 상호 의존하여 생겨난다.", "isCorrect": true },
+        { "text": "인간의 운명은 정해져 있다.", "isCorrect": false },
+        { "text": "쾌락만이 유일한 선이다.", "isCorrect": false }
+      ],
+      "hint": "이것이 있으므로 저것이 있고, 이것이 생기므로 저것이 생긴다."
+    },
+    {
+      "questionNumber": 37,
+      "question": "조선 세종 때 농사의 과학화를 위해 우리 풍토에 맞는 농법을 정리하여 편찬한 책은?",
+      "answerOptions": [
+        { "text": "농상집요", "isCorrect": false },
+        { "text": "농사직설", "isCorrect": true },
+        { "text": "금양잡록", "isCorrect": false },
+        { "text": "임원경제지", "isCorrect": false }
+      ],
+      "hint": "직접(直) 이야기(說)를 듣고 썼다는 뜻입니다."
+    },
+    {
+      "questionNumber": 38,
+      "question": "환율 하락(원화 절상)이 우리 경제에 미치는 영향으로 옳은 것은?",
+      "answerOptions": [
+        { "text": "수출 기업의 가격 경쟁력이 높아진다.", "isCorrect": false },
+        { "text": "외채 상환 부담이 감소한다.", "isCorrect": true },
+        { "text": "국내 물가가 상승한다.", "isCorrect": false },
+        { "text": "외국인 관광객이 증가한다.", "isCorrect": false }
+      ],
+      "hint": "1달러 갚는데 1500원 들던 것이 1000원만 들면 빚 갚기 좋습니다."
+    },
+    {
+      "questionNumber": 39,
+      "question": "정보 비대칭 상황에서 정보를 가진 쪽이 정보를 모르는 쪽에게 피해가 되는 행동을 하는 현상은?",
+      "answerOptions": [
+        { "text": "역선택", "isCorrect": false },
+        { "text": "도덕적 해이", "isCorrect": true },
+        { "text": "외부 효과", "isCorrect": false },
+        { "text": "규모의 경제", "isCorrect": false }
+      ],
+      "hint": "대리인 문제라고도 하며, 감시가 소홀한 틈을 타 딴짓을 하는 것입니다."
+    },
+    {
+      "questionNumber": 40,
+      "question": "세계적인 인구 이동의 유형 중, '경제적 요인'에 의한 자발적 이동이 아닌 것은?",
+      "answerOptions": [
+        { "text": "개발 도상국에서 선진국으로의 노동 이주", "isCorrect": false },
+        { "text": "농촌에서 도시로의 이주", "isCorrect": false },
+        { "text": "난민의 이동", "isCorrect": true },
+        { "text": "전문 기술자의 해외 취업", "isCorrect": false }
+      ],
+      "hint": "살기 위해 어쩔 수 없이 떠나는 경우입니다."
+    },
+    {
+      "questionNumber": 41,
+      "question": "하이데거(M. Heidegger) 등 실존주의 철학자들이 강조하는 '주체적 존재'로서의 인간의 특징은?",
+      "answerOptions": [
+        { "text": "이성을 통해 보편적 진리를 파악하는 존재", "isCorrect": false },
+        { "text": "죽음에 이르는 존재임을 자각하고 결단하는 존재", "isCorrect": true },
+        { "text": "신의 섭리에 순종하는 존재", "isCorrect": false },
+        { "text": "쾌락을 추구하는 존재", "isCorrect": false }
+      ],
+      "hint": "누구도 대신 죽어줄 수 없다는 사실을 깨달아야 합니다."
+    },
+    {
+      "questionNumber": 42,
+      "question": "1945년 12월 모스크바 3국 외상 회의의 주요 결정 사항이 아닌 것은?",
+      "answerOptions": [
+        { "text": "임시 민주 정부 수립", "isCorrect": false },
+        { "text": "미·소 공동 위원회 설치", "isCorrect": false },
+        { "text": "최대 5년간의 신탁 통치 실시", "isCorrect": false },
+        { "text": "남북한 총선거 실시", "isCorrect": true }
+      ],
+      "hint": "남북한 총선거는 나중에 UN에서 결의된 내용입니다."
+    },
+    {
+      "questionNumber": 43,
+      "question": "노사 간의 분쟁이 발생했을 때, 제3자가 개입하여 강제적인 구속력을 가진 결정을 내리는 조정 방식은?",
+      "answerOptions": [
+        { "text": "알선", "isCorrect": false },
+        { "text": "조정", "isCorrect": false },
+        { "text": "중재", "isCorrect": true },
+        { "text": "협상", "isCorrect": false }
+      ],
+      "hint": "심판관이 판결을 내리는 것과 비슷합니다."
+    },
+    {
+      "questionNumber": 44,
+      "question": "선거구 획정 시 인구 비례 원칙을 위반하여 특정 정당이나 후보자에게 유리하도록 기형적으로 선거구를 나누는 행위는?",
+      "answerOptions": [
+        { "text": "로그롤링", "isCorrect": false },
+        { "text": "게리맨더링", "isCorrect": true },
+        { "text": "필리버스터", "isCorrect": false },
+        { "text": "캐스팅 보트", "isCorrect": false }
+      ],
+      "hint": "선거구 모양이 괴물 샐러맨더를 닮았다고 비꼬는 말입니다."
+    },
+    {
+      "questionNumber": 45,
+      "question": "해안 단구 지형이 형성되는 주된 원인은?",
+      "answerOptions": [
+        { "text": "지반의 융기 또는 해수면의 하강", "isCorrect": true },
+        { "text": "지반의 침강 또는 해수면의 상승", "isCorrect": false },
+        { "text": "화산 폭발", "isCorrect": false },
+        { "text": "빙하의 침식", "isCorrect": false }
+      ],
+      "hint": "정동진에 가면 바다를 바라보는 언덕 위에 기차역이나 공원이 있는 이유입니다."
+    },
+    {
+      "questionNumber": 46,
+      "question": "싱어(P. Singer)가 주장한 '동물 해방론'의 핵심 논거는?",
+      "answerOptions": [
+        { "text": "동물은 이성이 있기 때문이다.", "isCorrect": false },
+        { "text": "동물은 영혼이 있기 때문이다.", "isCorrect": false },
+        { "text": "동물은 쾌고 감수 능력(고통을 느낄 능력)이 있기 때문이다.", "isCorrect": true },
+        { "text": "동물은 생태계의 구성원이기 때문이다.", "isCorrect": false }
+      ],
+      "hint": "고통을 느낀다면 그 고통은 인간의 것과 동등하게 취급되어야 합니다."
+    },
+    {
+      "questionNumber": 47,
+      "question": "1970년대 박정희 정부가 농촌의 생활 환경 개선과 소득 증대를 목적으로 추진한 관 주도의 지역 사회 개발 운동은?",
+      "answerOptions": [
+        { "text": "물산 장려 운동", "isCorrect": false },
+        { "text": "새마을 운동", "isCorrect": true },
+        { "text": "문맹 퇴치 운동", "isCorrect": false },
+        { "text": "브나로드 운동", "isCorrect": false }
+      ],
+      "hint": "새벽종이 울렸네, 새 아침이 밝았네."
+    },
+    {
+      "questionNumber": 48,
+      "question": "재산세를 부과할 때 소득 재분배 효과를 높이기 위해 적용해야 하는 세율 구조는?",
+      "answerOptions": [
+        { "text": "비례세", "isCorrect": false },
+        { "text": "누진세", "isCorrect": true },
+        { "text": "역진세", "isCorrect": false },
+        { "text": "간접세", "isCorrect": false }
+      ],
+      "hint": "많이 가진 사람이 더 높은 비율로 세금을 냅니다."
+    },
+    {
+      "questionNumber": 49,
+      "question": "문화 상대주의의 한계로, 인류의 보편적 가치(생명, 자유 등)를 훼손하는 극단적인 문화까지 인정하는 태도는?",
+      "answerOptions": [
+        { "text": "극단적 문화 상대주의", "isCorrect": true },
+        { "text": "자문화 중심주의", "isCorrect": false },
+        { "text": "문화 사대주의", "isCorrect": false },
+        { "text": "문화 제국주의", "isCorrect": false }
+      ],
+      "hint": "상대주의도 좋지만 '선'을 넘으면 안 됩니다."
+    },
+    {
+      "questionNumber": 50,
+      "question": "지속 가능한 발전을 위한 지표로, 인간의 활동이 자연 생태계에 남기는 생태적 부하(부담)의 크기를 나타낸 것은?",
+      "answerOptions": [
+        { "text": "행복 지수", "isCorrect": false },
+        { "text": "생태 발자국", "isCorrect": true },
+        { "text": "인간 개발 지수", "isCorrect": false },
+        { "text": "빅맥 지수", "isCorrect": false }
+      ],
+      "hint": "발자국이 클수록 지구에 나쁜 영향을 줍니다."
+    }
+  ]
+}

@@ -1,0 +1,336 @@
+{
+  "title": "중등 과학 핵심 정복",
+  "description": "중학교 1~3학년 과학 교육과정(물리, 화학, 생명과학, 지구과학)의 필수 개념을 다루는 심화 학습 데이터입니다.",
+  "questions": [
+    {
+      "questionNumber": 1,
+      "question": "식물 세포에는 있지만 동물 세포에는 없는 구조로, 세포를 보호하고 모양을 유지해 주는 것은 무엇입니까?",
+      "answerOptions": [
+        { "text": "세포막", "rationale": "세포막은 동물과 식물 세포 모두에 존재하며 물질 출입을 조절합니다.", "isCorrect": false },
+        { "text": "세포벽", "rationale": "세포벽은 식물 세포의 가장 바깥쪽에 있는 단단한 막으로 세포를 보호합니다.", "isCorrect": true },
+        { "text": "핵", "rationale": "핵은 생명 활동의 중심이며 두 세포 모두에 있습니다.", "isCorrect": false },
+        { "text": "미토콘드리아", "rationale": "미토콘드리아는 에너지를 생산하는 기관으로 두 세포 모두에 있습니다.", "isCorrect": false }
+      ],
+      "hint": "식물이 동물보다 단단한 이유를 생각해 보세요."
+    },
+    {
+      "questionNumber": 2,
+      "question": "물질의 상태 변화 중, 고체가 액체를 거치지 않고 바로 기체로 변하거나 그 반대로 변하는 현상은 무엇입니까?",
+      "answerOptions": [
+        { "text": "융해", "rationale": "융해는 고체가 액체로 변하는 현상입니다.", "isCorrect": false },
+        { "text": "기화", "rationale": "기화는 액체가 기체로 변하는 현상입니다.", "isCorrect": false },
+        { "text": "승화", "rationale": "승화는 고체와 기체 사이에서 바로 상태가 변하는 현상입니다.", "isCorrect": true },
+        { "text": "액화", "rationale": "액화는 기체가 액체로 변하는 현상입니다.", "isCorrect": false }
+      ],
+      "hint": "드라이아이스 크기가 점점 작아지는 현상과 관련이 있습니다."
+    },
+    {
+      "questionNumber": 3,
+      "question": "다음 중 힘의 3요소가 아닌 것은 무엇입니까?",
+      "answerOptions": [
+        { "text": "힘의 크기", "rationale": "화살표의 길이로 나타냅니다.", "isCorrect": false },
+        { "text": "힘의 방향", "rationale": "화살표의 방향으로 나타냅니다.", "isCorrect": false },
+        { "text": "힘의 작용점", "rationale": "힘이 작용하는 지점으로, 화살표의 출발점입니다.", "isCorrect": false },
+        { "text": "힘의 속력", "rationale": "속력은 힘의 효과일 뿐 힘의 3요소에는 포함되지 않습니다.", "isCorrect": true }
+      ],
+      "hint": "힘을 화살표로 나타낼 때 표현하지 않는 것을 고르세요."
+    },
+    {
+      "questionNumber": 4,
+      "question": "지권의 층상 구조 중 가장 큰 부피를 차지하며, 유동성이 있어 대류가 일어나는 층은?",
+      "answerOptions": [
+        { "text": "지각", "rationale": "지각은 가장 얇은 층입니다.", "isCorrect": false },
+        { "text": "맨틀", "rationale": "맨틀은 지구 부피의 약 80%를 차지하며 대류가 일어납니다.", "isCorrect": true },
+        { "text": "외핵", "rationale": "외핵은 액체 상태이지만 가장 큰 부피는 아닙니다.", "isCorrect": false },
+        { "text": "내핵", "rationale": "내핵은 고체 상태의 중심부입니다.", "isCorrect": false }
+      ],
+      "hint": "지각 바로 아래에 있는 두꺼운 층입니다."
+    },
+    {
+      "questionNumber": 5,
+      "question": "광합성이 일어나는 장소와 이때 주로 발생하는 기체는 무엇입니까?",
+      "answerOptions": [
+        { "text": "엽록체 - 산소", "rationale": "광합성은 엽록체에서 일어나며 산소를 방출합니다.", "isCorrect": true },
+        { "text": "미토콘드리아 - 이산화탄소", "rationale": "이는 호흡 과정입니다.", "isCorrect": false },
+        { "text": "엽록체 - 이산화탄소", "rationale": "광합성은 이산화탄소를 흡수하고 산소를 냅니다.", "isCorrect": false },
+        { "text": "세포질 - 질소", "rationale": "관련 없는 내용입니다.", "isCorrect": false }
+      ],
+      "hint": "식물은 잎의 초록색 부분에서 맑은 공기를 만들어냅니다."
+    },
+    {
+      "questionNumber": 6,
+      "question": "보일 법칙에 따르면, 온도가 일정할 때 기체의 압력과 부피는 어떤 관계입니까?",
+      "answerOptions": [
+        { "text": "비례한다.", "rationale": "압력이 커지면 부피는 작아집니다.", "isCorrect": false },
+        { "text": "반비례한다.", "rationale": "압력이 2배가 되면 부피는 1/2로 줄어듭니다.", "isCorrect": true },
+        { "text": "관계없다.", "rationale": "밀접한 관계가 있습니다.", "isCorrect": false },
+        { "text": "부피의 제곱에 비례한다.", "rationale": "단순 반비례 관계입니다.", "isCorrect": false }
+      ],
+      "hint": "풍선을 물속 깊이 넣으면(압력이 커지면) 크기가 어떻게 될까요?"
+    },
+    {
+      "questionNumber": 7,
+      "question": "암석이 풍화, 침식 작용을 받아 생긴 퇴적물이 굳어져 만들어진 암석을 무엇이라 합니까?",
+      "answerOptions": [
+        { "text": "화성암", "rationale": "마그마가 식어서 된 암석입니다.", "isCorrect": false },
+        { "text": "변성암", "rationale": "열과 압력을 받아 성질이 변한 암석입니다.", "isCorrect": false },
+        { "text": "퇴적암", "rationale": "퇴적물이 쌓여서 굳어진 암석입니다.", "isCorrect": true },
+        { "text": "심성암", "rationale": "화성암의 일종입니다.", "isCorrect": false }
+      ],
+      "hint": "쌓여서(퇴적) 만들어진 바위입니다."
+    },
+    {
+      "questionNumber": 8,
+      "question": "전류, 전압, 저항 사이의 관계를 나타낸 옴의 법칙 공식으로 옳은 것은?",
+      "answerOptions": [
+        { "text": "V = I × R", "rationale": "전압(V)은 전류(I)와 저항(R)의 곱과 같습니다.", "isCorrect": true },
+        { "text": "I = V × R", "rationale": "전류는 전압/저항입니다.", "isCorrect": false },
+        { "text": "R = V × I", "rationale": "저항은 전압/전류입니다.", "isCorrect": false },
+        { "text": "V = I / R", "rationale": "틀린 공식입니다.", "isCorrect": false }
+      ],
+      "hint": "전압(V)이 클수록 전류(I)도 세게 흐르고 저항(R)도 큽니다."
+    },
+    {
+      "questionNumber": 9,
+      "question": "사람의 소화 기관 중 '탄수화물, 단백질, 지방'을 모두 분해하는 소화 효소가 나오는 곳은?",
+      "answerOptions": [
+        { "text": "위", "rationale": "위에서는 단백질 소화 효소만 나옵니다.", "isCorrect": false },
+        { "text": "소장(이자)", "rationale": "이자는 3대 영양소를 분해하는 효소를 모두 분비하여 소장으로 보냅니다.", "isCorrect": true },
+        { "text": "대장", "rationale": "대장에서는 소화 작용이 거의 일어나지 않습니다.", "isCorrect": false },
+        { "text": "입", "rationale": "입에서는 탄수화물 소화 효소만 나옵니다.", "isCorrect": false }
+      ],
+      "hint": "위 다음에 연결된 십이지장 쪽으로 소화액을 보내는 기관을 생각해보세요."
+    },
+    {
+      "questionNumber": 10,
+      "question": "원자를 구성하는 입자 중 (+) 전하를 띠며 원자 중심에 위치하는 것은?",
+      "answerOptions": [
+        { "text": "전자", "rationale": "전자는 (-) 전하를 띠고 핵 주위를 돕니다.", "isCorrect": false },
+        { "text": "원자핵", "rationale": "원자핵은 (+) 전하를 띠며 원자의 질량 대부분을 차지합니다.", "isCorrect": true },
+        { "text": "중성자", "rationale": "중성자는 전하를 띠지 않습니다.", "isCorrect": false },
+        { "text": "분자", "rationale": "분자는 원자가 결합된 상태입니다.", "isCorrect": false }
+      ],
+      "hint": "원자의 '핵'심이 되는 부분입니다."
+    },
+    {
+      "questionNumber": 11,
+      "question": "파동의 성질 중, 파동이 장애물을 만났을 때 꺾여서 장애물 뒤쪽까지 퍼져 나가는 현상은?",
+      "answerOptions": [
+        { "text": "반사", "rationale": "반사는 튕겨 나오는 현상입니다.", "isCorrect": false },
+        { "text": "굴절", "rationale": "굴절은 매질이 달라질 때 진행 방향이 꺾이는 것입니다.", "isCorrect": false },
+        { "text": "회절", "rationale": "회절은 장애물을 돌아 퍼지는 현상입니다. 담벼락 뒤에서 소리가 들리는 이유입니다.", "isCorrect": true },
+        { "text": "간섭", "rationale": "간섭은 두 파동이 겹쳐지는 현상입니다.", "isCorrect": false }
+      ],
+      "hint": "담장 너머의 목소리가 들리는 이유를 생각해보세요."
+    },
+    {
+      "questionNumber": 12,
+      "question": "대기권 중 기상 현상(비, 눈, 구름)이 일어나는 층은 어디입니까?",
+      "answerOptions": [
+        { "text": "대류권", "rationale": "대류권은 공기의 대부분이 모여 있고 대류가 일어나 기상 현상이 발생합니다.", "isCorrect": true },
+        { "text": "성층권", "rationale": "성층권은 오존층이 있으며 기상 현상이 없습니다.", "isCorrect": false },
+        { "text": "중간권", "rationale": "중간권은 대류는 있지만 수증기가 없어 기상 현상이 없습니다.", "isCorrect": false },
+        { "text": "열권", "rationale": "열권은 공기가 매우 희박한 곳입니다.", "isCorrect": false }
+      ],
+      "hint": "우리가 살고 있는 지표면과 가장 가까운 층입니다."
+    },
+    {
+      "questionNumber": 13,
+      "question": "순물질이 액체에서 고체로 변하는 동안 온도가 일정하게 유지되는 구간을 무엇이라 합니까?",
+      "answerOptions": [
+        { "text": "녹는점", "rationale": "녹는점은 고체에서 액체로 변할 때의 온도입니다.", "isCorrect": false },
+        { "text": "끓는점", "rationale": "끓는점은 액체에서 기체로 변할 때의 온도입니다.", "isCorrect": false },
+        { "text": "어는점", "rationale": "액체가 고체로 얼 때 일정하게 유지되는 온도를 어는점이라 합니다.", "isCorrect": true },
+        { "text": "발화점", "rationale": "발화점은 불이 붙는 온도입니다.", "isCorrect": false }
+      ],
+      "hint": "물이 얼음이 되는 온도입니다."
+    },
+    {
+      "questionNumber": 14,
+      "question": "혈액의 성분 중 산소를 운반하는 붉은색 색소(헤모글로빈)가 들어있는 혈구는?",
+      "answerOptions": [
+        { "text": "백혈구", "rationale": "백혈구는 식균 작용을 하여 몸을 보호합니다.", "isCorrect": false },
+        { "text": "적혈구", "rationale": "적혈구는 붉은색이며 산소를 운반합니다.", "isCorrect": true },
+        { "text": "혈소판", "rationale": "혈소판은 혈액 응고에 관여합니다.", "isCorrect": false },
+        { "text": "혈장", "rationale": "혈장은 액체 성분으로 영양소와 노폐물을 운반합니다.", "isCorrect": false }
+      ],
+      "hint": "이것이 부족하면 빈혈이 생깁니다."
+    },
+    {
+      "questionNumber": 15,
+      "question": "다음 중 일(Work)의 과학적 정의에 맞지 않는 경우는?",
+      "answerOptions": [
+        { "text": "바닥에 있는 상자를 들어 올렸다.", "rationale": "힘의 방향으로 물체가 이동했으므로 일을 한 것입니다.", "isCorrect": false },
+        { "text": "수레를 밀어서 앞으로 이동시켰다.", "rationale": "힘과 이동 방향이 같으므로 일을 했습니다.", "isCorrect": false },
+        { "text": "무거운 가방을 들고 가만히 서 있었다.", "rationale": "이동 거리가 0이므로 한 일의 양은 0입니다.", "isCorrect": true },
+        { "text": "떨어지는 사과가 중력을 받아 낙하했다.", "rationale": "중력이 일을 한 경우입니다.", "isCorrect": false }
+      ],
+      "hint": "과학에서의 일은 힘을 주어 물체를 '이동'시켜야 합니다."
+    },
+    {
+      "questionNumber": 16,
+      "question": "별의 밝기 등급에 대한 설명으로 옳은 것은?",
+      "answerOptions": [
+        { "text": "등급 숫자가 작을수록 밝은 별이다.", "rationale": "1등급이 6등급보다 약 100배 더 밝습니다.", "isCorrect": true },
+        { "text": "등급 숫자가 클수록 밝은 별이다.", "rationale": "숫자가 클수록 어두운 별입니다.", "isCorrect": false },
+        { "text": "눈으로 볼 수 있는 가장 어두운 별은 1등급이다.", "rationale": "육안으로 볼 수 있는 한계 등급은 6등급입니다.", "isCorrect": false },
+        { "text": "태양은 마이너스(-) 등급을 갖지 않는다.", "rationale": "태양은 매우 밝아서 약 -26.8등급입니다.", "isCorrect": false }
+      ],
+      "hint": "1등이 6등보다 성적이 좋은 것처럼, 별도 숫자가 작을수록 밝습니다."
+    },
+    {
+      "questionNumber": 17,
+      "question": "물질을 이루는 기본 성분으로 더 이상 분해되지 않는 것을 무엇이라 합니까?",
+      "answerOptions": [
+        { "text": "원자", "rationale": "원자는 물질을 구성하는 입자입니다.", "isCorrect": false },
+        { "text": "분자", "rationale": "분자는 물질의 성질을 가지는 가장 작은 입자입니다.", "isCorrect": false },
+        { "text": "원소", "rationale": "원소는 물질을 이루는 기본 성분을 말합니다. (예: 수소, 산소)", "isCorrect": true },
+        { "text": "화합물", "rationale": "화합물은 두 가지 이상의 원소가 결합한 물질입니다.", "isCorrect": false }
+      ],
+      "hint": "주기율표에 나와 있는 수소(H), 산소(O) 같은 것들의 이름입니다."
+    },
+    {
+      "questionNumber": 18,
+      "question": "사람의 염색체 수는 총 몇 개입니까?",
+      "answerOptions": [
+        { "text": "23개", "rationale": "23쌍입니다.", "isCorrect": false },
+        { "text": "44개", "rationale": "상염색체가 44개입니다.", "isCorrect": false },
+        { "text": "46개", "rationale": "사람의 체세포 염색체 수는 23쌍, 즉 46개입니다.", "isCorrect": true },
+        { "text": "48개", "rationale": "침팬지의 염색체 수가 48개입니다.", "isCorrect": false }
+      ],
+      "hint": "23쌍이 존재합니다."
+    },
+    {
+      "questionNumber": 19,
+      "question": "해수에서 가장 많이 포함되어 있는 염류는 무엇입니까?",
+      "answerOptions": [
+        { "text": "염화 마그네슘", "rationale": "두 번째로 많은 염류이며 쓴맛을 냅니다.", "isCorrect": false },
+        { "text": "황산 마그네슘", "rationale": "소량 포함되어 있습니다.", "isCorrect": false },
+        { "text": "염화 나트륨", "rationale": "짠맛을 내는 소금 성분으로 가장 많은 비율을 차지합니다.", "isCorrect": true },
+        { "text": "탄산 칼슘", "rationale": "아주 적은 양입니다.", "isCorrect": false }
+      ],
+      "hint": "바닷물이 짠 이유입니다."
+    },
+    {
+      "questionNumber": 20,
+      "question": "마찰력의 크기에 영향을 주는 요인이 아닌 것은?",
+      "answerOptions": [
+        { "text": "접촉면의 거칠기", "rationale": "거칠수록 마찰력이 큽니다.", "isCorrect": false },
+        { "text": "물체의 무게", "rationale": "무거울수록 누르는 힘이 커져 마찰력이 큽니다.", "isCorrect": false },
+        { "text": "접촉면의 넓이", "rationale": "마찰력은 접촉면의 넓이와는 관계가 없습니다.", "isCorrect": true },
+        { "text": "바닥의 재질", "rationale": "재질에 따라 거칠기가 달라집니다.", "isCorrect": false }
+      ],
+      "hint": "넓은 타이어를 낀다고 해서 미끄러지는 정도가 달라지지는 않습니다(이상적인 상황에서)."
+    },
+    {
+      "questionNumber": 21,
+      "question": "식물의 뿌리에서 물을 흡수하는 원리는 무엇입니까?",
+      "answerOptions": [
+        { "text": "확산", "rationale": "확산은 농도가 높은 곳에서 낮은 곳으로 퍼지는 것입니다.", "isCorrect": false },
+        { "text": "삼투 현상", "rationale": "삼투는 반투과성 막을 경계로 농도가 낮은 쪽에서 높은 쪽으로 물이 이동하는 현상입니다.", "isCorrect": true },
+        { "text": "증산 작용", "rationale": "증산 작용은 잎에서 물을 내보내는 것으로 물 상승의 원동력입니다.", "isCorrect": false },
+        { "text": "광합성", "rationale": "양분을 만드는 과정입니다.", "isCorrect": false }
+      ],
+      "hint": "김장할 때 배추에 소금을 뿌리면 물이 빠져나오는 것과 같은 원리입니다."
+    },
+    {
+      "questionNumber": 22,
+      "question": "질산은 수용액과 반응하여 흰색 앙금(염화 은)을 생성하는 이온은?",
+      "answerOptions": [
+        { "text": "나트륨 이온", "rationale": "앙금을 잘 만들지 않습니다.", "isCorrect": false },
+        { "text": "염화 이온", "rationale": "염화 이온(Cl-)은 은 이온(Ag+)과 반응하여 흰색 앙금인 염화 은(AgCl)을 만듭니다.", "isCorrect": true },
+        { "text": "칼슘 이온", "rationale": "탄산 이온 등과 반응하여 앙금을 만듭니다.", "isCorrect": false },
+        { "text": "구리 이온", "rationale": "파란색을 띱니다.", "isCorrect": false }
+      ],
+      "hint": "수돗물 소독 냄새와 관련 있는 원소의 이온입니다."
+    },
+    {
+      "questionNumber": 23,
+      "question": "다음 중 외행성(지구 궤도 바깥쪽 행성)에 해당하지 않는 것은?",
+      "answerOptions": [
+        { "text": "화성", "rationale": "외행성입니다.", "isCorrect": false },
+        { "text": "목성", "rationale": "외행성입니다.", "isCorrect": false },
+        { "text": "금성", "rationale": "금성은 지구 궤도 안쪽을 도는 내행성입니다.", "isCorrect": true },
+        { "text": "토성", "rationale": "외행성입니다.", "isCorrect": false }
+      ],
+      "hint": "초저녁 서쪽 하늘이나 새벽 동쪽 하늘에서만 볼 수 있는 행성입니다."
+    },
+    {
+      "questionNumber": 24,
+      "question": "신경계 중 뇌와 척수를 포함하며 자극의 판단과 명령을 내리는 중심 부분은?",
+      "answerOptions": [
+        { "text": "말초 신경계", "rationale": "온몸에 퍼져 있는 신경입니다.", "isCorrect": false },
+        { "text": "중추 신경계", "rationale": "뇌와 척수로 구성된 신경계의 중심입니다.", "isCorrect": true },
+        { "text": "체성 신경계", "rationale": "말초 신경계의 일부입니다.", "isCorrect": false },
+        { "text": "자율 신경계", "rationale": "내장 기관을 조절하는 신경계입니다.", "isCorrect": false }
+      ],
+      "hint": "컴퓨터의 CPU와 같은 역할을 하는 곳입니다."
+    },
+    {
+      "questionNumber": 25,
+      "question": "운동하고 있는 물체가 가진 에너지를 무엇이라 합니까?",
+      "answerOptions": [
+        { "text": "위치 에너지", "rationale": "높은 곳에 있는 물체가 가지는 에너지입니다.", "isCorrect": false },
+        { "text": "운동 에너지", "rationale": "운동하는 물체가 가지는 에너지로 질량과 속력의 제곱에 비례합니다.", "isCorrect": true },
+        { "text": "탄성 에너지", "rationale": "변형된 탄성체가 가지는 에너지입니다.", "isCorrect": false },
+        { "text": "열 에너지", "rationale": "온도와 관련된 에너지입니다.", "isCorrect": false }
+      ],
+      "hint": "달리는 자동차가 가진 에너지입니다."
+    },
+    {
+      "questionNumber": 26,
+      "question": "다음 화학 반응식의 계수 a, b가 바르게 짝지어진 것은? (aH₂ + O₂ → bH₂O)",
+      "answerOptions": [
+        { "text": "a=1, b=1", "rationale": "수소와 산소 원자 수가 맞지 않습니다.", "isCorrect": false },
+        { "text": "a=2, b=2", "rationale": "반응 전 수소 4개, 산소 2개 -> 반응 후 수소 4개, 산소 2개로 맞습니다.", "isCorrect": true },
+        { "text": "a=1, b=2", "rationale": "반응 전 수소 개수가 부족합니다.", "isCorrect": false },
+        { "text": "a=2, b=1", "rationale": "반응 후 산소 개수가 부족합니다.", "isCorrect": false }
+      ],
+      "hint": "화살표 양쪽의 원자 개수가 같아야 합니다. (산소 O가 2개니까 오른쪽 물 분자도 2개여야겠죠?)"
+    },
+    {
+      "questionNumber": 27,
+      "question": "지진이 발생했을 때 지진의 크기를 나타내는 척도 중, 방출된 에너지의 양을 나타내는 절대적인 값은?",
+      "answerOptions": [
+        { "text": "진도", "rationale": "진도는 지역에 따라 느껴지는 흔들림의 정도(상대적)입니다.", "isCorrect": false },
+        { "text": "규모", "rationale": "규모는 지진 자체의 에너지 크기로 거리와 관계없이 일정합니다.", "isCorrect": true },
+        { "text": "진원", "rationale": "지진이 발생한 땅속 지점입니다.", "isCorrect": false },
+        { "text": "진앙", "rationale": "진원 바로 위의 지표면 지점입니다.", "isCorrect": false }
+      ],
+      "hint": "뉴스에서 '리히터 OO 5.0'이라고 할 때 쓰는 말입니다."
+    },
+    {
+      "questionNumber": 28,
+      "question": "멘델의 유전 법칙 중, 잡종 1대에서 우성 형질만 표현되고 열성 형질은 숨겨지는 원리는?",
+      "answerOptions": [
+        { "text": "분리의 법칙", "rationale": "생식세포 형성 시 유전자가 나뉘어 들어가는 원리입니다.", "isCorrect": false },
+        { "text": "독립의 법칙", "rationale": "두 쌍 이상의 형질이 서로 영향을 주지 않고 유전되는 원리입니다.", "isCorrect": false },
+        { "text": "우열의 원리", "rationale": "대립 유전자가 함께 있을 때 우성만 겉으로 드러나는 원리입니다.", "isCorrect": true },
+        { "text": "중간 유전", "rationale": "우열 관계가 불분명하여 중간 형질이 나오는 경우입니다.", "isCorrect": false }
+      ],
+      "hint": "이기는 편(우성)만 겉으로 드러납니다."
+    },
+    {
+      "questionNumber": 29,
+      "question": "포화 수증기량이 온도가 높을수록 증가하는 이유는?",
+      "answerOptions": [
+        { "text": "공기 분자 사이의 거리가 멀어져서", "rationale": "온도가 높으면 공기가 팽창하여 수증기가 들어갈 자리가 많아집니다.", "isCorrect": true },
+        { "text": "공기가 무거워져서", "rationale": "관련 없습니다.", "isCorrect": false },
+        { "text": "수증기가 응결하기 쉬워서", "rationale": "온도가 높으면 응결하기 어렵습니다.", "isCorrect": false },
+        { "text": "기압이 낮아져서", "rationale": "직접적인 원인이 아닙니다.", "isCorrect": false }
+      ],
+      "hint": "따뜻한 공기는 '그릇'이 커서 물을 많이 머금을 수 있습니다."
+    },
+    {
+      "questionNumber": 30,
+      "question": "자석 내부에서의 자기장 방향은 어떻게 됩니까?",
+      "answerOptions": [
+        { "text": "N극에서 S극으로", "rationale": "자석 외부에서의 방향입니다.", "isCorrect": false },
+        { "text": "S극에서 N극으로", "rationale": "자기력선은 끊어지지 않고 연결되므로 내부에서는 S극에서 N극으로 향합니다.", "isCorrect": true },
+        { "text": "방향이 없다.", "rationale": "자기장은 항상 방향이 있습니다.", "isCorrect": false },
+        { "text": "중앙에서 양쪽 끝으로", "rationale": "그렇지 않습니다.", "isCorrect": false }
+      ],
+      "hint": "자기력선은 닫힌 곡선을 이룹니다. 밖에서는 N->S라면 안에서는?"
+    }
+  ]
+}

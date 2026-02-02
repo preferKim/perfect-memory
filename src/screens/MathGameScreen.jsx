@@ -1,8 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Check, X } from 'lucide-react';
 import MathRenderer from '../components/MathRenderer';
+import { usePlayer } from '../context/PlayerContext';
 
-const MathGameScreen = ({ onBack, difficulty, topicLevel, user, addXp }) => {
+const MathGameScreen = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user, addXp } = usePlayer();
+  const { difficulty, topicLevel } = location.state || { difficulty: 'easy', topicLevel: 1 };
+
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -129,7 +136,7 @@ const MathGameScreen = ({ onBack, difficulty, topicLevel, user, addXp }) => {
                   선택하신 난이도와 주제에 해당하는 문제가 없습니다.
               </p>
               <button
-                  onClick={onBack}
+                  onClick={() => navigate(-1)}
                   className="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition-colors"
               >
                   돌아가기
@@ -149,7 +156,7 @@ const MathGameScreen = ({ onBack, difficulty, topicLevel, user, addXp }) => {
             </p>
             <div className="flex gap-4">
                 <button
-                    onClick={onBack}
+                    onClick={() => navigate(-1)}
                     className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-lg transition-colors"
                 >
                     과목 선택으로
@@ -196,7 +203,7 @@ const MathGameScreen = ({ onBack, difficulty, topicLevel, user, addXp }) => {
         <div className="w-full max-w-3xl">
             {/* Header */}
             <div className="relative flex items-center justify-between mb-4 self-stretch">
-                <button onClick={onBack} className="p-2 rounded-full hover:bg-white/10 transition-colors">
+                <button onClick={() => navigate(-1)} className="p-2 rounded-full hover:bg-white/10 transition-colors">
                     <ArrowLeft size={20} className="text-gray-300" />
                 </button>
                 <div className="text-lg font-bold text-white flex items-center gap-4">

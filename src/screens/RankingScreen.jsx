@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 import { Heart, Clock } from 'lucide-react';
 
@@ -18,6 +19,7 @@ const RankingScreen = ({
     lives = 0,
     time = 0,
 }) => {
+    const navigate = useNavigate();
     const sortedRankings = [...rankings].sort((a, b) => b.score - a.score);
 
     const renderNormalModeResult = () => {
@@ -123,14 +125,24 @@ const RankingScreen = ({
         <div className="glass-card p-6 sm:p-12 text-center">
             {renderContent()}
 
-            <Button
-                onClick={onRestart}
-                variant="threedee"
-                color="primary"
-                className="mt-8 px-8 py-4 text-lg"
-            >
-                메인 화면으로 돌아가기
-            </Button>
+            <div className="mt-8 flex justify-center gap-4">
+                <Button
+                    onClick={() => navigate('/')}
+                    variant="threedee"
+                    color="normal"
+                    className="px-8 py-4 text-lg"
+                >
+                    메인으로
+                </Button>
+                <Button
+                    onClick={onRestart}
+                    variant="threedee"
+                    color="primary"
+                    className="px-8 py-4 text-lg"
+                >
+                    다시하기
+                </Button>
+            </div>
         </div>
     );
 };

@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Clock, Keyboard } from 'lucide-react';
 
 const words = ["React", "JavaScript", "Tailwind", "Vite", "Supabase", "Component", "Props", "State", "Hook"];
 
-const TypingGame = ({ onBack }) => {
+const TypingGame = () => {
+    const navigate = useNavigate();
     const inputRef = useRef(null);
 
     const [difficulty, setDifficulty] = useState('easy');
@@ -116,7 +118,7 @@ const TypingGame = ({ onBack }) => {
         return (
             <div className="glass-card p-6 sm:p-12 text-center relative flex flex-col items-center">
                  <button
-                    onClick={onBack}
+                    onClick={() => navigate(-1)}
                     className="absolute top-4 left-4 text-gray-200 hover:text-white transition p-2"
                     title="Back"
                     aria-label="Back"
@@ -139,7 +141,7 @@ const TypingGame = ({ onBack }) => {
         <div className="glass-card p-6 sm:p-12 text-center h-full flex flex-col justify-between">
             <header className="relative w-full">
                 <button
-                    onClick={onBack}
+                    onClick={() => navigate(-1)}
                     className="absolute top-0 left-0 text-gray-200 hover:text-white transition p-2"
                     title="Back"
                     aria-label="Back"

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, RefreshCw, Target } from 'lucide-react';
 import Button from '../../components/Button';
 
@@ -27,7 +28,8 @@ const generateProblem = () => {
     return { target, options: components.sort(() => Math.random() - 0.5) };
 };
 
-const ClickerGame = ({ onBack }) => {
+const ClickerGame = () => {
+    const navigate = useNavigate();
     const [targetNumber, setTargetNumber] = useState(0);
     const [currentSum, setCurrentSum] = useState(0);
     const [options, setOptions] = useState([]);
@@ -89,7 +91,7 @@ const ClickerGame = ({ onBack }) => {
 
     return (
         <div className="glass-card p-6 sm:p-12 text-center relative flex flex-col items-center w-full max-w-2xl mx-auto">
-            <button onClick={onBack} className="absolute top-4 left-4 text-gray-200 hover:text-white transition p-2">
+            <button onClick={() => navigate(-1)} className="absolute top-4 left-4 text-gray-200 hover:text-white transition p-2">
                 <ArrowLeft size={24} />
             </button>
             <Target size={48} className="text-white mb-4" />
