@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BookOpen, Gamepad2, Target, Keyboard, Hash, Puzzle, BarChart3 } from 'lucide-react';
+import { BookOpen, Gamepad2, Target, Keyboard, Hash, Puzzle } from 'lucide-react';
 import Button from '../components/Button';
 import HeaderSection from '../components/HeaderSection';
 import OnboardingModal from '../components/OnboardingModal';
@@ -39,16 +39,6 @@ const SubjectScreen = ({ onSignUp, onLogin, onLogout, user }) => {
                 />
 
                 <div className="space-y-5">
-                    {/* Dashboard Button */}
-                    <Button
-                        onClick={() => navigate('/dashboard')}
-                        variant="threedee"
-                        color="success"
-                        className="w-full h-16 flex items-center justify-center gap-3"
-                    >
-                        <BarChart3 size={24} className="text-white" />
-                        <span className="text-lg font-bold">학습 대시보드</span>
-                    </Button>
 
                     {/* 공부방 Section */}
                     <div className="bg-black/10 rounded-2xl p-6">
