@@ -1,10 +1,16 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Lightbulb, BookOpen, CheckCircle, XCircle } from 'lucide-react';
 import Button from '../Button';
+import { useAuth } from '../../hooks/useAuth';
+import { useLearningProgress } from '../../hooks/useLearningProgress';
 
 const GrammarQuiz = () => {
     const navigate = useNavigate();
+    const { user } = useAuth();
+    const { startSession, endSession, recordAnswer } = useLearningProgress(user?.id);
+    const sessionRef = useRef(null);
+
     const [questions, setQuestions] = useState([]);
     const [grammarTerms, setGrammarTerms] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -33,6 +39,17 @@ const GrammarQuiz = () => {
         fetchAndSetData();
     }, []);
 
+    // 세션 시작
+    useEffect(() => {
+        const initSession = async () => {
+            if (user?.id && questions.length > 0 && !sessionRef.current && !isFinished) {
+                console.log('Starting session for: korean_grammar');
+                sessionRef.current = await startSession('korean_grammar', 'quiz');
+            }
+        };
+        initSession();
+    }, [user?.id, questions.length, isFinished, startSession]);
+
     const currentQuestion = questions[currentQuestionIndex];
 
     const handleWordClick = (word) => {
@@ -57,7 +74,7 @@ const GrammarQuiz = () => {
         } else {
             setFeedback('incorrect');
         }
-        
+
         // Find and set term details
         const termName = currentQuestion.term;
         const details = grammarTerms.find(t => t.term === termName);
@@ -74,7 +91,7 @@ const GrammarQuiz = () => {
             setIsFinished(true);
         }
     };
-    
+
     const restartQuiz = () => {
         setCurrentQuestionIndex(0);
         setSelectedWords([]);
@@ -89,8 +106,18 @@ const GrammarQuiz = () => {
     if (questions.length === 0) {
         return <div className="text-center text-white">퀴즈를 불러오는 중...</div>;
     }
-    
+
     if (isFinished) {
+        if (user?.id && sessionRef.current) {
+            endSession({
+                totalQuestions: questions.length,
+                correctCount: score,
+                wrongCount: questions.length - score,
+                score: score * 10
+            });
+            sessionRef.current = null;
+        }
+
         return (
             <div className="glass-card p-6 sm:p-8 text-center text-white">
                 <h2 className="text-3xl font-bold mb-4 text-primary-light">퀴즈 완료!</h2>
@@ -146,7 +173,7 @@ const GrammarQuiz = () => {
                                 className={`cursor-pointer p-1 rounded transition-colors duration-200 inline-block mr-1 ${selectedWords.includes(word) ? 'bg-yellow-500 text-black' : 'hover:bg-white/20'
                                     } ${feedback === 'correct' && currentQuestion.answers.includes(word.trim()) ? 'bg-green-500 !text-black' : ''
                                     } ${feedback === 'incorrect' && selectedWords.includes(word) && !currentQuestion.answers.includes(word.trim()) ? 'bg-red-500 !text-black line-through' : ''
-                                    } ${feedback !== null && currentQuestion.answers.includes(word.trim()) ? 'border-b-2 border-green-400' : '' }`}
+                                    } ${feedback !== null && currentQuestion.answers.includes(word.trim()) ? 'border-b-2 border-green-400' : ''}`}
                             >
                                 {word}
                             </span>
@@ -178,13 +205,13 @@ const GrammarQuiz = () => {
                             </p>
                             {currentQuestion.explain && (
                                 <div className="bg-black/20 p-4 rounded-xl mb-4 text-left border border-white/10">
-                                    <h3 className="font-bold text-lg text-blue-300 flex items-center mb-2"><BookOpen size={18} className="mr-2"/>해설</h3>
+                                    <h3 className="font-bold text-lg text-blue-300 flex items-center mb-2"><BookOpen size={18} className="mr-2" />해설</h3>
                                     <p className="text-sm text-gray-200">{currentQuestion.explain}</p>
                                 </div>
                             )}
                             {feedback !== null && termDetails && (
                                 <div className="bg-black/20 p-4 rounded-xl mt-4 text-left border border-white/10 animate-fade-in">
-                                    <h3 className="font-bold text-lg text-green-300 flex items-center mb-2"><BookOpen size={18} className="mr-2"/>'<strong>{termDetails.term}</strong>' 개념 다시보기</h3>
+                                    <h3 className="font-bold text-lg text-green-300 flex items-center mb-2"><BookOpen size={18} className="mr-2" />'<strong>{termDetails.term}</strong>' 개념 다시보기</h3>
                                     <div className="border-t border-white/20 pt-2 mt-2">
                                         <p className="text-md font-semibold text-primary-light mb-2">{termDetails.hanja} ({termDetails.hanja_meaning})</p>
                                         <p className="text-sm text-gray-200 mb-3 leading-relaxed">{termDetails.description}</p>

@@ -297,7 +297,48 @@ export function useLearningProgress(userId) {
         const { correctCount, wrongCount, score } = stats;
 
         try {
-            // 기존 진행 상태 확인
+            // 1. 과정 정보(total_items) 조회
+            const { data: course } = await supabase
+                .from('courses')
+                .select('total_items')
+                .eq('id', courseId)
+                .single();
+
+            const totalItems = course?.total_items || 0;
+
+            // 2. 학습한 고유 단어 수 조회 (이미 마스터한 단어 수)
+            // learning_records에서 해당 과정, 해당 유저의 정답 기록이 있는 고유 word_id 개수
+            const { count: masteredCount, error: countError } = await supabase
+                .from('learning_records')
+                .select('word_id', { count: 'exact', head: true }) // head: true for count only
+                .eq('user_id', userId)
+                .eq('course_id', courseId)
+                .eq('is_correct', true)
+                .not('word_id', 'is', null); // word_id가 있는 경우만 (혹시 모를 더미 데이터 제외)
+
+            // Note: Supabase .select with head:true won't give distinct count automatically if accessed via HTTP API strictly, 
+            // but we need DISTINCT word_id. 
+            // Standard Supabase client doesn't support 'distinct count' easily in one go without RPC.
+            // Alternative: Fetch all mastered word_ids and count unique Set. 
+            // Considering performance, let's try a rpc call if available, or just fetch distinct word_ids.
+            // If the dataset is small enough (<10000), fetching IDs is fine.
+
+            const { data: masteredWords } = await supabase
+                .from('learning_records')
+                .select('word_id')
+                .eq('user_id', userId)
+                .eq('course_id', courseId)
+                .eq('is_correct', true);
+
+            const uniqueMasteredCount = new Set(masteredWords?.map(r => r.word_id)).size;
+
+            // 3. 진도율 계산
+            let progressPercent = 0;
+            if (totalItems > 0) {
+                progressPercent = Math.min(100, (uniqueMasteredCount / totalItems) * 100).toFixed(2);
+            }
+
+            // 4. 기존 진행 상태 확인 및 업데이트
             const { data: existing } = await supabase
                 .from('user_course_progress')
                 .select('*')
@@ -311,11 +352,12 @@ export function useLearningProgress(userId) {
                 await supabase
                     .from('user_course_progress')
                     .update({
-                        status: 'in_progress',
+                        status: progressPercent >= 100 ? 'completed' : 'in_progress',
                         total_attempts: existing.total_attempts + 1,
                         correct_count: existing.correct_count + correctCount,
                         wrong_count: existing.wrong_count + wrongCount,
                         best_score: Math.max(existing.best_score || 0, score || 0),
+                        progress_percent: parseFloat(progressPercent),
                         last_studied_at: now
                     })
                     .eq('id', existing.id);
@@ -330,6 +372,7 @@ export function useLearningProgress(userId) {
                         correct_count: correctCount,
                         wrong_count: wrongCount,
                         best_score: score || 0,
+                        progress_percent: parseFloat(progressPercent),
                         started_at: now,
                         last_studied_at: now
                     });
@@ -360,6 +403,28 @@ export function useLearningProgress(userId) {
         return '⚪';
     }, [progress]);
 
+    /**
+     * 최근 학습 세션 기록 가져오기 (그래프용)
+     */
+    const fetchGameSessions = useCallback(async (limit = 100) => {
+        if (!userId) return [];
+
+        try {
+            const { data, error } = await supabase
+                .from('game_sessions')
+                .select('id, started_at, total_questions, correct_count, score, course_id')
+                .eq('user_id', userId)
+                .order('started_at', { ascending: false })
+                .limit(limit);
+
+            if (error) throw error;
+            return data;
+        } catch (err) {
+            console.error('fetchGameSessions error:', err);
+            return [];
+        }
+    }, [userId]);
+
     return {
         progress,
         loading,
@@ -371,7 +436,8 @@ export function useLearningProgress(userId) {
         getWeakWords,
         removeWeakWord,
         getCourseProgress,
-        getStatusIcon
+        getStatusIcon,
+        fetchGameSessions
     };
 }
 

@@ -23,7 +23,10 @@ import ChosungGame from './components/games/ChosungGame';
 import ChosungResultScreen from './screens/ChosungResultScreen';
 import MathGameScreen from './screens/MathGameScreen';
 import DashboardScreen from './screens/DashboardScreen';
+
 import WrongAnswerScreen from './screens/WrongAnswerScreen';
+import CertificateSelectionScreen from './screens/CertificateSelectionScreen';
+import CertificateQuizScreen from './screens/CertificateQuizScreen';
 
 // Playground components
 import ClickerGame from './screens/playground/ClickerGame';
@@ -54,7 +57,12 @@ function App() {
           <Route path="/social" element={<SocialSelectionScreen />} />
           <Route path="/social/:difficulty" element={<SocialQuizScreen />} />
           <Route path="/science" element={<ScienceSelectionScreen />} />
+
           <Route path="/science/:difficulty" element={<ScienceQuizScreen />} />
+
+          {/* Certificate */}
+          <Route path="/certificate" element={<CertificateSelectionScreen />} />
+          <Route path="/certificate/quiz" element={<CertificateQuizScreen />} />
 
           {/* Math */}
           <Route path="/math/jsj50day/:lectureId" element={<ObjectiveScreen />} />

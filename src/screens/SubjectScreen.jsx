@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BookOpen, Gamepad2, Target, Keyboard, Hash, Puzzle } from 'lucide-react';
+import { BookOpen, Gamepad2, Target, Keyboard, Hash, Puzzle, Award } from 'lucide-react';
 import Button from '../components/Button';
 import HeaderSection from '../components/HeaderSection';
 import OnboardingModal from '../components/OnboardingModal';
@@ -20,7 +20,7 @@ const SubjectScreen = ({ onSignUp, onLogin, onLogout, user }) => {
         if (subject.startsWith('playground-')) {
             const game = subject.split('-')[1];
             navigate(`/playground/${game}`);
-        } else if (subject === 'english' || subject === 'math' || subject === 'korean' || subject === 'social' || subject === 'science') {
+        } else if (subject === 'english' || subject === 'math' || subject === 'korean' || subject === 'social' || subject === 'science' || subject === 'certificate') {
             navigate(`/${subject}`);
         } else {
             alert('아직 준비되지 않은 과목입니다.');
@@ -61,6 +61,23 @@ const SubjectScreen = ({ onSignUp, onLogin, onLogout, user }) => {
                             </Button>
                             <Button onClick={() => handleSubjectClick('science')} variant="threedee" color="speed" className="w-full h-28 flex flex-col items-center justify-center">
                                 <span className="text-2xl">🔬</span><br />과학
+                            </Button>
+                        </div>
+                    </div>
+
+                    {/* 자격증 Section */}
+                    <div className="bg-black/10 rounded-2xl p-6">
+                        <div className="flex items-center justify-center mb-5">
+                            <Award className="text-purple-300 mr-3" size={28} />
+                            <h2 className="text-2xl font-bold text-white">자격증</h2>
+                        </div>
+                        <div className="grid grid-cols-1 gap-4 max-w-lg mx-auto">
+                            <Button onClick={() => handleSubjectClick('certificate')} variant="threedee" color="primary" className="w-full h-24 flex items-center justify-center gap-4">
+                                <span className="text-3xl">💻</span>
+                                <div className="text-left">
+                                    <div className="text-xl font-bold">정보처리기사</div>
+                                    <div className="text-sm opacity-80">기출문제 풀이</div>
+                                </div>
                             </Button>
                         </div>
                     </div>

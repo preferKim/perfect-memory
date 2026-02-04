@@ -12,8 +12,9 @@ const ScienceQuizScreen = () => {
     const { difficulty } = useParams();
     const { addXp } = usePlayer();
     const { user } = useAuth();
-    const { recordAnswer } = useLearningProgress(user?.id);
+    const { recordAnswer, startSession, endSession } = useLearningProgress(user?.id);
     const { getQuestions } = useLearningContent();
+    const sessionRef = useRef(null);
 
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -37,6 +38,18 @@ const ScienceQuizScreen = () => {
             explanationRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     }, [isAnswered]);
+
+    // 세션 시작
+    useEffect(() => {
+        const initSession = async () => {
+            if (user?.id && questions.length > 0 && !sessionRef.current && !gameFinished) {
+                const courseCode = `science_${difficulty}`;
+                console.log('Starting session for:', courseCode);
+                sessionRef.current = await startSession(courseCode, 'quiz');
+            }
+        };
+        initSession();
+    }, [user?.id, questions.length, difficulty, gameFinished, startSession]);
 
     const xpAddedRef = useRef(false);
     useEffect(() => {
@@ -147,6 +160,16 @@ const ScienceQuizScreen = () => {
     }
 
     if (gameFinished) {
+        if (user?.id && sessionRef.current) {
+            endSession({
+                totalQuestions: questions.length,
+                correctCount: score,
+                wrongCount: wrongAnswers,
+                score: score * 10
+            });
+            sessionRef.current = null;
+        }
+
         return (
             <div className="flex flex-col items-center justify-center min-h-screen bg-gray-800 p-4 text-center">
                 <div className="glass-card p-8 rounded-2xl w-full max-w-md">

@@ -34,6 +34,35 @@ const MathGameScreen = () => {
     }
   }, [isAnswered]);
 
+  // 세션 시작
+  useEffect(() => {
+    const initSession = async () => {
+      if (user?.id && questions.length > 0 && !sessionRef.current && !gameFinished) {
+        const selectedDifficulty = difficulty || 'elementary';
+        const selectedTopicLevel = topicLevel || 1;
+
+        let courseCode;
+        if (selectedDifficulty === 'jsj50day') {
+          const paddedLevel = String(selectedTopicLevel).padStart(2, '0');
+          courseCode = `math_seungje_${paddedLevel}`;
+        } else {
+          // 단계별 학습: math_level_{단계}_{난이도}
+          // fallback 'easy' -> 'elementary' 처리
+          let diff = selectedDifficulty;
+          if (diff === 'easy') diff = 'elementary';
+          if (diff === 'medium') diff = 'middle';
+          if (diff === 'hard') diff = 'high';
+
+          courseCode = `math_level_${selectedTopicLevel}_${diff}`;
+        }
+
+        console.log('Starting session for:', courseCode);
+        sessionRef.current = await startSession(courseCode, 'quiz');
+      }
+    };
+    initSession();
+  }, [user?.id, questions.length, difficulty, topicLevel, gameFinished, startSession]);
+
   // Handle XP gain on game finish
   const xpAddedRef = useRef(false);
   useEffect(() => {
@@ -192,6 +221,16 @@ const MathGameScreen = () => {
   }
 
   if (gameFinished) {
+    if (user?.id && sessionRef.current) {
+      endSession({
+        totalQuestions: questions.length,
+        correctCount: score,
+        wrongCount: wrongAnswers,
+        score: score * 10 // 점수 계산 방식 조정 필요시 수정
+      });
+      sessionRef.current = null;
+    }
+
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4 text-center">
         <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">

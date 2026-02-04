@@ -8,7 +8,8 @@ import { useLearningProgress } from '../hooks/useLearningProgress';
 const LiteraryTermsQuiz = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
-    const { recordAnswer } = useLearningProgress(user?.id);
+    const { recordAnswer, startSession, endSession } = useLearningProgress(user?.id);
+    const sessionRef = useRef(null);
     const nextButtonRef = useRef(null);
     const [allTerms, setAllTerms] = useState([]);
     const [quizQuestions, setQuizQuestions] = useState([]);
@@ -61,6 +62,17 @@ const LiteraryTermsQuiz = () => {
             })
             .catch(error => console.error("Failed to load literary terms:", error));
     }, [generateQuestions]);
+
+    // 세션 시작
+    useEffect(() => {
+        const initSession = async () => {
+            if (user?.id && quizQuestions.length > 0 && !sessionRef.current) {
+                console.log('Starting session for: korean_literary_terms');
+                sessionRef.current = await startSession('korean_literary_terms', 'quiz');
+            }
+        };
+        initSession();
+    }, [user?.id, quizQuestions.length, startSession]);
 
     // Scroll to the next question button when it appears
     useEffect(() => {
@@ -124,6 +136,16 @@ const LiteraryTermsQuiz = () => {
     const isGameOver = currentQuestionIndex >= quizQuestions.length;
 
     if (isGameOver) {
+        if (user?.id && sessionRef.current) {
+            endSession({
+                totalQuestions: quizQuestions.length,
+                correctCount: score / 10,
+                wrongCount: quizQuestions.length - (score / 10),
+                score: score
+            });
+            sessionRef.current = null;
+        }
+
         return (
             <div className="glass-card p-8 text-center flex flex-col items-center gap-6">
                 <h3 className="text-4xl font-bold text-white">게임 종료!</h3>
