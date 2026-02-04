@@ -8,6 +8,8 @@ import RankingScreen from './RankingScreen';
 import ConnectingGameScreen from './ConnectingGameScreen';
 import FeedbackAnimation from '../components/FeedbackAnimation';
 import { supabase } from '../supabaseClient';
+import { useLearningContent, fetchFromJson } from '../hooks/useLearningContent';
+import { useLearningProgress } from '../hooks/useLearningProgress';
 
 const initialState = {
     status: 'idle', gameMode: 'normal', difficulty: 'easy', playerName: '',
@@ -87,6 +89,11 @@ const GameScreen = () => {
     const timerRef = useRef(null);
     const dragPosRef = useRef({ x: 0, y: 0 });
 
+    // Supabase 학습 훅
+    const { getQuestions } = useLearningContent();
+    const { startSession, endSession, recordAnswer } = useLearningProgress(user?.id);
+    const sessionRef = useRef(null);
+
     useEffect(() => {
         dispatch({ type: 'START_GAME', payload: { name, level, mode } });
         supabase.auth.getSession().then(({ data: { session } }) => setUser(session?.user ?? null));
@@ -98,18 +105,51 @@ const GameScreen = () => {
         if (status === 'loading') {
             const loadGameData = async () => {
                 try {
-                    const wordsResponse = await fetch(`/words/english_${difficulty}.json`);
-                    const wordsData = await wordsResponse.json();
+                    const courseCode = `english_${difficulty}`;
+
+                    // Supabase에서 데이터 가져오기 시도
+                    let wordsData = await getQuestions(courseCode, { limit: 100, shuffle: false });
+
+                    // Supabase에 데이터가 없으면 JSON fallback
+                    if (!wordsData || wordsData.length === 0) {
+                        console.log('Supabase에 데이터 없음, JSON fallback 사용');
+                        wordsData = await fetchFromJson('english', difficulty);
+                    }
+
                     let payload = {};
                     if (gameMode === 'speed') payload = { words: wordsData, allWords: wordsData };
                     else if (gameMode === 'connect') payload = { connectWords: wordsData.sort(() => .5 - Math.random()).slice(0, 10) };
                     else payload = { words: wordsData.sort(() => .5 - Math.random()), allWords: wordsData };
                     dispatch({ type: 'SET_WORDS_SUCCESS', payload });
-                } catch (error) { console.error("Failed to load game data:", error); }
+                } catch (error) {
+                    console.error("Failed to load game data:", error);
+                    // Fallback to JSON
+                    try {
+                        const wordsData = await fetchFromJson('english', difficulty);
+                        let payload = {};
+                        if (gameMode === 'speed') payload = { words: wordsData, allWords: wordsData };
+                        else if (gameMode === 'connect') payload = { connectWords: wordsData.sort(() => .5 - Math.random()).slice(0, 10) };
+                        else payload = { words: wordsData.sort(() => .5 - Math.random()), allWords: wordsData };
+                        dispatch({ type: 'SET_WORDS_SUCCESS', payload });
+                    } catch (e) { console.error("JSON fallback also failed:", e); }
+                }
             };
             loadGameData();
         }
     }, [status, difficulty, gameMode]);
+
+    // 세션 시작 (user가 로드된 후 게임이 playing 상태일 때)
+    useEffect(() => {
+        const initSession = async () => {
+            if (user?.id && status === 'playing' && !sessionRef.current) {
+                const courseCode = `english_${difficulty}`;
+                console.log('Starting session for:', courseCode, gameMode);
+                sessionRef.current = await startSession(courseCode, gameMode);
+                console.log('Session started:', sessionRef.current);
+            }
+        };
+        initSession();
+    }, [user?.id, status, difficulty, gameMode, startSession]);
 
     useEffect(() => {
         if (status !== 'playing' || isPaused) {
@@ -195,16 +235,23 @@ const GameScreen = () => {
     const checkAnswer = (direction) => {
         const directionMap = { up: 0, down: 1, left: 2, right: 3 };
         const selectedAnswer = options[directionMap[direction]];
-        const isCorrect = selectedAnswer === words[currentIndex].korean;
+        const currentWord = words[currentIndex];
+        const isCorrect = selectedAnswer === currentWord.korean;
         dispatch({ type: 'CHECK_ANSWER', payload: { isCorrect } });
 
         if (isCorrect) {
             addXp(difficulty === 'easy' ? 1 : difficulty === 'medium' ? 2 : 3);
         } else {
             // Track weak word on wrong answer
-            if (words[currentIndex]) {
-                addWeakWord(words[currentIndex]);
+            if (currentWord) {
+                addWeakWord(currentWord);
             }
+        }
+
+        // Supabase에 답안 기록 (로그인 사용자 + 세션 있을 때)
+        if (user?.id && sessionRef.current && currentWord?._wordId) {
+            console.log('Recording answer:', currentWord._wordId, isCorrect);
+            recordAnswer(currentWord._wordId, isCorrect, selectedAnswer);
         }
 
         setTimeout(handleNext, 1200);
@@ -250,7 +297,14 @@ const GameScreen = () => {
     const handleRestart = () => dispatch({ type: 'START_GAME', payload: { name, level, mode } });
 
     if (status === 'loading' || (words.length === 0 && gameMode !== 'connect')) return <div className="flex items-center justify-center h-screen text-xl font-bold text-white">Loading...</div>;
-    if (status === 'finished') return <RankingScreen onRestart={handleRestart} gameMode={gameMode} score={score} wrongAnswers={wrongAnswers} total={total} lives={lives} time={gameMode === 'connect' ? connectTime : speedRunTimeLeft} />;
+    if (status === 'finished') {
+        // 세션 종료 (로그인 사용자만)
+        if (user?.id && sessionRef.current) {
+            endSession({ totalQuestions: total, correctCount: score, wrongCount: wrongAnswers, score });
+            sessionRef.current = null;
+        }
+        return <RankingScreen onRestart={handleRestart} gameMode={gameMode} score={score} wrongAnswers={wrongAnswers} total={total} lives={lives} time={gameMode === 'connect' ? connectTime : speedRunTimeLeft} />;
+    }
     if (gameMode === 'connect') return <ConnectingGameScreen words={connectWords} lives={lives} onCheckAnswer={(w1, w2) => dispatch({ type: 'CHECK_CONNECT_ANSWER', payload: { word1: w1, word2: w2 } })} matchedPairs={matchedPairs} resetGame={togglePause} time={connectTime} />;
 
     const currentWord = words[currentIndex] || {};
