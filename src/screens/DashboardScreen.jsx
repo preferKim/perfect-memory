@@ -142,17 +142,10 @@ const DashboardScreen = () => {
             return;
         }
 
-        // 오답노트 학습 모드로 이동
-        navigate('/game', {
+        // 통합 오답노트 학습 화면으로 이동
+        navigate('/wrong-answer', {
             state: {
-                name: selectedSubject === 'all' ? '오답노트 전체 학습' : `${SUBJECT_CONFIG[selectedSubject]?.name || selectedSubject} 오답노트`,
-                level: 'custom',
-                mode: 'normal',
-                gameType: 'wrong_answers',
-                customWords: filteredWords.map(w => ({
-                    ...w,
-                    wordId: w._wordId
-                })),
+                customWords: filteredWords,
                 subject: selectedSubject === 'all' ? 'mixed' : selectedSubject
             }
         });
@@ -295,12 +288,18 @@ const DashboardScreen = () => {
                                             initial={{ opacity: 0, x: -20 }}
                                             animate={{ opacity: 1, x: 0 }}
                                             transition={{ delay: index * 0.03 }}
-                                            className="bg-white/5 rounded-xl p-4 flex items-center justify-between hover:bg-white/10 transition"
+                                            className="bg-white/5 rounded-xl p-4 flex items-center justify-between hover:bg-white/10 transition cursor-pointer group"
+                                            onClick={() => navigate('/wrong-answer', {
+                                                state: {
+                                                    customWords: [word],
+                                                    subject: subject
+                                                }
+                                            })}
                                         >
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex items-center gap-3 mb-1 flex-wrap">
                                                     <span className="text-lg" title={config.name}>{config.emoji}</span>
-                                                    <span className="text-lg font-bold text-white truncate">
+                                                    <span className="text-lg font-bold text-white truncate group-hover:text-primary-light transition">
                                                         {display.main}
                                                     </span>
                                                     <span className="text-sm bg-danger/20 text-danger-light px-2 py-0.5 rounded-full whitespace-nowrap">
@@ -317,13 +316,19 @@ const DashboardScreen = () => {
                                                     <div className="text-sm text-primary-light font-mono">{display.extra}</div>
                                                 )}
                                             </div>
-                                            <button
-                                                onClick={() => handleRemoveWord(word._wordId)}
-                                                className="text-gray-400 hover:text-danger-light transition p-2 flex-shrink-0"
-                                                aria-label="삭제"
-                                            >
-                                                <Trash2 size={20} />
-                                            </button>
+                                            <div className="flex items-center gap-2">
+                                                <Play size={18} className="text-gray-500 group-hover:text-primary-light transition opacity-0 group-hover:opacity-100" />
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleRemoveWord(word._wordId);
+                                                    }}
+                                                    className="text-gray-400 hover:text-danger-light transition p-2 flex-shrink-0"
+                                                    aria-label="삭제"
+                                                >
+                                                    <Trash2 size={20} />
+                                                </button>
+                                            </div>
                                         </motion.div>
                                     );
                                 })}

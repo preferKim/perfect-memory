@@ -35,14 +35,13 @@ const MathGameScreen = () => {
   }, [isAnswered]);
 
   // Handle XP gain on game finish
+  const xpAddedRef = useRef(false);
   useEffect(() => {
-    if (gameFinished && user && addXp) {
-      const xpGained = score * 5; // 5 XP for each correct answer
-      if (xpGained > 0) {
-        addXp(xpGained);
-      }
+    if (gameFinished && user && score > 0 && !xpAddedRef.current) {
+      xpAddedRef.current = true;
+      addXp(score * 5);
     }
-  }, [gameFinished, user, addXp, score]);
+  }, [gameFinished, user, score]);
 
   // Define loadQuestions function outside of useEffect to be callable by restartGame
   const loadQuestions = async () => {

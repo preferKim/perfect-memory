@@ -38,38 +38,45 @@ const ScienceQuizScreen = () => {
         }
     }, [isAnswered]);
 
+    const xpAddedRef = useRef(false);
     useEffect(() => {
-        if (gameFinished && user && addXp) {
-            const xpGained = score * 5; // 5 XP for each correct answer
-            if (xpGained > 0) {
-                addXp(xpGained);
-            }
+        if (gameFinished && user && score > 0 && !xpAddedRef.current) {
+            xpAddedRef.current = true;
+            addXp(score * 5);
         }
-    }, [gameFinished, user, addXp, score]);
+    }, [gameFinished, user, score]);
 
-    const loadQuestions = () => {
+    const loadQuestions = async () => {
         setIsLoading(true);
-        fetch(`/words/science_${difficulty}.json`)
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
-                }
-                return res.json();
-            })
-            .then(data => {
-                const finalQuestions = data.questions || [];
-                if (finalQuestions.length === 0) {
-                    console.warn(`No questions found for difficulty ${difficulty}.`);
-                }
-                const shuffled = [...finalQuestions].sort(() => 0.5 - Math.random());
-                setQuestions(shuffled.slice(0, 10)); // Take 10 random questions
-                setIsLoading(false);
-            })
-            .catch(error => {
-                console.error(`Failed to load science problems for difficulty ${difficulty}:`, error);
-                setQuestions([]);
-                setIsLoading(false);
-            });
+
+        try {
+            // Supabase에서 데이터 가져오기 시도 (_wordId 포함)
+            const courseCode = `science_${difficulty}`;
+            let questionsData = await getQuestions(courseCode, { limit: 20, shuffle: true });
+
+            // Supabase에 데이터가 없으면 JSON fallback
+            if (!questionsData || questionsData.length === 0) {
+                console.log('Supabase에 데이터 없음, JSON fallback 사용');
+
+                const res = await fetch(`/words/science_${difficulty}.json`);
+                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+
+                const data = await res.json();
+                questionsData = data.questions || [];
+            }
+
+            if (questionsData.length === 0) {
+                console.warn(`No questions found for difficulty ${difficulty}.`);
+            }
+
+            const shuffled = [...questionsData].sort(() => 0.5 - Math.random());
+            setQuestions(shuffled.slice(0, 10));
+        } catch (error) {
+            console.error(`Failed to load science problems for difficulty ${difficulty}:`, error);
+            setQuestions([]);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     useEffect(() => {
