@@ -142,24 +142,26 @@ export function useLearningProgress(userId) {
      * 개별 답안 기록
      */
     const recordAnswer = useCallback(async (wordId, isCorrect, userAnswer = null, timeSpentMs = null) => {
-        if (!userId || !currentSession) return;
+        if (!userId) return;
 
         try {
-            // 학습 기록 저장
-            await supabase
-                .from('learning_records')
-                .insert({
-                    user_id: userId,
-                    word_id: wordId,
-                    course_id: currentSession.course_id,
-                    game_mode: currentSession.game_mode,
-                    is_correct: isCorrect,
-                    user_answer: userAnswer,
-                    time_spent_ms: timeSpentMs,
-                    session_id: currentSession.id
-                });
+            // 세션이 있으면 학습 기록 저장
+            if (currentSession) {
+                await supabase
+                    .from('learning_records')
+                    .insert({
+                        user_id: userId,
+                        word_id: wordId,
+                        course_id: currentSession.course_id,
+                        game_mode: currentSession.game_mode,
+                        is_correct: isCorrect,
+                        user_answer: userAnswer,
+                        time_spent_ms: timeSpentMs,
+                        session_id: currentSession.id
+                    });
+            }
 
-            // 오답이면 weak_words 업데이트
+            // 오답이면 weak_words 업데이트 (세션 없이도 저장)
             if (!isCorrect) {
                 await addWeakWord(wordId);
             } else {
@@ -260,7 +262,8 @@ export function useLearningProgress(userId) {
                 ...item.words?.content,
                 _wordId: item.word_id,
                 _wrongCount: item.wrong_count,
-                _correctCount: item.correct_count
+                _correctCount: item.correct_count,
+                _courseCode: item.words?.course_code
             })) || [];
         } catch (err) {
             console.error('getWeakWords error:', err);

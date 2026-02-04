@@ -7,9 +7,9 @@ import PauseMenu from '../components/PauseMenu';
 import RankingScreen from './RankingScreen';
 import ConnectingGameScreen from './ConnectingGameScreen';
 import FeedbackAnimation from '../components/FeedbackAnimation';
-import { supabase } from '../supabaseClient';
 import { useLearningContent, fetchFromJson } from '../hooks/useLearningContent';
 import { useLearningProgress } from '../hooks/useLearningProgress';
+import { useAuth } from '../hooks/useAuth';
 
 const initialState = {
     status: 'idle', gameMode: 'normal', difficulty: 'easy', playerName: '',
@@ -77,7 +77,7 @@ const GameScreen = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { addXp, addWeakWord } = usePlayer();
-    const [user, setUser] = useState(null);
+    const { user } = useAuth();
     const { name, level, mode } = location.state || { name: 'Player', level: 'easy', mode: 'normal' };
 
     const [state, dispatch] = useReducer(reducer, initialState);
@@ -97,24 +97,30 @@ const GameScreen = () => {
 
     useEffect(() => {
         dispatch({ type: 'START_GAME', payload: { name, level, mode } });
-        supabase.auth.getSession().then(({ data: { session } }) => setUser(session?.user ?? null));
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_, s) => setUser(s?.user ?? null));
-        return () => subscription.unsubscribe();
     }, [name, level, mode]);
 
     useEffect(() => {
         if (status === 'loading') {
             const loadGameData = async () => {
                 try {
-                    const courseCode = `english_${difficulty}`;
+                    // 오답노트에서 customWords가 전달된 경우
+                    const { customWords, gameType } = location.state || {};
 
-                    // Supabase에서 데이터 가져오기 시도
-                    let wordsData = await getQuestions(courseCode, { limit: 100, shuffle: false });
+                    let wordsData;
+                    if (customWords && customWords.length > 0) {
+                        console.log('Using custom words from wrong answer notebook:', customWords.length);
+                        wordsData = customWords;
+                    } else {
+                        const courseCode = `english_${difficulty}`;
 
-                    // Supabase에 데이터가 없으면 JSON fallback
-                    if (!wordsData || wordsData.length === 0) {
-                        console.log('Supabase에 데이터 없음, JSON fallback 사용');
-                        wordsData = await fetchFromJson('english', difficulty);
+                        // Supabase에서 데이터 가져오기 시도
+                        wordsData = await getQuestions(courseCode, { limit: 100, shuffle: false });
+
+                        // Supabase에 데이터가 없으면 JSON fallback
+                        if (!wordsData || wordsData.length === 0) {
+                            console.log('Supabase에 데이터 없음, JSON fallback 사용');
+                            wordsData = await fetchFromJson('english', difficulty);
+                        }
                     }
 
                     let payload = {};
@@ -137,7 +143,7 @@ const GameScreen = () => {
             };
             loadGameData();
         }
-    }, [status, difficulty, gameMode]);
+    }, [status, difficulty, gameMode, location.state]);
 
     // 세션 시작 (user가 로드된 후 게임이 playing 상태일 때)
     useEffect(() => {

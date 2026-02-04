@@ -2,10 +2,14 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, BookOpen } from 'lucide-react';
 import Button from '../components/Button';
+import { useAuth } from '../hooks/useAuth';
+import { useLearningProgress } from '../hooks/useLearningProgress';
 
 const LiteraryTermsQuiz = () => {
     const navigate = useNavigate();
-    const nextButtonRef = useRef(null); // Ref for the "Next Question" button
+    const { user } = useAuth();
+    const { recordAnswer } = useLearningProgress(user?.id);
+    const nextButtonRef = useRef(null);
     const [allTerms, setAllTerms] = useState([]);
     const [quizQuestions, setQuizQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -65,21 +69,33 @@ const LiteraryTermsQuiz = () => {
         }
     }, [isAnswered]);
 
-    const handleAnswerSelect = (option) => {
+    const handleAnswerSelect = async (option) => {
         if (isAnswered) return;
 
         setUserAnswer(option);
         setIsAnswered(true);
 
-        const correctTermAnswer = quizQuestions[currentQuestionIndex].answer;
+        const currentQuestion = quizQuestions[currentQuestionIndex];
+        const correctTermAnswer = currentQuestion.answer;
         const correctTermDetails = allTerms.find(t => t.term === correctTermAnswer);
         setExplanationTerm(correctTermDetails);
 
-        if (option === correctTermAnswer) {
+        const isCorrect = option === correctTermAnswer;
+
+        if (isCorrect) {
             setScore(prev => prev + 10);
             setFeedbackText('정답입니다! 🎉');
         } else {
             setFeedbackText('오답입니다 😥');
+        }
+
+        // DB에 답안 기록 (오답 시 약점 문제로 저장)
+        if (user?.id && currentQuestion._wordId) {
+            try {
+                await recordAnswer(currentQuestion._wordId, isCorrect, option);
+            } catch (err) {
+                console.error('Failed to record answer:', err);
+            }
         }
     };
 

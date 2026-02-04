@@ -1,6 +1,7 @@
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { supabase } from '../supabaseClient'; // Import supabase
+import { supabase } from '../supabaseClient';
+import { useAuth } from '../hooks/useAuth';
 
 const PlayerContext = createContext();
 
@@ -20,27 +21,15 @@ const generateLevelThresholds = (maxLevels = 15) => {
 
 const LEVEL_THRESHOLDS = generateLevelThresholds();
 
-export const PlayerProvider = ({ children }) => { // Remove user prop
+export const PlayerProvider = ({ children }) => {
+  const { user: currentUser } = useAuth();
   const [level, setLevel] = useState(1);
   const [xp, setXp] = useState(0);
   const [justLeveledUp, setJustLeveledUp] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null); // New state for internal user
   const [weakWords, setWeakWords] = useState(() => {
     const saved = localStorage.getItem('weakWords');
     return saved ? JSON.parse(saved) : {};
   });
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setCurrentUser(session?.user ?? null);
-    });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setCurrentUser(session?.user ?? null);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
 
   useEffect(() => {
     const fetchAndSetPlayerStats = async () => {

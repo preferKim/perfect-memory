@@ -3,11 +3,17 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Check, X, BookOpen } from 'lucide-react';
 import Button from '../components/Button';
 import { usePlayer } from '../context/PlayerContext';
+import { useAuth } from '../hooks/useAuth';
+import { useLearningProgress } from '../hooks/useLearningProgress';
+import { useLearningContent } from '../hooks/useLearningContent';
 
 const SocialQuizScreen = () => {
     const navigate = useNavigate();
     const { difficulty } = useParams();
-    const { user, addXp } = usePlayer();
+    const { addXp } = usePlayer();
+    const { user } = useAuth();
+    const { recordAnswer } = useLearningProgress(user?.id);
+    const { getQuestions } = useLearningContent();
 
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -31,7 +37,7 @@ const SocialQuizScreen = () => {
             explanationRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     }, [isAnswered]);
-    
+
     useEffect(() => {
         if (gameFinished && user && addXp) {
             const xpGained = score * 5; // 5 XP for each correct answer
@@ -70,16 +76,28 @@ const SocialQuizScreen = () => {
         loadQuestions();
     }, [difficulty]);
 
-    const handleAnswerSelect = (option) => {
+    const handleAnswerSelect = async (option) => {
         if (isAnswered) return;
-        
+
         setSelectedAnswer(option.text);
         setIsAnswered(true);
 
-        if (option.isCorrect) {
+        const currentQuestion = questions[currentQuestionIndex];
+        const isCorrect = option.isCorrect;
+
+        if (isCorrect) {
             setScore(score + 1);
         } else {
             setWrongAnswers(wrongAnswers + 1);
+        }
+
+        // DB에 답안 기록 (오답 시 약점 문제로 저장)
+        if (user?.id && currentQuestion._wordId) {
+            try {
+                await recordAnswer(currentQuestion._wordId, isCorrect, option.text);
+            } catch (err) {
+                console.error('Failed to record answer:', err);
+            }
         }
     };
 
@@ -216,18 +234,18 @@ const SocialQuizScreen = () => {
                 {isAnswered && (
                     <div ref={explanationRef} className="glass-card p-6 rounded-2xl shadow-lg animate-fade-in">
                         <h3 className="font-bold text-lg mb-2 flex items-center">
-                            {selectedAnswer === correctAnswer ? 
-                                <span className="text-green-400">정답입니다!</span> : 
+                            {selectedAnswer === correctAnswer ?
+                                <span className="text-green-400">정답입니다!</span> :
                                 <span className="text-red-400">오답입니다.</span>
                             }
                         </h3>
                         {currentQuestion.hint && (
-                          <div className="text-gray-200 mb-4 text-left">
-                            <h4 className="text-md font-semibold text-white mb-2 flex items-center">
-                                <BookOpen size={18} className="mr-2 text-yellow-400" /> 해설
-                            </h4>
-                            <p className="text-gray-300 leading-relaxed">{currentQuestion.hint}</p>
-                          </div>
+                            <div className="text-gray-200 mb-4 text-left">
+                                <h4 className="text-md font-semibold text-white mb-2 flex items-center">
+                                    <BookOpen size={18} className="mr-2 text-yellow-400" /> 해설
+                                </h4>
+                                <p className="text-gray-300 leading-relaxed">{currentQuestion.hint}</p>
+                            </div>
                         )}
                         <Button
                             onClick={handleNextQuestion}

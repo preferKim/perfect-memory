@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from './Button';
-import { supabase } from '../supabaseClient';
+import { useAuth } from '../hooks/useAuth';
 import { usePlayer } from '../context/PlayerContext';
 import { X, BarChart3, ChevronRight, Gem, Star, Crown } from 'lucide-react';
 
@@ -17,35 +17,15 @@ const LEVEL_ICONS = {
 const HeaderSection = () => {
     const navigate = useNavigate();
     const { level, xpGainedInCurrentLevel, xpRequiredForCurrentLevel } = usePlayer();
+    const { user, loading, signInWithOAuth, signOut } = useAuth();
     const [isAuthOpen, setIsAuthOpen] = useState(false);
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-
-    // 인증 상태 관리
-    useEffect(() => {
-        // 초기 세션 확인
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setUser(session?.user ?? null);
-            setLoading(false);
-        });
-
-        // 인증 상태 변경 리스너
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-            setUser(session?.user ?? null);
-            setIsAuthOpen(false); // 로그인 성공 시 모달 닫기
-        });
-
-        return () => subscription.unsubscribe();
-    }, []);
 
     const handleOAuthLogin = async () => {
-        await supabase.auth.signInWithOAuth({
-            provider: 'google',
-        });
+        await signInWithOAuth('google');
     };
 
     const handleLogout = async () => {
-        await supabase.auth.signOut();
+        await signOut();
     };
 
     if (isAuthOpen) {
