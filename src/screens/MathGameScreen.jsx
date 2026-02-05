@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, Check, X } from 'lucide-react';
+import { ArrowLeft, Check, X, Star } from 'lucide-react';
 import MathRenderer from '../components/MathRenderer';
 import { usePlayer } from '../context/PlayerContext';
 import { useAuth } from '../hooks/useAuth';
@@ -12,7 +12,7 @@ const MathGameScreen = () => {
   const location = useLocation();
   const { addXp } = usePlayer();
   const { user } = useAuth();
-  const { recordAnswer, startSession, endSession } = useLearningProgress(user?.id);
+  const { recordAnswer, startSession, endSession, toggleFavorite, isFavorite } = useLearningProgress(user?.id);
   const { getQuestions } = useLearningContent();
   const { difficulty, topicLevel } = location.state || { difficulty: 'easy', topicLevel: 1 };
 
@@ -299,11 +299,27 @@ const MathGameScreen = () => {
         </div>
 
         {/* Question Card */}
-        <div className="glass-card p-6 sm:p-8 rounded-2xl shadow-lg mb-3">
+        <div className="glass-card p-6 sm:p-8 rounded-2xl shadow-lg mb-3 relative">
+          {user?.id && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (currentQuestion._wordId) {
+                  toggleFavorite(currentQuestion._wordId);
+                }
+              }}
+              className="absolute top-4 right-4 p-2 hover:scale-110 transition active:scale-95"
+            >
+              <Star
+                size={24}
+                className={isFavorite(currentQuestion._wordId) ? "fill-yellow-400 text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" : "text-gray-600 hover:text-gray-400"}
+              />
+            </button>
+          )}
           <p className="text-sm text-gray-300 mb-2">문제 {currentQuestionIndex + 1}/{questions.length}</p>
           {/* Problem text */}
           <div className="mb-2">
-            <p className="text-xl sm:text-2xl font-medium text-white leading-relaxed">
+            <p className="text-xl sm:text-2xl font-medium text-white leading-relaxed pr-8">
               <MathRenderer text={currentQuestion.problem} />
             </p>
           </div>

@@ -9,7 +9,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useLearningProgress } from '../hooks/useLearningProgress';
 
 /**
- * 통합 오답노트 학습 화면
+ * 통합 집중학습 화면
  * - 모든 과목을 4지선다 형식으로 통합
  * - 과목별 데이터 정규화
  */
@@ -266,7 +266,7 @@ const WrongAnswerScreen = () => {
                     <div className="text-6xl mb-4">
                         {accuracy >= 80 ? '🎉' : accuracy >= 50 ? '👍' : '💪'}
                     </div>
-                    <h2 className="text-3xl font-bold text-white mb-4">오답노트 학습 완료!</h2>
+                    <h2 className="text-3xl font-bold text-white mb-4">집중 학습 완료!</h2>
                     <div className="grid grid-cols-2 gap-4 mb-6">
                         <div className="bg-green-500/20 rounded-xl p-4">
                             <div className="text-3xl font-bold text-green-400">{score}</div>
@@ -307,7 +307,7 @@ const WrongAnswerScreen = () => {
                     </button>
                     <div className="text-lg font-bold text-white flex items-center gap-4">
                         <Brain size={20} className="text-danger-light" />
-                        <span>오답노트 학습</span>
+                        <span>집중 학습</span>
                         <div className="flex items-center gap-2 text-sm bg-black/20 px-3 py-1 rounded-lg">
                             <span className="text-green-400">O: {score}</span>
                             <span className="text-red-400">X: {wrongAnswers}</span>

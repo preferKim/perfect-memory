@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Check, X, BookOpen } from 'lucide-react';
+import { ArrowLeft, Check, X, BookOpen, Star } from 'lucide-react';
 import Button from '../components/Button';
 import { usePlayer } from '../context/PlayerContext';
 import { useAuth } from '../hooks/useAuth';
@@ -12,7 +12,7 @@ const ScienceQuizScreen = () => {
     const { difficulty } = useParams();
     const { addXp } = usePlayer();
     const { user } = useAuth();
-    const { recordAnswer, startSession, endSession } = useLearningProgress(user?.id);
+    const { recordAnswer, startSession, endSession, toggleFavorite, isFavorite } = useLearningProgress(user?.id);
     const { getQuestions } = useLearningContent();
     const sessionRef = useRef(null);
 
@@ -233,9 +233,25 @@ const ScienceQuizScreen = () => {
                 </div>
 
                 {/* Question Card */}
-                <div className="glass-card p-6 sm:p-8 rounded-2xl shadow-lg mb-6">
+                <div className="glass-card p-6 sm:p-8 rounded-2xl shadow-lg mb-6 relative">
+                    {user?.id && (
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                if (currentQuestion._wordId) {
+                                    toggleFavorite(currentQuestion._wordId);
+                                }
+                            }}
+                            className="absolute top-4 right-4 p-2 hover:scale-110 transition active:scale-95"
+                        >
+                            <Star
+                                size={24}
+                                className={isFavorite(currentQuestion._wordId) ? "fill-yellow-400 text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" : "text-gray-600 hover:text-gray-400"}
+                            />
+                        </button>
+                    )}
                     <p className="text-sm text-gray-300 mb-2">문제 {currentQuestionIndex + 1}/{questions.length}</p>
-                    <p className="text-xl sm:text-2xl font-medium text-white leading-relaxed whitespace-pre-line">
+                    <p className="text-xl sm:text-2xl font-medium text-white leading-relaxed whitespace-pre-line pr-8">
                         {currentQuestion.question}
                     </p>
                 </div>

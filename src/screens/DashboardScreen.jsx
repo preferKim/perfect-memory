@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Brain, Trash2, Play, BookOpen, Calculator, Globe, FlaskConical, Target, Award, Calendar } from 'lucide-react';
+import { ArrowLeft, Brain, Trash2, Play, BookOpen, Calculator, Globe, FlaskConical, Target, Award, Calendar, Star } from 'lucide-react';
 import { usePlayer } from '../context/PlayerContext';
 import { useLearningProgress } from '../hooks/useLearningProgress';
 import { useAuth } from '../hooks/useAuth';
@@ -28,7 +28,9 @@ const DashboardScreen = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
     const { subjectStats: playerSubjectStats } = usePlayer();
-    const { getWeakWords, removeWeakWord, progress, fetchProgress, fetchGameSessions } = useLearningProgress(user?.id);
+    const { getWeakWords, removeWeakWord, progress, fetchProgress, fetchGameSessions, getFavoriteWords, toggleFavorite } = useLearningProgress(user?.id);
+    const [favoriteList, setFavoriteList] = useState([]);
+    const [loadingFavorites, setLoadingFavorites] = useState(true);
 
     const [weakWordsList, setWeakWordsList] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -75,6 +77,10 @@ const DashboardScreen = () => {
 
             const words = await getWeakWords(50);
             setWeakWordsList(words || []);
+
+            const favs = await getFavoriteWords(50);
+            setFavoriteList(favs || []);
+            setLoadingFavorites(false);
             setLoading(false);
         };
         loadData();
@@ -324,6 +330,80 @@ const DashboardScreen = () => {
                             </div>
                         )}
                     </div>
+                </motion.div>
+
+                {/* Favorites Section */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.15 }}
+                    className="glass-card p-6 mb-6"
+                >
+                    <div className="flex items-center justify-between mb-4">
+                        <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                            <Star size={20} className="text-yellow-400 fill-yellow-400" />
+                            즐겨찾기 ({favoriteList.length})
+                        </h2>
+                    </div>
+
+                    {loadingFavorites ? (
+                        <div className="text-center py-8 text-gray-400">로딩 중...</div>
+                    ) : favoriteList.length === 0 ? (
+                        <div className="text-center py-8 text-gray-500">
+                            즐겨찾기한 단어가 없습니다.
+                        </div>
+                    ) : (
+                        <>
+                            <div className="space-y-2 mb-4 max-h-60 overflow-y-auto">
+                                {favoriteList.map((word, index) => {
+                                    const display = getDisplayText(word);
+                                    let courseCode = word._courseCode || '';
+                                    let subjectKey = Object.keys(SUBJECT_CONFIG).find(s => courseCode.startsWith(s)) || 'english';
+                                    const config = SUBJECT_CONFIG[subjectKey] || SUBJECT_CONFIG.english;
+
+                                    return (
+                                        <div
+                                            key={word._wordId || index}
+                                            className="bg-white/5 rounded-lg p-3 flex items-center justify-between hover:bg-white/10 transition cursor-pointer"
+                                            onClick={() => navigate('/wrong-answer', { state: { customWords: [word], subject: subjectKey } })}
+                                        >
+                                            <div className="flex items-center gap-3 overflow-hidden">
+                                                <div className={`p-1.5 rounded bg-${config.color}/10 text-${config.color}-light shrink-0`}>
+                                                    {config.emoji}
+                                                </div>
+                                                <div className="min-w-0">
+                                                    <div className="text-sm font-bold text-white truncate">{display.main}</div>
+                                                    <div className="text-xs text-gray-400 truncate">{display.sub}</div>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center gap-2 shrink-0">
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        toggleFavorite(word._wordId); // hook will handle logic
+                                                        setFavoriteList(prev => prev.filter(w => w._wordId !== word._wordId));
+                                                    }}
+                                                    className="text-yellow-400 hover:text-yellow-300 p-1"
+                                                >
+                                                    <Star size={16} className="fill-yellow-400" />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            <Button
+                                onClick={() => navigate('/wrong-answer', { state: { customWords: favoriteList } })}
+                                variant="threedee"
+                                color="warning" // Yellow-ish for favorites
+                                className="w-full text-sm py-2"
+                            >
+                                <Play size={16} className="mr-2 inline" />
+                                즐겨찾기 학습 시작 ({favoriteList.length})
+                            </Button>
+                        </>
+                    )}
                 </motion.div>
 
                 {/* Weak Words Section (Keep existing logic mostly) */}

@@ -3,6 +3,7 @@
  * - 과정별 진행률 추적
  * - 학습 기록 저장
  * - 약점 단어 관리
+ * - 즐겨찾기 관리
  */
 
 import { useState, useCallback, useEffect } from 'react';
@@ -12,6 +13,7 @@ export function useLearningProgress(userId) {
     const [progress, setProgress] = useState({});
     const [loading, setLoading] = useState(false);
     const [currentSession, setCurrentSession] = useState(null);
+    const [favorites, setFavorites] = useState(new Set()); // Set for efficient lookup
 
     /**
      * 사용자의 전체 진행 상태 가져오기
@@ -58,11 +60,113 @@ export function useLearningProgress(userId) {
         }
     }, [userId]);
 
+    /**
+     * 즐겨찾기 목록 가져오기
+     */
+    const fetchFavorites = useCallback(async () => {
+        if (!userId) return;
+        try {
+            const { data, error } = await supabase
+                .from('favorite_words')
+                .select('word_id')
+                .eq('user_id', userId);
+
+            if (error) throw error;
+
+            setFavorites(new Set(data.map(item => item.word_id)));
+        } catch (err) {
+            console.error('fetchFavorites error:', err);
+        }
+    }, [userId]);
+
     useEffect(() => {
         if (userId) {
             fetchProgress();
+            fetchFavorites();
         }
-    }, [userId, fetchProgress]);
+    }, [userId, fetchProgress, fetchFavorites]);
+
+    /**
+     * 즐겨찾기 토글 (추가/삭제)
+     */
+    const toggleFavorite = useCallback(async (wordId) => {
+        if (!userId) return;
+
+        const isFav = favorites.has(wordId);
+
+        try {
+            // Optimistic update
+            setFavorites(prev => {
+                const newSet = new Set(prev);
+                if (isFav) newSet.delete(wordId);
+                else newSet.add(wordId);
+                return newSet;
+            });
+
+            if (isFav) {
+                // Remove
+                await supabase
+                    .from('favorite_words')
+                    .delete()
+                    .eq('user_id', userId)
+                    .eq('word_id', wordId);
+            } else {
+                // Add
+                await supabase
+                    .from('favorite_words')
+                    .insert({ user_id: userId, word_id: wordId });
+            }
+        } catch (err) {
+            console.error('toggleFavorite error:', err);
+            // Revert on error
+            fetchFavorites();
+        }
+    }, [userId, favorites, fetchFavorites]);
+
+    /**
+     * 즐겨찾기 여부 확인
+     */
+    const isFavorite = useCallback((wordId) => {
+        return favorites.has(wordId);
+    }, [favorites]);
+
+    /**
+     * 즐겨찾기 단어 상세 목록 가져오기 (대시보드용)
+     */
+    const getFavoriteWords = useCallback(async (limit = 20) => {
+        if (!userId) return [];
+
+        try {
+            // 1. favorites 테이블에서 최근 순으로 가져오기
+            const { data: favs, error } = await supabase
+                .from('favorite_words')
+                .select(`
+                     word_id,
+                     created_at,
+                     words (
+                        *,
+                        content, 
+                        course_code
+                     )
+                 `)
+                .eq('user_id', userId)
+                .order('created_at', { ascending: false })
+                .limit(limit);
+
+            if (error) throw error;
+
+            // weak_words 포맷과 유사하게 가공하여 리턴
+            return favs?.map(item => ({
+                ...item.words?.content,
+                _wordId: item.word_id,
+                _createdAt: item.created_at,
+                _courseCode: item.words?.course_code,
+            })) || [];
+        } catch (err) {
+            console.error('getFavoriteWords error:', err);
+            return [];
+        }
+    }, [userId]);
 
     /**
      * 게임 세션 시작
@@ -306,22 +410,6 @@ export function useLearningProgress(userId) {
             const totalItems = course?.total_items || 0;
 
             // 2. 학습한 고유 단어 수 조회 (이미 마스터한 단어 수)
-            // learning_records에서 해당 과정, 해당 유저의 정답 기록이 있는 고유 word_id 개수
-            const { count: masteredCount, error: countError } = await supabase
-                .from('learning_records')
-                .select('word_id', { count: 'exact', head: true }) // head: true for count only
-                .eq('user_id', userId)
-                .eq('course_id', courseId)
-                .eq('is_correct', true)
-                .not('word_id', 'is', null); // word_id가 있는 경우만 (혹시 모를 더미 데이터 제외)
-
-            // Note: Supabase .select with head:true won't give distinct count automatically if accessed via HTTP API strictly, 
-            // but we need DISTINCT word_id. 
-            // Standard Supabase client doesn't support 'distinct count' easily in one go without RPC.
-            // Alternative: Fetch all mastered word_ids and count unique Set. 
-            // Considering performance, let's try a rpc call if available, or just fetch distinct word_ids.
-            // If the dataset is small enough (<10000), fetching IDs is fine.
-
             const { data: masteredWords } = await supabase
                 .from('learning_records')
                 .select('word_id')
@@ -436,7 +524,11 @@ export function useLearningProgress(userId) {
         removeWeakWord,
         getCourseProgress,
         getStatusIcon,
-        fetchGameSessions
+        fetchGameSessions,
+        favorites,
+        toggleFavorite,
+        isFavorite,
+        getFavoriteWords
     };
 }
 
