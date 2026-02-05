@@ -21,330 +21,342 @@ const EnglishSelectionScreen = ({ onSignUp, onLogin, onLogout, isLoading, user }
         }
     }, [user, gameMode]);
 
-        const InfoCard = ({ icon, title, description }) => (
+    const InfoCard = ({ icon, title, description }) => (
 
-            <div className="flex items-center gap-4 bg-white/5 p-3 rounded-xl">
+        <div className="flex items-center gap-4 bg-white/5 p-3 rounded-xl">
 
-                <div className="text-3xl">{icon}</div>
+            <div className="text-3xl">{icon}</div>
 
-                <div>
+            <div>
 
-                    <div className="font-bold text-gray-100">{title}</div>
+                <div className="font-bold text-gray-100">{title}</div>
 
-                    <div className="text-gray-300 text-sm">{description}</div>
-
-                </div>
+                <div className="text-gray-300 text-sm">{description}</div>
 
             </div>
 
-        );
+        </div>
 
-    
+    );
 
-        const renderModeInfo = () => {
 
-            switch (gameMode) {
 
-                case 'normal':
+    const renderModeInfo = () => {
 
-                    return <InfoCard icon="🎓" title="일반 모드" description="발음을 듣고, 뜻을 확인하며 단어를 암기해보세요." />;
+        switch (gameMode) {
 
-                case 'speed':
+            case 'normal':
 
-                    return <InfoCard icon="⚡️" title="경쟁 모드" description="100초 동안 최대한 많은 문제를 풀어보세요. 오답 시 점수가 차감됩니다." />;
+                return <InfoCard icon="🎓" title="일반 모드" description="발음을 듣고, 뜻을 확인하며 단어를 암기해보세요." />;
 
-                case 'connect':
+            case 'speed':
 
-                    return <InfoCard icon="🔗" title="연결 모드" description="제시된 단어와 뜻을 올바르게 연결하세요. 목숨은 3개입니다." />;
+                return <InfoCard icon="⚡️" title="경쟁 모드" description="100초 동안 최대한 많은 문제를 풀어보세요. 오답 시 점수가 차감됩니다." />;
 
-                default:
+            case 'connect':
 
-                    return null;
+                return <InfoCard icon="🔗" title="연결 모드" description="제시된 단어와 뜻을 올바르게 연결하세요. 목숨은 3개입니다." />;
 
-            }
+            default:
 
-        };
+                return null;
 
-    
+        }
 
-        const handleStartGameClick = (difficulty) => {
+    };
 
-            let nameToUse = playerName;
 
-            if (!playerName && gameMode === 'speed') {
 
-                nameToUse = `guest_${Math.floor(Math.random() * 10000)}`;
+    const handleStartGameClick = (difficulty) => {
 
-            }
+        let nameToUse = playerName;
 
-            navigate('/game', { state: { name: nameToUse, level: difficulty, mode: gameMode } });
+        if (!playerName && gameMode === 'speed') {
 
-        };
+            nameToUse = `guest_${Math.floor(Math.random() * 10000)}`;
 
-    
+        }
 
-        return (
+        navigate('/game', { state: { name: nameToUse, level: difficulty, mode: gameMode } });
 
-            <div className="glass-card p-6 sm:p-12 text-center relative">
+    };
 
-                <div className="absolute top-4 left-4 z-10 flex gap-2">
+
+
+    return (
+
+        <div className="glass-card p-6 sm:p-12 text-center relative">
+
+            <div className="absolute top-4 left-4 z-10 flex gap-2">
+
+                <button
+
+                    onClick={() => navigate('/')}
+
+                    className="text-sm font-semibold text-gray-200 hover:text-white px-3 py-1.5 rounded-full border border-white/40 hover:border-white/80 bg-black/20 hover:bg-black/40 transition-all flex items-center"
+
+                >
+
+                    <ArrowLeft size={16} className="mr-1" /> 과목선택
+
+                </button>
+
+                {isInstallable && (
 
                     <button
 
-                        onClick={() => navigate('/')}
+                        onClick={promptInstall}
 
                         className="text-sm font-semibold text-gray-200 hover:text-white px-3 py-1.5 rounded-full border border-white/40 hover:border-white/80 bg-black/20 hover:bg-black/40 transition-all flex items-center"
 
                     >
 
-                        <ArrowLeft size={16} className="mr-1" /> 과목선택
+                        <Download size={16} className="mr-1" /> 홈 화면에 추가
 
                     </button>
 
-                    {isInstallable && (
+                )}
 
-                      <button
+            </div>
 
-                          onClick={promptInstall}
+            <HeaderSection
 
-                          className="text-sm font-semibold text-gray-200 hover:text-white px-3 py-1.5 rounded-full border border-white/40 hover:border-white/80 bg-black/20 hover:bg-black/40 transition-all flex items-center"
+                onSignUp={onSignUp}
 
-                      >
+                onLogin={onLogin}
 
-                          <Download size={16} className="mr-1" /> 홈 화면에 추가
+                onLogout={onLogout}
 
-                      </button>
+                user={user}
 
-                    )}
+            />
 
+
+
+            <div className="mb-6">
+
+
+
+                <p className="text-xl font-bold text-white mb-4">
+
+
+
+                    <span className="inline-block border-b-2 border-primary-light pb-1">게임 모드를 선택하세요!</span>
+
+
+
+                </p>
+
+                {/* 기초 모드 - 별도 섹션 */}
+                <div className="flex justify-center mb-4">
+                    <Button
+                        onClick={() => navigate('/english/alphabet')}
+                        variant="threedee"
+                        color="success"
+                        className="px-8"
+                    >
+                        🔤 기초 - 알파벳 익히기
+                    </Button>
                 </div>
 
-                <HeaderSection
+                <div className="flex justify-center gap-2">
 
-                    onSignUp={onSignUp}
+                    <Button
 
-                    onLogin={onLogin}
+                        onClick={() => setGameMode('normal')}
 
-                    onLogout={onLogout}
+                        variant="mode"
 
-                    user={user}
+                        mode="normal"
 
-                />
+                        isActive={gameMode === 'normal'}
 
-    
+                    >
 
-                                <div className="mb-6">
+                        🎓<br />일반<br />모드
 
-    
+                    </Button>
 
-                                    <p className="text-xl font-bold text-white mb-4">
+                    <Button
 
-    
+                        onClick={() => setGameMode('speed')}
 
-                                        <span className="inline-block border-b-2 border-primary-light pb-1">게임 모드를 선택하세요!</span>
+                        variant="mode"
 
-    
+                        mode="speed"
 
-                                    </p>
+                        isActive={gameMode === 'speed'}
 
-                    <div className="flex justify-center gap-2">
+                    >
 
-                        <Button
+                        ⚡️<br />경쟁<br />모드
 
-                            onClick={() => setGameMode('normal')}
+                    </Button>
 
-                            variant="mode"
+                    <Button
 
-                            mode="normal"
+                        onClick={() => setGameMode('connect')}
 
-                            isActive={gameMode === 'normal'}
+                        variant="mode"
 
-                        >
+                        mode="connect"
 
-                            🎓<br />일반<br />모드
+                        isActive={gameMode === 'connect'}
 
-                        </Button>
+                    >
 
-                        <Button
+                        🔗<br />연결<br />모드
 
-                            onClick={() => setGameMode('speed')}
-
-                            variant="mode"
-
-                            mode="speed"
-
-                            isActive={gameMode === 'speed'}
-
-                        >
-
-                            ⚡️<br />경쟁<br />모드
-
-                        </Button>
-
-                        <Button
-
-                            onClick={() => setGameMode('connect')}
-
-                            variant="mode"
-
-                            mode="connect"
-
-                            isActive={gameMode === 'connect'}
-
-                        >
-
-                            🔗<br />연결<br />모드
-
-                        </Button>
-
-                    </div>
-
-                </div>
-
-    
-
-                <div className="bg-black/10 rounded-2xl p-6 mb-6 text-left max-w-md mx-auto border-2 border-white/10">
-
-                    {renderModeInfo()}
-
-                </div>
-
-    
-
-                                {gameMode === 'speed' && (
-
-    
-
-                                    <div className="mb-6">
-
-    
-
-                                        <label htmlFor="playerName" className="text-xl font-bold text-white mb-4 block">
-                                            <span className="inline-block border-b-2 border-primary-light pb-1">도전자의 이름을 알려주세요!</span>
-                                        </label>
-
-    
-
-                                        <input
-
-    
-
-                                            id="playerName"
-
-    
-
-                                            type="text"
-
-    
-
-                                            value={playerName}
-
-    
-
-                                            onChange={(e) => setPlayerName(e.target.value)}
-
-    
-
-                                            placeholder="예: 아이유"
-
-    
-
-                                            className="w-full max-w-xs mx-auto px-4 py-3 text-center text-lg font-medium bg-white/5 border-2 border-white/10 rounded-xl text-white focus:ring-2 focus:ring-primary focus:border-primary transition"
-
-    
-
-                                        />
-
-    
-
-                                    </div>
-
-    
-
-                                )}
-
-    
-
-                                <div className="mb-4">
-
-    
-
-                                    <p className="text-xl font-bold text-white mb-4">
-
-    
-
-                                        <span className="inline-block border-b-2 border-primary-light pb-1">도전할 레벨을 골라보세요!</span>
-
-    
-
-                                    </p>
-
-                    <div className="grid grid-cols-3 gap-2">
-
-                        <Button
-
-                            onClick={() => handleStartGameClick('easy')}
-
-                            disabled={isLoading}
-
-                            variant="threedee"
-
-                            color="primary"
-
-                        >
-
-                            🐣<br/>병아리반
-
-                        </Button>
-
-                        <Button
-
-                            onClick={() => handleStartGameClick('medium')}
-
-                            disabled={isLoading}
-
-                            variant="threedee"
-
-                            color="secondary"
-
-                        >
-
-                            🐰<br/>토끼반
-
-                        </Button>
-
-                        <Button
-
-                            onClick={() => handleStartGameClick('hard')}
-
-                            disabled={isLoading}
-
-                            variant="threedee"
-
-                            color="danger"
-
-                        >
-
-                            🐯<br/>호랑이반
-
-                        </Button>
-
-                    </div>
-
-                    {isLoading && (
-
-                        <p className="text-primary-light mt-4 font-medium animate-pulse">단어 카드를 가져오고 있어요...</p>
-
-                    )}
+                    </Button>
 
                 </div>
 
             </div>
 
-        );
 
-    };
 
-    export default EnglishSelectionScreen;
+            <div className="bg-black/10 rounded-2xl p-6 mb-6 text-left max-w-md mx-auto border-2 border-white/10">
 
-    
+                {renderModeInfo()}
+
+            </div>
+
+
+
+            {gameMode === 'speed' && (
+
+
+
+                <div className="mb-6">
+
+
+
+                    <label htmlFor="playerName" className="text-xl font-bold text-white mb-4 block">
+                        <span className="inline-block border-b-2 border-primary-light pb-1">도전자의 이름을 알려주세요!</span>
+                    </label>
+
+
+
+                    <input
+
+
+
+                        id="playerName"
+
+
+
+                        type="text"
+
+
+
+                        value={playerName}
+
+
+
+                        onChange={(e) => setPlayerName(e.target.value)}
+
+
+
+                        placeholder="예: 아이유"
+
+
+
+                        className="w-full max-w-xs mx-auto px-4 py-3 text-center text-lg font-medium bg-white/5 border-2 border-white/10 rounded-xl text-white focus:ring-2 focus:ring-primary focus:border-primary transition"
+
+
+
+                    />
+
+
+
+                </div>
+
+
+
+            )}
+
+
+
+            <div className="mb-4">
+
+
+
+                <p className="text-xl font-bold text-white mb-4">
+
+
+
+                    <span className="inline-block border-b-2 border-primary-light pb-1">도전할 레벨을 골라보세요!</span>
+
+
+
+                </p>
+
+                <div className="grid grid-cols-3 gap-2">
+
+                    <Button
+
+                        onClick={() => handleStartGameClick('easy')}
+
+                        disabled={isLoading}
+
+                        variant="threedee"
+
+                        color="primary"
+
+                    >
+
+                        🐣<br />병아리반
+
+                    </Button>
+
+                    <Button
+
+                        onClick={() => handleStartGameClick('medium')}
+
+                        disabled={isLoading}
+
+                        variant="threedee"
+
+                        color="secondary"
+
+                    >
+
+                        🐰<br />토끼반
+
+                    </Button>
+
+                    <Button
+
+                        onClick={() => handleStartGameClick('hard')}
+
+                        disabled={isLoading}
+
+                        variant="threedee"
+
+                        color="danger"
+
+                    >
+
+                        🐯<br />호랑이반
+
+                    </Button>
+
+                </div>
+
+                {isLoading && (
+
+                    <p className="text-primary-light mt-4 font-medium animate-pulse">단어 카드를 가져오고 있어요...</p>
+
+                )}
+
+            </div>
+
+        </div>
+
+    );
+
+};
+
+export default EnglishSelectionScreen;
+
+
