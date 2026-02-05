@@ -1,0 +1,290 @@
+[
+    {
+        "english": "A",
+        "korean": "애/아",
+        "level": 1,
+        "example": "Apple",
+        "pronunciation": "[eɪ]",
+        "example_meaning": "사과",
+        "category": "모음"
+    },
+    {
+        "english": "B",
+        "korean": "ㅂ",
+        "level": 1,
+        "example": "Bus",
+        "pronunciation": "[biː]",
+        "example_meaning": "버스",
+        "category": "자음"
+    },
+    {
+        "english": "C",
+        "korean": "ㅋ/ㅅ",
+        "level": 1,
+        "example": "Cat",
+        "pronunciation": "[siː]",
+        "example_meaning": "고양이",
+        "category": "자음"
+    },
+    {
+        "english": "D",
+        "korean": "ㄷ",
+        "level": 1,
+        "example": "Dog",
+        "pronunciation": "[diː]",
+        "example_meaning": "개",
+        "category": "자음"
+    },
+    {
+        "english": "E",
+        "korean": "에",
+        "level": 1,
+        "example": "Egg",
+        "pronunciation": "[iː]",
+        "example_meaning": "달걀",
+        "category": "모음"
+    },
+    {
+        "english": "F",
+        "korean": "ㅍ",
+        "level": 1,
+        "example": "Fan",
+        "pronunciation": "[ef]",
+        "example_meaning": "선풍기",
+        "category": "자음"
+    },
+    {
+        "english": "G",
+        "korean": "ㄱ/ㅈ",
+        "level": 1,
+        "example": "Game",
+        "pronunciation": "[dʒiː]",
+        "example_meaning": "게임",
+        "category": "자음"
+    },
+    {
+        "english": "H",
+        "korean": "ㅎ",
+        "level": 1,
+        "example": "Hat",
+        "pronunciation": "[eɪtʃ]",
+        "example_meaning": "모자",
+        "category": "자음"
+    },
+    {
+        "english": "I",
+        "korean": "이/아이",
+        "level": 1,
+        "example": "Ink",
+        "pronunciation": "[aɪ]",
+        "example_meaning": "잉크",
+        "category": "모음"
+    },
+    {
+        "english": "J",
+        "korean": "ㅈ",
+        "level": 1,
+        "example": "Jam",
+        "pronunciation": "[dʒeɪ]",
+        "example_meaning": "잼",
+        "category": "자음"
+    },
+    {
+        "english": "K",
+        "korean": "ㅋ",
+        "level": 1,
+        "example": "King",
+        "pronunciation": "[keɪ]",
+        "example_meaning": "왕",
+        "category": "자음"
+    },
+    {
+        "english": "L",
+        "korean": "ㄹ",
+        "level": 1,
+        "example": "Lamp",
+        "pronunciation": "[el]",
+        "example_meaning": "램프",
+        "category": "자음"
+    },
+    {
+        "english": "M",
+        "korean": "ㅁ",
+        "level": 1,
+        "example": "Moon",
+        "pronunciation": "[em]",
+        "example_meaning": "달",
+        "category": "자음"
+    },
+    {
+        "english": "N",
+        "korean": "ㄴ",
+        "level": 1,
+        "example": "No",
+        "pronunciation": "[en]",
+        "example_meaning": "아니요",
+        "category": "자음"
+    },
+    {
+        "english": "O",
+        "korean": "오/아",
+        "level": 1,
+        "example": "Orange",
+        "pronunciation": "[oʊ]",
+        "example_meaning": "오렌지",
+        "category": "모음"
+    },
+    {
+        "english": "P",
+        "korean": "ㅍ",
+        "level": 1,
+        "example": "Pen",
+        "pronunciation": "[piː]",
+        "example_meaning": "펜",
+        "category": "자음"
+    },
+    {
+        "english": "Q",
+        "korean": "ㅋ",
+        "level": 1,
+        "example": "Queen",
+        "pronunciation": "[kjuː]",
+        "example_meaning": "여왕",
+        "category": "자음"
+    },
+    {
+        "english": "R",
+        "korean": "ㄹ",
+        "level": 1,
+        "example": "Run",
+        "pronunciation": "[ɑːr]",
+        "example_meaning": "달리다",
+        "category": "자음"
+    },
+    {
+        "english": "S",
+        "korean": "ㅅ/ㅆ",
+        "level": 1,
+        "example": "Sun",
+        "pronunciation": "[es]",
+        "example_meaning": "태양",
+        "category": "자음"
+    },
+    {
+        "english": "T",
+        "korean": "ㅌ",
+        "level": 1,
+        "example": "Top",
+        "pronunciation": "[tiː]",
+        "example_meaning": "팽이",
+        "category": "자음"
+    },
+    {
+        "english": "U",
+        "korean": "어/우",
+        "level": 1,
+        "example": "Up",
+        "pronunciation": "[juː]",
+        "example_meaning": "위로",
+        "category": "모음"
+    },
+    {
+        "english": "V",
+        "korean": "ㅂ",
+        "level": 1,
+        "example": "Van",
+        "pronunciation": "[viː]",
+        "example_meaning": "트럭",
+        "category": "자음"
+    },
+    {
+        "english": "W",
+        "korean": "우/와",
+        "level": 1,
+        "example": "Win",
+        "pronunciation": "[dʌbljuː]",
+        "example_meaning": "이기다",
+        "category": "자음"
+    },
+    {
+        "english": "X",
+        "korean": "ㄱㅅ",
+        "level": 1,
+        "example": "Box",
+        "pronunciation": "[eks]",
+        "example_meaning": "상자",
+        "category": "자음"
+    },
+    {
+        "english": "Y",
+        "korean": "이/예",
+        "level": 1,
+        "example": "Yes",
+        "pronunciation": "[waɪ]",
+        "example_meaning": "네",
+        "category": "자음"
+    },
+    {
+        "english": "Z",
+        "korean": "ㅈ",
+        "level": 1,
+        "example": "Zoo",
+        "pronunciation": "[ziː]",
+        "example_meaning": "동물원",
+        "category": "자음"
+    },
+    {
+        "english": "CH",
+        "korean": "ㅊ",
+        "level": 2,
+        "example": "Chair",
+        "pronunciation": "[tʃ]",
+        "example_meaning": "의자",
+        "category": "이중자음"
+    },
+    {
+        "english": "SH",
+        "korean": "쉬/슈",
+        "level": 2,
+        "example": "Ship",
+        "pronunciation": "[ʃ]",
+        "example_meaning": "배(배)",
+        "category": "이중자음"
+    },
+    {
+        "english": "TH",
+        "korean": "ㄸ/ㅆ",
+        "level": 2,
+        "example": "Thin",
+        "pronunciation": "[θ]",
+        "example_meaning": "얇은",
+        "category": "이중자음"
+    },
+    {
+        "english": "PH",
+        "korean": "ㅍ",
+        "level": 2,
+        "example": "Phone",
+        "pronunciation": "[f]",
+        "example_meaning": "전화기",
+        "category": "이중자음"
+    },
+    {
+        "english": "WH",
+        "korean": "ㅇ/ㅎ",
+        "level": 2,
+        "example": "Whale",
+        "pronunciation": "[hw]",
+        "example_meaning": "고래",
+        "category": "이중자음"
+    },
+    {
+        "english": "NG",
+        "korean": "ㅇ(받침)",
+        "level": 2,
+        "example": "Sing",
+        "pronunciation": "[ŋ]",
+        "example_meaning": "노래하다",
+        "category": "이중자음"
+    }
+]
