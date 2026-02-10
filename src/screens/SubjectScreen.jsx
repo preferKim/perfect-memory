@@ -61,12 +61,19 @@ const SubjectScreen = ({ onSignUp, onLogin, onLogout, user }) => {
                             <Award className="text-purple-300 mr-3" size={28} />
                             <h2 className="text-2xl font-bold text-white">자격증</h2>
                         </div>
-                        <div className="grid grid-cols-1 gap-4 max-w-lg mx-auto">
-                            <Button onClick={() => handleSubjectClick('certificate')} variant="threedee" color="primary" className="w-full h-24 flex items-center justify-center gap-4">
-                                <span className="text-3xl">💻</span>
-                                <div className="text-left">
-                                    <div className="text-xl font-bold">정보처리기사</div>
-                                    <div className="text-sm opacity-80">기출문제 풀이</div>
+                        <div className="grid grid-cols-2 gap-4 max-w-lg mx-auto">
+                            <Button onClick={() => handleSubjectClick('certificate')} variant="threedee" color="primary" className="w-full h-28 flex flex-col items-center justify-center">
+                                <span className="text-2xl mb-2">💻</span>
+                                <div className="text-center">
+                                    <div className="text-lg font-bold leading-tight">정보처리기사</div>
+                                    <div className="text-xs opacity-80">기출문제 풀이</div>
+                                </div>
+                            </Button>
+                            <Button onClick={() => navigate('/certificate/aws')} variant="threedee" color="warning" className="w-full h-28 flex flex-col items-center justify-center">
+                                <span className="text-2xl mb-2">☁️</span>
+                                <div className="text-center">
+                                    <div className="text-lg font-bold leading-tight">AWS 전문가</div>
+                                    <div className="text-xs opacity-80">클라우드 자격증</div>
                                 </div>
                             </Button>
                         </div>

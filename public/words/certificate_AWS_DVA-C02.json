@@ -1,0 +1,652 @@
+[
+    {
+        "level": 2,
+        "problem": "DynamoDB 테이블에서 특정 파티션 키(Partition Key)에만 요청이 집중되어 'ProvisionedThroughputExceededException' 오류가 발생하고 있습니다. 이를 해결하기 위한 가장 적절한 방법은 무엇입니까?",
+        "options": [
+            "테이블의 전체 읽기 용량 유닛(RCU)을 늘린다.",
+            "지수 백오프(Exponential Backoff) 알고리즘을 사용하여 재시도 로직을 구현한다.",
+            "DynamoDB Accelerator(DAX)를 비활성화한다.",
+            "강력한 일관성(Strongly Consistent) 읽기로 변경한다."
+        ],
+        "answer": "지수 백오프(Exponential Backoff) 알고리즘을 사용하여 재시도 로직을 구현한다.",
+        "hint": "일시적인 스파이크나 스로틀링 발생 시 즉시 재시도하면 상황이 악화될 수 있습니다.",
+        "explanation": "스로틀링 오류 발생 시 AWS SDK는 자동으로 재시도하지만, 직접 처리해야 할 경우 지수 백오프를 통해 재시도 간격을 점차 늘려가며 요청해야 합니다."
+    },
+    {
+        "level": 2,
+        "problem": "AWS Lambda 함수가 실행될 때, 데이터베이스 비밀번호와 같은 민감한 정보를 코드에 하드코딩하지 않고 환경 변수로 안전하게 주입하려고 합니다. 가장 안전하고 권장되는 방식은 무엇입니까?",
+        "options": [
+            "Lambda 함수 코드 내에 상수로 선언한다.",
+            "Lambda 환경 변수에 평문으로 저장한다.",
+            "AWS Systems Manager Parameter Store의 SecureString을 사용하고, 실행 시 해독한다.",
+            "S3 버킷에 텍스트 파일로 저장하고 읽어온다."
+        ],
+        "answer": "AWS Systems Manager Parameter Store의 SecureString을 사용하고, 실행 시 해독한다.",
+        "hint": "환경 변수 자체도 콘솔에서 보일 수 있으므로 암호화된 저장소를 참조해야 합니다.",
+        "explanation": "민감한 정보는 Parameter Store(SecureString)나 Secrets Manager에 암호화하여 저장하고, Lambda 실행 시점에 가져오는 것이 모범 사례입니다."
+    },
+    {
+        "level": 2,
+        "problem": "API Gateway와 Lambda를 사용하는 서버리스 애플리케이션에서, 29초가 넘는 긴 처리 시간이 필요한 요청이 있어 '504 Gateway Timeout' 오류가 발생합니다. 이를 해결하기 위한 가장 적절한 아키텍처 변경은 무엇입니까?",
+        "options": [
+            "Lambda의 타임아웃 설정을 15분으로 늘린다.",
+            "API Gateway의 타임아웃 설정을 29초 이상으로 늘린다.",
+            "API Gateway와 Lambda 사이에 SQS 대기열을 도입하여 비동기 처리로 변경한다.",
+            "EC2 인스턴스로 마이그레이션한다."
+        ],
+        "answer": "API Gateway와 Lambda 사이에 SQS 대기열을 도입하여 비동기 처리로 변경한다.",
+        "hint": "API Gateway의 통합 타임아웃은 최대 29초로 고정되어 있습니다.",
+        "explanation": "API Gateway의 29초 제한은 변경할 수 없습니다. 긴 작업은 비동기적으로 처리해야 하므로, SQS에 메시지를 넣고 클라이언트에게는 즉시 응답(200 OK)을 준 뒤 백그라운드에서 처리해야 합니다."
+    },
+    {
+        "level": 2,
+        "problem": "개발자가 EC2 인스턴스에서 실행되는 애플리케이션이 S3 버킷에 접근할 수 있도록 권한을 부여하려고 합니다. 액세스 키와 비밀 키를 인스턴스 내부에 저장하지 않는 가장 안전한 방법은 무엇입니까?",
+        "options": [
+            "IAM 사용자의 자격 증명을 코드에 포함한다.",
+            "~/.aws/credentials 파일에 자격 증명을 저장한다.",
+            "S3 접근 권한이 있는 IAM 역할을 생성하여 EC2 인스턴스 프로필에 연결한다.",
+            "S3 버킷 정책을 통해 모든 IP 주소를 허용한다."
+        ],
+        "answer": "S3 접근 권한이 있는 IAM 역할을 생성하여 EC2 인스턴스 프로필에 연결한다.",
+        "hint": "EC2에 '모자(Role)'를 씌워주는 것과 같습니다.",
+        "explanation": "IAM 역할을 EC2 인스턴스에 연결하면, 애플리케이션은 임시 보안 자격 증명을 자동으로 받아오므로 장기 자격 증명(Access Key)을 관리할 필요가 없습니다."
+    },
+    {
+        "level": 2,
+        "problem": "S3 버킷에 업로드되는 객체에 대해 서버 측 암호화(SSE)를 강제하려고 합니다. 어떤 헤더가 포함되지 않은 업로드 요청을 거부하는 버킷 정책을 작성해야 합니까?",
+        "options": [
+            "x-amz-server-side-encryption",
+            "x-amz-acl",
+            "Content-Type",
+            "Authorization"
+        ],
+        "answer": "x-amz-server-side-encryption",
+        "hint": "서버 측 암호화(Server Side Encryption)를 의미하는 헤더입니다.",
+        "explanation": "S3 PutObject 요청 시 `x-amz-server-side-encryption` 헤더가 포함되어 있는지 확인하여 암호화를 강제할 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "분산 애플리케이션에서 성능 병목 현상을 분석하고, 서비스 간의 호출 흐름을 시각화(Tracing)하기 위해 사용해야 하는 AWS 서비스는 무엇입니까?",
+        "options": [
+            "Amazon CloudWatch Logs",
+            "AWS X-Ray",
+            "AWS CloudTrail",
+            "Amazon Inspector"
+        ],
+        "answer": "AWS X-Ray",
+        "hint": "엑스레이(X-Ray)처럼 애플리케이션 내부를 들여다봅니다.",
+        "explanation": "AWS X-Ray는 마이크로서비스 아키텍처와 같은 분산 애플리케이션을 분석하고 디버깅하여 성능 문제와 오류의 근본 원인을 파악하게 해줍니다."
+    },
+    {
+        "level": 2,
+        "problem": "DynamoDB 테이블 전체를 스캔(Scan)하는 대신 특정 조건에 맞는 데이터만 효율적으로 검색하기 위해 인덱스를 생성하려고 합니다. 파티션 키는 다르지만 테이블 생성 후에도 언제든 추가하거나 삭제할 수 있는 인덱스는 무엇입니까?",
+        "options": [
+            "LSI (Local Secondary Index)",
+            "GSI (Global Secondary Index)",
+            "Primary Index",
+            "Sort Key"
+        ],
+        "answer": "GSI (Global Secondary Index)",
+        "hint": "테이블 생성 후에도 만들 수 있으며, '전역적'으로 쿼리합니다.",
+        "explanation": "GSI는 테이블 생성 후에도 추가/삭제가 가능하며 파티션 키와 정렬 키를 기본 테이블과 다르게 설정할 수 있습니다. LSI는 테이블 생성 시에만 정의할 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "Elastic Beanstalk 환경에 새로운 버전의 애플리케이션을 배포하려고 합니다. 배포 중 실패가 발생해도 기존 환경에 전혀 영향을 주지 않고, 새 버전이 완벽히 정상일 때만 트래픽을 전환하는 가장 안전한 배포 방식은 무엇입니까?",
+        "options": [
+            "All at once (한 번에 모두)",
+            "Rolling (롤링)",
+            "Rolling with additional batch (추가 배치를 사용한 롤링)",
+            "Immutable (불변)"
+        ],
+        "answer": "Immutable (불변)",
+        "hint": "기존 인스턴스를 건드리지 않고 아예 새로운 오토스케일링 그룹을 만듭니다.",
+        "explanation": "Immutable 배포는 새로운 Auto Scaling 그룹에 새 버전의 인스턴스를 모두 띄운 후 상태가 정상이면 트래픽을 전환하므로, 롤백이 가장 쉽고 안전합니다."
+    },
+    {
+        "level": 2,
+        "problem": "AWS Lambda 함수 코드를 업데이트하지 않고, 트래픽의 10%만 새로운 버전의 함수로 보내 테스트하는 'Canary 배포'를 구현하려면 무엇을 사용해야 합니까?",
+        "options": [
+            "Lambda Layers",
+            "Lambda Alias (별칭) 및 가중치 기반 라우팅",
+            "Event Source Mapping",
+            "Environment Variables"
+        ],
+        "answer": "Lambda Alias (별칭) 및 가중치 기반 라우팅",
+        "hint": "함수의 특정 버전을 가리키는 포인터(Alias)를 사용합니다.",
+        "explanation": "Lambda Alias의 라우팅 구성을 사용하여 두 개의 서로 다른 버전(예: v1, v2)에 트래픽 가중치(90:10)를 할당할 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "SQS 대기열에서 메시지를 소비하는 애플리케이션이 메시지를 처리하는 데 예상보다 오랜 시간이 걸려, 처리 도중 다른 소비자가 동일한 메시지를 다시 가져가는 문제가 발생했습니다. 이를 해결하려면 무엇을 설정해야 합니까?",
+        "options": [
+            "Message Retention Period (메시지 보존 기간) 증가",
+            "Visibility Timeout (가시성 제한 시간) 증가",
+            "Dead Letter Queue (DLQ) 설정",
+            "Long Polling (롱 폴링) 활성화"
+        ],
+        "answer": "Visibility Timeout (가시성 제한 시간) 증가",
+        "hint": "처리 중인 메시지를 다른 소비자에게 보이지 않게(Invisible) 하는 시간입니다.",
+        "explanation": "Visibility Timeout 내에 처리를 완료하지 못하면 메시지가 다시 큐에 나타납니다. 처리 시간이 길어질 경우 이 시간을 늘리거나 `ChangeMessageVisibility` API를 호출해야 합니다."
+    },
+    {
+        "level": 2,
+        "problem": "S3에 저장된 프라이빗 객체를 특정 사용자에게 일정 시간 동안만 다운로드할 수 있도록 허용하고 싶습니다. IAM 사용자를 생성하지 않고 이를 구현하는 방법은 무엇입니까?",
+        "options": [
+            "S3 버킷 정책을 Public으로 변경한다.",
+            "CloudFront Signed Cookies를 사용한다.",
+            "S3 Presigned URL (미리 서명된 URL)을 생성하여 제공한다.",
+            "AWS STS를 사용하여 임시 토큰을 발급한다."
+        ],
+        "answer": "S3 Presigned URL (미리 서명된 URL)을 생성하여 제공한다.",
+        "hint": "URL 자체에 인증 정보와 만료 시간이 포함됩니다.",
+        "explanation": "S3 Presigned URL을 생성하면 보안 자격 증명 없이도 URL을 가진 사람이 지정된 시간 동안 해당 객체에 접근할 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "CodeBuild의 빌드 프로세스(명령어, 환경 변수, 단계 등)를 정의하기 위해 소스 코드 루트 디렉터리에 포함해야 하는 파일의 이름은 무엇입니까?",
+        "options": [
+            "appspec.yml",
+            "buildspec.yml",
+            "dockerrun.aws.json",
+            "template.yaml"
+        ],
+        "answer": "buildspec.yml",
+        "hint": "빌드(Build) 명세서(Spec)입니다.",
+        "explanation": "`buildspec.yml`은 CodeBuild가 빌드를 실행하는 방법을 정의하는 YAML 파일입니다. `appspec.yml`은 CodeDeploy에서 사용합니다."
+    },
+    {
+        "level": 2,
+        "problem": "Kinesis Data Streams의 데이터를 처리하는 Lambda 함수가 있습니다. 레코드 처리 순서가 보장되어야 할 때, 오류가 발생하면 해당 샤드의 처리가 멈추는 것을 방지하기 위해 실패한 레코드를 별도로 저장하는 기능은 무엇입니까?",
+        "options": [
+            "Dead Letter Queue (DLQ)",
+            "On-Failure Destinations (실패 시 대상)",
+            "BisectBatchOnFunctionError",
+            "Maximum Record Age"
+        ],
+        "answer": "On-Failure Destinations (실패 시 대상)",
+        "hint": "스트림 처리 실패 시 처리를 계속하면서 실패한 것만 따로 보냅니다.",
+        "explanation": "Kinesis와 Lambda 통합에서 'On-Failure Destinations'를 설정하면, 실패한 레코드 배치를 SQS나 SNS로 보내고 처리를 계속 진행할 수 있습니다. (과거에는 DLQ를 썼으나 현재는 Destinations가 더 권장됨)"
+    },
+    {
+        "level": 2,
+        "problem": "개발자가 로컬 환경에서 AWS SAM(Serverless Application Model)을 사용하여 애플리케이션을 테스트하려고 합니다. Lambda 함수를 로컬 Docker 컨테이너에서 실행하기 위해 사용하는 명령어는 무엇입니까?",
+        "options": [
+            "sam deploy",
+            "sam package",
+            "sam local invoke",
+            "sam init"
+        ],
+        "answer": "sam local invoke",
+        "hint": "로컬(local)에서 함수를 호출(invoke)합니다.",
+        "explanation": "`sam local invoke` 명령어는 로컬 머신에서 Docker를 사용하여 Lambda 함수를 실행하고 테스트할 수 있게 해줍니다."
+    },
+    {
+        "level": 2,
+        "problem": "CloudFormation 템플릿에서 다른 스택으로 내보낸(Export) 값을 가져와서(Import) 사용하기 위해 필요한 내장 함수는 무엇입니까?",
+        "options": [
+            "Fn::GetAtt",
+            "Fn::Ref",
+            "Fn::ImportValue",
+            "Fn::Sub"
+        ],
+        "answer": "Fn::ImportValue",
+        "hint": "값을 가져옵니다(Import).",
+        "explanation": "`Fn::ImportValue` 함수는 다른 CloudFormation 스택에서 `Outputs` 섹션을 통해 내보낸(Export) 값을 현재 스택으로 가져올 때 사용합니다."
+    },
+    {
+        "level": 2,
+        "problem": "Amazon Cognito에서 소셜 자격 증명 공급자(Google, Facebook 등)를 통해 로그인한 사용자에게 AWS 리소스(예: S3, DynamoDB)에 직접 접근할 수 있는 임시 AWS 자격 증명을 부여하는 기능은 무엇입니까?",
+        "options": [
+            "Cognito User Pools (사용자 풀)",
+            "Cognito Identity Pools (자격 증명 풀)",
+            "Cognito Sync",
+            "AWS IAM Identity Center"
+        ],
+        "answer": "Cognito Identity Pools (자격 증명 풀)",
+        "hint": "인증(Authentication)이 아니라 권한 부여(Authorization)를 담당합니다.",
+        "explanation": "User Pools는 인증(회원가입/로그인)을 담당하고, Identity Pools는 인증된 사용자에게 AWS 서비스에 접근할 수 있는 '임시 자격 증명(Role)'을 부여합니다."
+    },
+    {
+        "level": 2,
+        "problem": "ECS Fargate에서 실행되는 컨테이너가 다른 AWS 서비스(S3 등)를 호출해야 합니다. 이때 컨테이너에 권한을 부여하기 위해 정의해야 하는 IAM 역할은 무엇입니까?",
+        "options": [
+            "EC2 Instance Profile",
+            "Task Execution Role (작업 실행 역할)",
+            "Task Role (작업 역할)",
+            "Service Linked Role"
+        ],
+        "answer": "Task Role (작업 역할)",
+        "hint": "컨테이너(Task) 자체가 사용하는 역할입니다.",
+        "explanation": "`Task Role`은 애플리케이션(컨테이너)이 AWS API를 호출할 때 사용하는 권한입니다. `Task Execution Role`은 ECS 에이전트가 이미지를 pull하거나 로그를 보낼 때 사용하는 권한입니다."
+    },
+    {
+        "level": 2,
+        "problem": "대용량 파일(예: 1GB 이상)을 S3에 업로드할 때, 속도를 높이고 네트워크 오류 시 재시도 효율성을 높이기 위해 권장되는 업로드 방식은 무엇입니까?",
+        "options": [
+            "S3 Transfer Acceleration",
+            "Multipart Upload (멀티파트 업로드)",
+            "S3 Select",
+            "Versioning"
+        ],
+        "answer": "Multipart Upload (멀티파트 업로드)",
+        "hint": "파일을 여러 조각(Part)으로 나누어 병렬로 업로드합니다.",
+        "explanation": "100MB 이상의 파일은 멀티파트 업로드 사용이 권장되며, 파일을 작게 나누어 병렬로 업로드하므로 속도가 빠르고 실패 시 해당 파트만 재시도하면 됩니다."
+    },
+    {
+        "level": 2,
+        "problem": "RDS 데이터베이스에 애플리케이션이 접속할 때, DB 비밀번호를 사용하는 대신 IAM 역할을 사용하여 인증하려고 합니다. 이 기능을 무엇이라고 합니까?",
+        "options": [
+            "IAM Database Authentication",
+            "AWS Secrets Manager Rotation",
+            "RDS Security Groups",
+            "Transparent Data Encryption (TDE)"
+        ],
+        "answer": "IAM Database Authentication",
+        "hint": "IAM 토큰을 비밀번호 대신 사용합니다.",
+        "explanation": "IAM Database Authentication을 사용하면 DB에 별도의 사용자를 만들지 않고, IAM 역할에서 생성된 인증 토큰을 비밀번호처럼 사용하여 RDS(MySQL/PostgreSQL)에 접속할 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "API Gateway에서 CORS(Cross-Origin Resource Sharing) 오류를 해결하기 위해 브라우저가 실제 요청을 보내기 전에 보내는 'Preflight' 요청의 HTTP 메서드는 무엇입니까?",
+        "options": [
+            "GET",
+            "POST",
+            "OPTIONS",
+            "HEAD"
+        ],
+        "answer": "OPTIONS",
+        "hint": "서버가 어떤 옵션을 지원하는지 물어보는 요청입니다.",
+        "explanation": "브라우저는 CORS 요청 시 서버가 해당 출처를 허용하는지 확인하기 위해 `OPTIONS` 메서드로 Preflight 요청을 먼저 보냅니다."
+    },
+    {
+        "level": 2,
+        "problem": "여러 AWS Lambda 함수가 공통으로 사용하는 라이브러리(예: Node.js의 node_modules, Python의 pip 패키지)를 중복해서 업로드하지 않고 공유하여 관리하는 기능은 무엇입니까?",
+        "options": [
+            "Lambda Aliases",
+            "Lambda Versions",
+            "Lambda Layers",
+            "S3 Buckets"
+        ],
+        "answer": "Lambda Layers",
+        "hint": "코드 위에 층(Layer)처럼 쌓아서 사용합니다.",
+        "explanation": "Lambda Layers를 사용하면 라이브러리, 사용자 지정 런타임 또는 기타 종속성을 별도의 계층으로 분리하여 여러 함수에서 공유하고 배포 패키지 크기를 줄일 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "SQS 대기열 비용을 절감하고 빈 응답(Empty Response)을 줄이기 위해, 메시지가 도착할 때까지 최대 20초간 연결을 유지하는 방식은 무엇입니까?",
+        "options": [
+            "Short Polling",
+            "Long Polling",
+            "FIFO Queue",
+            "Visibility Timeout"
+        ],
+        "answer": "Long Polling",
+        "hint": "길게(Long) 기다립니다.",
+        "explanation": "Long Polling(WaitTimeSeconds > 0)을 설정하면 메시지가 없을 때 즉시 빈 응답을 보내지 않고 메시지가 도착할 때까지 기다리므로 API 호출 횟수와 비용을 줄일 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "CloudWatch Logs의 로그 데이터를 실시간으로 다른 서비스(예: Elasticsearch, Lambda)로 스트리밍하기 위해 설정해야 하는 것은 무엇입니까?",
+        "options": [
+            "Metric Filter",
+            "Subscription Filter (구독 필터)",
+            "Log Group",
+            "CloudTrail"
+        ],
+        "answer": "Subscription Filter (구독 필터)",
+        "hint": "로그 이벤트를 구독(Subscribe)하여 다른 곳으로 보냅니다.",
+        "explanation": "Subscription Filter를 사용하면 로그 데이터를 Kinesis, Lambda, OpenSearch Service 등으로 실시간 전송할 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "KMS(Key Management Service)를 사용하여 4KB보다 큰 데이터를 암호화할 때, KMS가 직접 데이터를 암호화하는 대신 데이터 암호화 키(Data Key)를 생성하여 애플리케이션에서 암호화를 수행하는 방식을 무엇이라고 합니까?",
+        "options": [
+            "Client-Side Encryption",
+            "Envelope Encryption (봉투 암호화)",
+            "Symmetric Encryption",
+            "Asymmetric Encryption"
+        ],
+        "answer": "Envelope Encryption (봉투 암호화)",
+        "hint": "데이터 키를 마스터 키로 감싸서(봉투) 보호합니다.",
+        "explanation": "KMS는 대용량 데이터를 직접 암호화하지 않고, 'GenerateDataKey' API를 통해 데이터 키를 발급해 줍니다. 애플리케이션은 이 데이터 키로 데이터를 암호화하고, 데이터 키 자체는 KMS 마스터 키로 암호화하여 저장합니다."
+    },
+    {
+        "level": 2,
+        "problem": "AWS Step Functions에서 최대 1년 동안 실행될 수 있으며, 각 단계의 상태 전환을 시각적으로 추적하고 재시도 로직을 상세히 제어해야 하는 워크플로 유형은 무엇입니까?",
+        "options": [
+            "Express Workflows",
+            "Standard Workflows",
+            "Synchronous Workflows",
+            "Batch Workflows"
+        ],
+        "answer": "Standard Workflows",
+        "hint": "장기 실행 및 정확히 한 번 실행을 보장합니다.",
+        "explanation": "Standard Workflows는 장기 실행(최대 1년)에 적합하며 실행 기록을 전체적으로 볼 수 있습니다. Express Workflows는 대규모 이벤트 처리 및 짧은 실행(최대 5분)에 적합합니다."
+    },
+    {
+        "level": 2,
+        "problem": "ElastiCache를 사용하여 데이터베이스 부하를 줄이려고 합니다. 데이터가 자주 변경되지 않고, 읽기 요청이 많을 때 데이터베이스와 캐시의 불일치(Stale Data)를 허용하지 않으면서 최신 상태를 유지하기에 가장 적합한 전략은 무엇입니까?",
+        "options": [
+            "Lazy Loading (지연 로딩)",
+            "Write Through (라이트 스루)",
+            "TTL (Time To Live) 추가",
+            "Read Replica (읽기 전용 복제본)"
+        ],
+        "answer": "Write Through (라이트 스루)",
+        "hint": "데이터를 쓸 때 캐시에도 같이 씁니다.",
+        "explanation": "Write Through 전략은 데이터베이스에 데이터를 쓸 때 캐시에도 동시에 업데이트하므로 데이터 일관성이 보장됩니다. 반면 Lazy Loading은 데이터가 요청될 때만 캐시에 로드하므로 데이터가 오래될 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "CodeDeploy를 사용하여 EC2 인스턴스에 애플리케이션을 배포할 때, 이전 버전의 애플리케이션을 중지하고 새 버전을 시작하기 전에 실행해야 하는 스크립트(예: 서비스 중지)는 AppSpec 파일의 어떤 수명 주기 후크(Lifecycle Hook)에 정의해야 합니까?",
+        "options": [
+            "BeforeInstall",
+            "AfterInstall",
+            "ApplicationStop",
+            "ValidateService"
+        ],
+        "answer": "ApplicationStop",
+        "hint": "새 파일을 설치하기 전에 기존 앱을 멈춥니다.",
+        "explanation": "ApplicationStop은 새 버전의 파일이 다운로드되기 *전*에 실행되는 첫 번째 후크로, 주로 실행 중인 애플리케이션을 우아하게 종료하는 데 사용됩니다."
+    },
+    {
+        "level": 2,
+        "problem": "DynamoDB 테이블의 데이터를 사용하여 지난 24시간 동안의 변경 사항(INSERT, MODIFY, DELETE)을 순서대로 처리하는 Lambda 함수를 만들려고 합니다. 이를 위해 활성화해야 하는 기능은 무엇입니까?",
+        "options": [
+            "DynamoDB Streams",
+            "DynamoDB DAX",
+            "DynamoDB Global Tables",
+            "Kinesis Data Firehose"
+        ],
+        "answer": "DynamoDB Streams",
+        "hint": "변경 로그를 스트림(Stream)으로 내보냅니다.",
+        "explanation": "DynamoDB Streams는 테이블의 항목 수정 사항을 시간 순서대로 캡처하여 Lambda 함수 등에서 비동기적으로 처리할 수 있게 해줍니다."
+    },
+    {
+        "level": 2,
+        "problem": "Lambda 함수의 콜드 스타트(Cold Start) 문제를 해결하기 위해, 항상 준비된 상태의 실행 환경을 미리 확보해 두는 기능은 무엇입니까?",
+        "options": [
+            "Reserved Concurrency (예약된 동시성)",
+            "Provisioned Concurrency (프로비저닝된 동시성)",
+            "Lambda Layers",
+            "Lambda Alias"
+        ],
+        "answer": "Provisioned Concurrency (프로비저닝된 동시성)",
+        "hint": "미리(Pre) 공급(Provision)해 둡니다.",
+        "explanation": "Provisioned Concurrency를 설정하면 요청이 오기 전에 실행 환경을 미리 초기화해 두므로, 함수 호출 시 지연 없이 즉시 실행됩니다."
+    },
+    {
+        "level": 2,
+        "problem": "API Gateway를 통해 제공되는 API를 특정 클라이언트(유료 고객 등)에게만 허용하고, 호출 횟수를 제한(Throttling)하려고 합니다. 이를 구현하기 위해 생성해야 하는 두 가지 리소스는 무엇입니까?",
+        "options": [
+            "API Keys & Usage Plans",
+            "IAM Users & Groups",
+            "Lambda Authorizer & Cognito",
+            "WAF Web ACL & Rules"
+        ],
+        "answer": "API Keys & Usage Plans",
+        "hint": "열쇠(Key)와 요금제(Plan)가 필요합니다.",
+        "explanation": "API Key를 발급하여 클라이언트를 식별하고, Usage Plan(사용량 계획)을 연결하여 해당 키의 초당 요청 수(Rate)와 월별 쿼터(Quota)를 제한할 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "CloudFormation 템플릿에서 'Dev', 'Test', 'Prod' 환경에 따라 서로 다른 인스턴스 유형(t2.micro, m5.large 등)을 사용하고 싶습니다. 조건문(Conditions)을 복잡하게 쓰지 않고, 키-값 쌍으로 매핑하여 값을 찾아오는 함수는 무엇입니까?",
+        "options": [
+            "Fn::FindInMap",
+            "Fn::Select",
+            "Fn::GetAtt",
+            "Fn::ImportValue"
+        ],
+        "answer": "Fn::FindInMap",
+        "hint": "지도(Map)에서 찾습니다.",
+        "explanation": "`Mappings` 섹션에 환경별 변수를 정의하고, `Fn::FindInMap` 함수를 사용하여 현재 환경(Key)에 맞는 값을 조회하는 것이 정석입니다."
+    },
+    {
+        "level": 2,
+        "problem": "S3 버킷에 저장된 정적 웹사이트의 콘텐츠가 업데이트되었지만, CloudFront 캐시 때문에 사용자가 이전 버전을 보고 있습니다. 모든 엣지 로케이션에서 즉시 새 콘텐츠를 가져오도록 강제하는 방법은 무엇입니까?",
+        "options": [
+            "Create Invalidation (무효화 생성)",
+            "TTL(Time to Live)을 0으로 설정",
+            "Versioning 활성화",
+            "Origin Access Control (OAC) 설정"
+        ],
+        "answer": "Create Invalidation (무효화 생성)",
+        "hint": "기존 캐시를 무효(Invalid)로 만듭니다.",
+        "explanation": "CloudFront 무효화(Invalidation)를 생성하면 지정된 경로(예: /*)의 파일이 캐시에서 삭제되고, 다음 요청 시 오리진(S3)에서 새 파일을 가져옵니다."
+    },
+    {
+        "level": 2,
+        "problem": "AWS SAM(Serverless Application Model) 템플릿 파일에서 반드시 포함되어야 하는 최상위 선언문으로, 이 파일이 서버리스 변환을 사용함을 나타내는 것은 무엇입니까?",
+        "options": [
+            "Transform: AWS::Serverless-2016-10-31",
+            "AWSTemplateFormatVersion: '2010-09-09'",
+            "Resources: Type: AWS::Serverless::Function",
+            "Globals: Function: Runtime: nodejs18.x"
+        ],
+        "answer": "Transform: AWS::Serverless-2016-10-31",
+        "hint": "이 템플릿을 CloudFormation으로 변환(Transform)해 줍니다.",
+        "explanation": "SAM 템플릿은 CloudFormation의 확장판이므로, `Transform: AWS::Serverless-2016-10-31` 헤더가 있어야 SAM 구문(AWS::Serverless::Function 등)을 해석할 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "EC2 인스턴스에 설치된 CodeDeploy 에이전트가 배포 명령을 수신하고 상태를 보고하기 위해 아웃바운드 통신이 필요한 포트는 몇 번입니까?",
+        "options": [
+            "Port 443 (HTTPS)",
+            "Port 80 (HTTP)",
+            "Port 22 (SSH)",
+            "Port 3389 (RDP)"
+        ],
+        "answer": "Port 443 (HTTPS)",
+        "hint": "AWS 서비스 API와 통신하는 보안 포트입니다.",
+        "explanation": "CodeDeploy 에이전트는 AWS CodeDeploy 서비스와 통신하기 위해 HTTPS(443) 포트만 아웃바운드로 열려 있으면 됩니다. 인바운드 포트는 필요하지 않습니다."
+    },
+    {
+        "level": 2,
+        "problem": "DynamoDB에서 특정 시점이 지나면 데이터를 자동으로 삭제하여 스토리지 비용을 절감하고 오래된 데이터를 정리하는 기능은 무엇입니까?",
+        "options": [
+            "Time To Live (TTL)",
+            "DynamoDB Streams",
+            "On-Demand Backup",
+            "Point-in-Time Recovery (PITR)"
+        ],
+        "answer": "Time To Live (TTL)",
+        "hint": "생존 시간(TTL)을 설정합니다.",
+        "explanation": "TTL(Time To Live)을 활성화하고 만료 시간이 담긴 속성을 지정하면, DynamoDB가 해당 시간이 지난 항목을 백그라운드에서 무료로 삭제합니다."
+    },
+    {
+        "level": 2,
+        "problem": "사내에서 사용하는 공통 라이브러리(Python 패키지 등)를 인터넷(PyPI, npm)이 아닌 안전한 프라이빗 저장소에서 관리하고 배포하기 위해 사용하는 서비스는 무엇입니까?",
+        "options": [
+            "AWS CodeArtifact",
+            "AWS CodeCommit",
+            "AWS CodeBuild",
+            "Amazon S3"
+        ],
+        "answer": "AWS CodeArtifact",
+        "hint": "아티팩트(Artifact)를 저장합니다.",
+        "explanation": "AWS CodeArtifact는 소프트웨어 패키지(Maven, Gradle, npm, pip 등)를 위한 안전하고 확장 가능한 완전 관리형 아티팩트 리포지토리 서비스입니다."
+    },
+    {
+        "level": 2,
+        "problem": "AWS Step Functions 워크플로에서 여러 작업을 병렬(Parallel)로 실행하고, 모든 작업이 완료될 때까지 기다렸다가 다음 단계로 넘어가는 상태(State) 유형은 무엇입니까?",
+        "options": [
+            "Parallel State",
+            "Map State",
+            "Wait State",
+            "Choice State"
+        ],
+        "answer": "Parallel State",
+        "hint": "가지를 쳐서 동시에 실행합니다.",
+        "explanation": "Parallel State는 여러 상태 분기(Branch)를 동시에 실행하는 데 사용됩니다. (Map State는 배열의 각 항목에 대해 동일한 작업을 반복할 때 사용됩니다.)"
+    },
+    {
+        "level": 2,
+        "problem": "GraphQL API를 사용하여 클라이언트가 필요한 데이터만 정확히 요청할 수 있게 하고, 실시간 데이터 구독(Subscription) 기능을 제공하는 AWS 서비스는 무엇입니까?",
+        "options": [
+            "AWS AppSync",
+            "Amazon API Gateway",
+            "AWS Lambda",
+            "Amazon MQ"
+        ],
+        "answer": "AWS AppSync",
+        "hint": "애플리케이션 데이터 동기화(Sync) 및 GraphQL.",
+        "explanation": "AWS AppSync는 GraphQL을 기반으로 하여, 클라이언트가 여러 소스의 데이터를 단일 API 호출로 가져오고 실시간 업데이트를 받을 수 있게 해줍니다."
+    },
+    {
+        "level": 2,
+        "problem": "CloudFormation 스택을 업데이트하려고 하는데, 누군가 콘솔에서 수동으로 보안 그룹 규칙을 변경하여 템플릿과 실제 리소스 상태가 일치하지 않습니다. 이를 감지하기 위한 기능은 무엇입니까?",
+        "options": [
+            "Drift Detection (드리프트 감지)",
+            "Change Sets (변경 세트)",
+            "Stack Policies (스택 정책)",
+            "CloudTrail"
+        ],
+        "answer": "Drift Detection (드리프트 감지)",
+        "hint": "배가 표류(Drift)하듯 설정이 벗어난 것을 찾습니다.",
+        "explanation": "Drift Detection 기능을 사용하면 CloudFormation 템플릿 정의와 실제 배포된 리소스 간의 구성 차이(드리프트)를 식별할 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "SQS FIFO(선입선출) 대기열에서 메시지 처리 순서를 보장하면서도, 서로 다른 고객(Customer A, Customer B)의 메시지를 병렬로 처리하여 성능을 높이려면 무엇을 설정해야 합니까?",
+        "options": [
+            "Message Group ID",
+            "Message Deduplication ID",
+            "Visibility Timeout",
+            "Delay Seconds"
+        ],
+        "answer": "Message Group ID",
+        "hint": "그룹별로 순서를 보장합니다.",
+        "explanation": "Message Group ID를 다르게 설정하면, 같은 그룹 ID 내에서는 순서가 보장되지만 서로 다른 그룹 ID 간에는 순서 제약 없이 병렬 처리가 가능합니다."
+    },
+    {
+        "level": 2,
+        "problem": "웹 애플리케이션에서 사용자가 S3 버킷에 이미지를 업로드하면, 즉시 썸네일을 생성하는 Lambda 함수를 실행하고 싶습니다. 가장 적절한 트리거 설정 방식은 무엇입니까?",
+        "options": [
+            "S3 Event Notifications (S3 이벤트 알림)",
+            "CloudWatch Events (EventBridge)",
+            "CloudTrail Logs",
+            "Lambda Pollings"
+        ],
+        "answer": "S3 Event Notifications (S3 이벤트 알림)",
+        "hint": "S3 자체에서 알림을 보냅니다.",
+        "explanation": "S3 버킷의 이벤트 알림 기능을 사용하여 `s3:ObjectCreated:*` 이벤트 발생 시 Lambda 함수를 비동기적으로 호출하는 것이 가장 효율적입니다."
+    },
+    {
+        "level": 2,
+        "problem": "CodePipeline의 배포 단계에서 승인(Manual Approval) 단계를 추가했습니다. 승인 알림을 이메일로 전송하기 위해 연동해야 하는 서비스는 무엇입니까?",
+        "options": [
+            "Amazon SNS",
+            "Amazon SES",
+            "Amazon SQS",
+            "AWS Chatbot"
+        ],
+        "answer": "Amazon SNS",
+        "hint": "간단한 알림 서비스(Notification Service).",
+        "explanation": "CodePipeline의 수동 승인 작업은 Amazon SNS 주제(Topic)와 연결하여 검토자에게 승인 요청 알림(이메일, SMS 등)을 보낼 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "개발자가 Lambda 함수 내에서 AWS SDK를 초기화할 때, `region`이나 `credentials`를 코드에 직접 입력하지 않아도 자동으로 설정되는 이유는 무엇입니까?",
+        "options": [
+            "Lambda 실행 환경이 환경 변수(AWS_REGION 등)를 자동으로 주입하기 때문에",
+            "IAM 역할이 자동으로 코드를 수정하기 때문에",
+            "AWS SDK가 인터넷에서 정보를 가져오기 때문에",
+            "Lambda는 리전 개념이 없기 때문에"
+        ],
+        "answer": "Lambda 실행 환경이 환경 변수(AWS_REGION 등)를 자동으로 주입하기 때문에",
+        "hint": "예약된 환경 변수가 존재합니다.",
+        "explanation": "Lambda 런타임은 `AWS_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`(임시 자격 증명) 등의 환경 변수를 미리 채워두므로 SDK가 이를 자동으로 참조합니다."
+    },
+    {
+        "level": 2,
+        "problem": "Kinesis Data Firehose를 사용하여 스트리밍 데이터를 로드할 수 있는 대상(Destination) 서비스가 아닌 것은 무엇입니까?",
+        "options": [
+            "Amazon DynamoDB",
+            "Amazon S3",
+            "Amazon Redshift",
+            "Amazon OpenSearch Service (Elasticsearch)"
+        ],
+        "answer": "Amazon DynamoDB",
+        "hint": "DynamoDB는 Firehose의 직접적인 타겟이 아닙니다.",
+        "explanation": "Kinesis Data Firehose의 기본 지원 대상은 S3, Redshift, OpenSearch Service, Splunk 및 HTTP 엔드포인트입니다. DynamoDB로 데이터를 넣으려면 Lambda 등을 거쳐야 합니다."
+    },
+    {
+        "level": 2,
+        "problem": "Elastic Beanstalk 환경 설정을 소스 코드와 함께 버전 관리하고 싶습니다. 프로젝트 루트의 어떤 디렉터리에 `.config` 확장자를 가진 구성 파일을 넣어야 합니까?",
+        "options": [
+            ".ebextensions",
+            ".elasticbeanstalk",
+            ".aws",
+            "configs"
+        ],
+        "answer": ".ebextensions",
+        "hint": "EB의 확장(Extension) 설정입니다.",
+        "explanation": "애플리케이션 번들의 최상위 경로에 `.ebextensions`라는 폴더를 만들고 그 안에 `.config` 파일을 넣으면 패키지 설치, 파일 생성, 쉘 명령 실행 등을 자동화할 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "Secrets Manager와 Systems Manager Parameter Store의 가장 큰 차이점 중 하나로, Secrets Manager만이 제공하는 고유 기능은 무엇입니까?",
+        "options": [
+            "자동 자격 증명 교체 (Automatic Rotation)",
+            "데이터 암호화 (Encryption)",
+            "계층적 저장 구조",
+            "버전 관리"
+        ],
+        "answer": "자동 자격 증명 교체 (Automatic Rotation)",
+        "hint": "비밀번호를 주기적으로 바꿉니다.",
+        "explanation": "Secrets Manager는 RDS, DocumentDB 등의 자격 증명을 주기적으로, 그리고 자동으로 교체(Rotation)하는 기능을 내장하고 있습니다. Parameter Store는 이를 직접 구현해야 합니다."
+    },
+    {
+        "level": 2,
+        "problem": "다른 AWS 계정(Account B)의 Lambda 함수가 내 계정(Account A)의 S3 버킷에 접근할 수 있도록 허용하려면 무엇을 설정해야 합니까?",
+        "options": [
+            "S3 버킷 정책(Bucket Policy)에서 Account B의 Lambda 역할 ARN을 허용한다.",
+            "Account A의 IAM 사용자를 생성하여 Account B에 공유한다.",
+            "VPC Peering을 연결한다.",
+            "S3 ACL을 퍼블릭으로 설정한다."
+        ],
+        "answer": "S3 버킷 정책(Bucket Policy)에서 Account B의 Lambda 역할 ARN을 허용한다.",
+        "hint": "리소스 기반 정책(Resource-based Policy)을 사용합니다.",
+        "explanation": "교차 계정 액세스를 위해서는 리소스(S3) 소유자가 버킷 정책을 통해 외부 계정(또는 그 계정의 특정 IAM 역할)의 접근을 명시적으로 허용해야 합니다."
+    },
+    {
+        "level": 2,
+        "problem": "API Gateway에서 배포 단계(Stage)별로 다른 엔드포인트(예: Dev DB, Prod DB)를 호출하도록 Lambda 함수를 구성하고 싶습니다. Lambda 코드를 수정하지 않고 이를 처리하는 방법은 무엇입니까?",
+        "options": [
+            "Stage Variables (스테이지 변수) 사용",
+            "API Gateway Mapping Template 사용",
+            "Lambda Aliases 사용",
+            "Environment Variables 사용"
+        ],
+        "answer": "Stage Variables (스테이지 변수) 사용",
+        "hint": "API Gateway 스테이지마다 변수를 다르게 설정하여 Lambda에 전달합니다.",
+        "explanation": "API Gateway의 Stage Variables를 설정하고, Lambda 함수 내에서 이 변수를 읽거나, 통합 설정에서 Lambda Alias를 호출하는 데 사용하여 동적으로 대상을 변경할 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "CloudWatch Logs에서 'ERROR'라는 문자열이 포함된 로그가 발생할 때마다 횟수를 세어(Count), 특정 임계값을 넘으면 경보(Alarm)를 울리게 하고 싶습니다. 무엇을 설정해야 합니까?",
+        "options": [
+            "Metric Filter (지표 필터)",
+            "Subscription Filter",
+            "Log Insights",
+            "CloudTrail"
+        ],
+        "answer": "Metric Filter (지표 필터)",
+        "hint": "로그 텍스트를 숫자(Metric)로 변환합니다.",
+        "explanation": "Metric Filter를 사용하면 로그 데이터에서 특정 패턴(예: 'ERROR')을 찾아 CloudWatch 지표(Metric)로 변환할 수 있으며, 이 지표를 기반으로 경보를 설정할 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "프론트엔드 웹 및 모바일 개발자가 AWS 백엔드 리소스(Auth, Data, Storage)를 가장 빠르고 쉽게 구성하고 배포할 수 있도록 지원하는 프레임워크 및 도구 모음은 무엇입니까?",
+        "options": [
+            "AWS Amplify",
+            "AWS Elastic Beanstalk",
+            "AWS CodeStar",
+            "AWS OpsWorks"
+        ],
+        "answer": "AWS Amplify",
+        "hint": "증폭시키다(Amplify). 프론트엔드 개발자 친화적입니다.",
+        "explanation": "AWS Amplify는 인증, 스토리지, API 등을 프론트엔드 코드와 쉽게 통합하고, CI/CD를 포함한 호스팅 서비스까지 제공하는 올인원 솔루션입니다."
+    }
+]

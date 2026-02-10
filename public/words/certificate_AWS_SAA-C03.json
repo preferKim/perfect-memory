@@ -1,0 +1,652 @@
+[
+    {
+        "level": 2,
+        "problem": "한 스타트업이 사진 공유 애플리케이션을 개발 중입니다. 사용자가 업로드한 원본 사진은 S3 버킷에 저장되며, 썸네일 생성 후에는 원본 사진에 거의 액세스하지 않지만, 법적 규제로 인해 3년 동안 보관해야 합니다. 검색 시간은 12시간 이내면 충분합니다. 가장 비용 효율적인 스토리지 클래스는 무엇입니까?",
+        "options": [
+            "S3 Standard",
+            "S3 Standard-Infrequent Access (S3 Standard-IA)",
+            "S3 Glacier Instant Retrieval",
+            "S3 Glacier Deep Archive"
+        ],
+        "answer": "S3 Glacier Deep Archive",
+        "hint": "3년 보관, 액세스 빈도 매우 낮음, 검색 시간 12시간 허용.",
+        "explanation": "S3 Glacier Deep Archive는 가장 저렴한 스토리지 클래스로, 검색 시간이 12시간~48시간 걸리지만 장기 보관 및 규정 준수용 아카이빙에 가장 비용 효율적입니다."
+    },
+    {
+        "level": 2,
+        "problem": "회사는 프라이빗 서브넷에 있는 EC2 인스턴스들이 인터넷에서 보안 패치를 다운로드할 수 있도록 허용해야 합니다. 하지만 외부 인터넷에서 해당 인스턴스로 직접 접속하는 것은 차단해야 합니다. 어떤 아키텍처 구성요소를 사용해야 합니까?",
+        "options": [
+            "Internet Gateway",
+            "NAT Gateway",
+            "Egress-Only Internet Gateway",
+            "VPC Peering"
+        ],
+        "answer": "NAT Gateway",
+        "hint": "프라이빗 인스턴스가 아웃바운드 트래픽만 보낼 수 있게 해야 합니다.",
+        "explanation": "NAT Gateway는 프라이빗 서브넷의 인스턴스가 인터넷에 연결할 수 있게 해주지만, 인터넷에서 인스턴스로의 직접 연결은 차단합니다."
+    },
+    {
+        "level": 2,
+        "problem": "전 세계 사용자를 대상으로 정적 웹사이트를 호스팅하려고 합니다. 웹사이트는 S3 버킷에 저장되어 있으며, 사용자에게 가장 낮은 지연 시간(Low Latency)을 제공하고 HTTPS 보안 연결을 지원해야 합니다. 어떤 서비스를 조합해야 합니까?",
+        "options": [
+            "S3 Static Website Hosting + Route 53",
+            "S3 + CloudFront",
+            "EC2 + ELB",
+            "S3 + Global Accelerator"
+        ],
+        "answer": "S3 + CloudFront",
+        "hint": "전 세계 엣지 로케이션 캐싱 및 HTTPS 지원.",
+        "explanation": "Amazon CloudFront는 S3와 연동하여 전 세계 엣지 로케이션을 통해 콘텐츠를 빠르게 전송하며, S3 정적 호스팅만으로는 지원하지 않는 HTTPS 인증서 적용이 가능합니다."
+    },
+    {
+        "level": 2,
+        "problem": "데이터베이스의 읽기 성능을 향상시켜야 합니다. 애플리케이션은 읽기 작업이 쓰기 작업보다 훨씬 많으며, 메인 데이터베이스의 부하를 줄이고 싶습니다. Amazon RDS를 사용 중일 때 적절한 해결책은 무엇입니까?",
+        "options": [
+            "Multi-AZ 배포 활성화",
+            "Read Replica(읽기 전용 복제본) 생성",
+            "ElastiCache 도입",
+            "인스턴스 유형을 더 큰 사이즈로 변경"
+        ],
+        "answer": "Read Replica(읽기 전용 복제본) 생성",
+        "hint": "읽기 트래픽 분산이 목적입니다.",
+        "explanation": "RDS Read Replica를 생성하여 읽기 트래픽을 복제본으로 분산시키면 마스터 데이터베이스의 부하를 줄이고 전체 읽기 처리량을 늘릴 수 있습니다. (Multi-AZ는 고가용성 목적)"
+    },
+    {
+        "level": 2,
+        "problem": "회사의 애플리케이션은 ALB(Application Load Balancer) 뒤에 있는 Auto Scaling 그룹의 EC2 인스턴스에서 실행됩니다. 세션 데이터를 유지해야 하는데, 인스턴스가 확장/축소될 때 로그인이 풀리는 문제가 있습니다. 세션 데이터를 공유하기 위한 가장 적절한 아키텍처는 무엇입니까?",
+        "options": [
+            "ALB의 스티키 세션(Sticky Session) 활성화",
+            "세션 데이터를 DynamoDB 또는 ElastiCache에 저장",
+            "EBS 볼륨에 세션 저장",
+            "S3에 세션 저장"
+        ],
+        "answer": "세션 데이터를 DynamoDB 또는 ElastiCache에 저장",
+        "hint": "Stateless 아키텍처를 위해 세션 저장소를 분리해야 합니다.",
+        "explanation": "스티키 세션은 부하 불균형을 초래할 수 있습니다. 가장 좋은 방법은 세션 상태를 외부의 고성능 키-값 저장소인 ElastiCache나 DynamoDB로 분리하여 인스턴스 상태와 무관하게 세션을 유지하는 것입니다."
+    },
+    {
+        "level": 2,
+        "problem": "온프레미스 데이터 센터와 AWS VPC 간에 10Gbps의 전용 대역폭이 필요하며, 인터넷을 통하지 않는 안정적인 연결이 필수적입니다. 가장 적합한 연결 방식은 무엇입니까?",
+        "options": [
+            "Site-to-Site VPN",
+            "AWS Direct Connect",
+            "VPC Peering",
+            "Transit Gateway"
+        ],
+        "answer": "AWS Direct Connect",
+        "hint": "인터넷을 우회하는 전용 물리적 회선.",
+        "explanation": "AWS Direct Connect는 인터넷을 통하지 않고 전용 회선을 통해 온프레미스와 AWS를 연결하여 일관된 네트워크 성능과 높은 대역폭을 제공합니다."
+    },
+    {
+        "level": 2,
+        "problem": "EC2 인스턴스에서 실행되는 애플리케이션이 S3 버킷에 접근하려고 합니다. 액세스 키와 비밀 키를 소스 코드에 저장하지 않고 권한을 부여하는 가장 안전한 방법은 무엇입니까?",
+        "options": [
+            "IAM 사용자를 생성하고 키를 발급받아 환경 변수로 저장",
+            "S3 버킷 정책에서 해당 EC2의 IP 주소 허용",
+            "IAM 역할을 생성하여 EC2 인스턴스에 연결(Instance Profile)",
+            "AWS 자격 증명 파일을 인스턴스에 업로드"
+        ],
+        "answer": "IAM 역할을 생성하여 EC2 인스턴스에 연결(Instance Profile)",
+        "hint": "자격 증명을 장기 저장하지 않고 임시 자격 증명을 사용합니다.",
+        "explanation": "IAM 역할을 EC2 인스턴스 프로파일에 할당하면, 애플리케이션은 AWS SDK를 통해 자동으로 임시 보안 자격 증명을 받아 S3에 안전하게 접근할 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "수천 개의 IoT 센서로부터 초당 수십만 개의 데이터 레코드를 실시간으로 수집하고 처리해야 합니다. 데이터 순서가 보장되어야 하며, 이후 분석을 위해 S3로 저장해야 합니다. 어떤 서비스가 적합합니까?",
+        "options": [
+            "Amazon SQS",
+            "Amazon Kinesis Data Streams",
+            "AWS Lambda",
+            "Amazon SNS"
+        ],
+        "answer": "Amazon Kinesis Data Streams",
+        "hint": "대용량 실시간 스트리밍 데이터 수집 및 순서 보장.",
+        "explanation": "Kinesis Data Streams는 대규모 데이터 스트림을 실시간으로 수집하고 처리하는 데 최적화되어 있으며, 샤드(Shard) 내에서 데이터 순서를 보장합니다."
+    },
+    {
+        "level": 2,
+        "problem": "회사는 매일 밤 12시에 배치 분석 작업을 실행합니다. 이 작업은 중단되어도 다시 시작하면 되며, 완료하는 데 약 3시간이 걸립니다. 비용을 최소화하기 위해 어떤 EC2 인스턴스 구매 옵션을 사용해야 합니까?",
+        "options": [
+            "On-Demand Instances",
+            "Reserved Instances",
+            "Spot Instances",
+            "Dedicated Hosts"
+        ],
+        "answer": "Spot Instances",
+        "hint": "중단 가능한 작업, 비용 최적화.",
+        "explanation": "스팟 인스턴스는 온디맨드 대비 최대 90% 저렴하지만 AWS에 의해 중단될 수 있습니다. 중단되어도 괜찮은 배치 작업이나 내결함성이 있는 워크로드에 가장 적합합니다."
+    },
+    {
+        "level": 2,
+        "problem": "단일 리전 내의 여러 가용 영역(AZ)에 걸쳐 있는 EC2 인스턴스들이 동일한 파일 시스템을 동시에 마운트하여 읽고 써야 합니다. 리눅스 기반 워크로드일 때 가장 적합한 스토리지 솔루션은 무엇입니까?",
+        "options": [
+            "Amazon EBS",
+            "Amazon EFS",
+            "Amazon S3",
+            "Amazon FSx for Windows File Server"
+        ],
+        "answer": "Amazon EFS",
+        "hint": "여러 EC2에서 동시 마운트 가능한 리눅스 파일 시스템.",
+        "explanation": "Amazon EFS(Elastic File System)는 리전 내 여러 AZ에 있는 수천 개의 EC2 인스턴스에서 동시에 액세스할 수 있는 완전 관리형 NFS 파일 시스템입니다. (EBS는 단일 AZ, 단일 인스턴스 연결이 기본)"
+    },
+    {
+        "level": 2,
+        "problem": "현재 단일 EC2 인스턴스에서 실행 중인 레거시 애플리케이션이 있습니다. 이 애플리케이션은 확장 불가능(Not Scalable)하며 고정된 IP 주소가 필요합니다. 인스턴스 장애 발생 시 자동으로 복구되도록 구성하려면 어떻게 해야 합니까?",
+        "options": [
+            "Auto Scaling 그룹의 최소/최대 용량을 1로 설정하고 탄력적 IP(EIP) 연결",
+            "EC2 인스턴스를 수동으로 모니터링하고 장애 시 재시작",
+            "Load Balancer 뒤에 인스턴스 배치",
+            "Lambda 함수로 주기적 상태 확인"
+        ],
+        "answer": "Auto Scaling 그룹의 최소/최대 용량을 1로 설정하고 탄력적 IP(EIP) 연결",
+        "hint": "자동 복구(Self-healing)와 고정 IP 유지.",
+        "explanation": "Auto Scaling 그룹의 Min/Max를 1로 설정하면 인스턴스 장애 시 자동으로 새 인스턴스를 시작합니다. 사용자 데이터 스크립트 등을 통해 부팅 시 EIP를 다시 연결하도록 구성하면 고정 IP 요건도 충족할 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "회사는 규정 준수를 위해 모든 API 호출 기록(누가, 언제, 어떤 리소스에 접근했는지)을 7년 동안 보관해야 합니다. 또한 특정 리소스 변경 시 관리자에게 즉시 알림이 가야 합니다. 어떤 서비스를 조합해야 합니까?",
+        "options": [
+            "CloudWatch Logs + SNS",
+            "CloudTrail + CloudWatch Events(EventBridge) + SNS",
+            "VPC Flow Logs + S3",
+            "AWS Config + Lambda"
+        ],
+        "answer": "CloudTrail + CloudWatch Events(EventBridge) + SNS",
+        "hint": "API 호출 기록 감사는 CloudTrail입니다.",
+        "explanation": "CloudTrail은 API 활동 로그를 기록합니다. 이 로그를 기반으로 EventBridge 규칙을 생성하여 특정 이벤트 발생 시 SNS를 통해 알림을 보낼 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "웹 애플리케이션이 RDS MySQL 데이터베이스를 사용 중입니다. 데이터베이스의 CPU 사용률이 100%에 도달하여 성능 저하가 발생했습니다. 조사 결과 복잡한 분석 쿼리가 원인임이 밝혀졌습니다. 애플리케이션 코드를 최소한으로 수정하여 이 문제를 해결하려면 어떻게 해야 합니까?",
+        "options": [
+            "RDS 인스턴스를 수직 확장(Scale Up)한다.",
+            "RDS Read Replica를 생성하고 분석 쿼리를 해당 엔드포인트로 보낸다.",
+            "데이터베이스를 DynamoDB로 마이그레이션한다.",
+            "ElastiCache를 도입하여 쿼리 결과를 캐싱한다."
+        ],
+        "answer": "RDS Read Replica를 생성하고 분석 쿼리를 해당 엔드포인트로 보낸다.",
+        "hint": "읽기 부하 분리.",
+        "explanation": "무거운 분석 쿼리(읽기 작업)를 처리하기 위해 읽기 전용 복제본(Read Replica)을 생성하고, 분석 툴이 이 복제본을 바라보도록 하면 마스터 DB의 부하를 효과적으로 분리할 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "금융 애플리케이션을 위해 강력한 일관성(Strong Consistency)과 트랜잭션 지원이 필요합니다. 하지만 스키마가 자주 변경될 수 있어 유연성이 필요합니다. 서버 관리 부담을 없애고 싶다면 어떤 데이터베이스가 적합합니까?",
+        "options": [
+            "Amazon Aurora Serverless",
+            "Amazon DynamoDB",
+            "Amazon RDS for Oracle",
+            "Amazon Redshift"
+        ],
+        "answer": "Amazon DynamoDB",
+        "hint": "스키마리스(Schema-less) NoSQL이면서 트랜잭션(ACID) 지원.",
+        "explanation": "DynamoDB는 NoSQL로 스키마 유연성을 제공하며, 현재는 ACID 트랜잭션 기능을 지원하여 금융 거래와 같은 워크로드도 처리할 수 있는 완전 관리형 서버리스 DB입니다."
+    },
+    {
+        "level": 2,
+        "problem": "S3 버킷에 업로드되는 이미지를 썸네일로 변환하는 이벤트 기반 아키텍처를 설계하려고 합니다. 서버를 프로비저닝하거나 관리하고 싶지 않습니다. 가장 적합한 컴퓨팅 서비스는 무엇입니까?",
+        "options": [
+            "EC2 Spot Instances",
+            "AWS Lambda",
+            "AWS Fargate",
+            "AWS Batch"
+        ],
+        "answer": "AWS Lambda",
+        "hint": "이벤트 트리거 + 서버리스.",
+        "explanation": "S3 이벤트 알림을 트리거로 사용하여 코드를 실행하는 데 AWS Lambda가 가장 적합합니다. 서버 관리가 필요 없고 사용한 실행 시간만큼만 비용을 지불합니다."
+    },
+    {
+        "level": 2,
+        "problem": "여러 AWS 계정에서 발생하는 로그 데이터를 중앙의 보안 계정 S3 버킷으로 통합하려고 합니다. 가장 효율적이고 안전한 방법은 무엇입니까?",
+        "options": [
+            "각 계정의 로그를 퍼블릭 인터넷을 통해 전송",
+            "S3 버킷 정책을 수정하여 다른 AWS 계정의 쓰기 권한 허용 (Cross-account access)",
+            "VPC Peering을 사용하여 데이터 전송",
+            "각 계정에 EC2를 띄워 로그를 수집 후 전송"
+        ],
+        "answer": "S3 버킷 정책을 수정하여 다른 AWS 계정의 쓰기 권한 허용 (Cross-account access)",
+        "hint": "계정 간 S3 접근 권한 설정.",
+        "explanation": "중앙 S3 버킷의 버킷 정책(Bucket Policy)에서 다른 계정(Principal)이 객체를 업로드(PutObject)할 수 있도록 허용하는 것이 표준적인 로그 중앙화 방식입니다."
+    },
+    {
+        "level": 2,
+        "problem": "사용자가 업로드한 동영상을 전 세계 사용자에게 스트리밍해야 합니다. 동영상의 저작권을 보호하기 위해 유료 회원만 일시적으로 URL에 접근할 수 있게 하려 합니다. 어떤 기능을 사용해야 합니까?",
+        "options": [
+            "S3 Pre-signed URL",
+            "CloudFront Signed URL / Signed Cookies",
+            "IAM Policy",
+            "S3 Bucket Policy"
+        ],
+        "answer": "CloudFront Signed URL / Signed Cookies",
+        "hint": "CDN을 통한 콘텐츠 전송 시 접근 제어.",
+        "explanation": "CloudFront를 통해 전 세계에 배포되는 콘텐츠에 대한 접근을 제어할 때는 CloudFront 서명된 URL(Signed URL)이나 서명된 쿠키를 사용하는 것이 가장 적합합니다. (S3 Pre-signed URL은 S3 직접 접근 시 사용)"
+    },
+    {
+        "level": 2,
+        "problem": "VPC 내의 프라이빗 서브넷에 있는 애플리케이션이 S3 버킷의 데이터를 다운로드해야 합니다. 데이터가 공용 인터넷을 통과하지 않도록 보안을 강화하고 네트워크 비용을 절감하려면 무엇을 사용해야 합니까?",
+        "options": [
+            "NAT Gateway",
+            "VPC Endpoint (Gateway type)",
+            "VPN Connection",
+            "Internet Gateway"
+        ],
+        "answer": "VPC Endpoint (Gateway type)",
+        "hint": "S3와 DynamoDB는 게이트웨이 엔드포인트를 사용합니다.",
+        "explanation": "S3 및 DynamoDB용 VPC 게이트웨이 엔드포인트를 사용하면 트래픽이 인터넷을 거치지 않고 AWS 내부 네트워크를 통해 직접 서비스에 연결되므로 보안이 강화되고 NAT Gateway 데이터 처리 비용이 들지 않습니다."
+    },
+    {
+        "level": 2,
+        "problem": "회사는 온프레미스 애플리케이션을 AWS로 마이그레이션 중입니다. 애플리케이션은 공유 파일 스토리지에 의존하며 Windows Server 기반입니다. 클라우드에서 호환되는 완전 관리형 파일 시스템은 무엇입니까?",
+        "options": [
+            "Amazon EFS",
+            "Amazon S3",
+            "Amazon FSx for Windows File Server",
+            "Amazon EBS Multi-Attach"
+        ],
+        "answer": "Amazon FSx for Windows File Server",
+        "hint": "Windows SMB 프로토콜 지원 필요.",
+        "explanation": "Amazon FSx for Windows File Server는 Windows 파일 시스템(NTFS)과 완벽하게 호환되며 SMB 프로토콜을 지원하는 완전 관리형 서비스입니다."
+    },
+    {
+        "level": 2,
+        "problem": "글로벌 게임 서비스를 출시합니다. 사용자들은 UDP 프로토콜을 사용하여 게임 서버에 접속합니다. 전 세계 사용자들에게 지연 시간을 줄이고 안정적인 접속을 제공하기 위해 어떤 로드 밸런서와 가속화 서비스를 사용해야 합니까?",
+        "options": [
+            "ALB(Application Load Balancer) + CloudFront",
+            "NLB(Network Load Balancer) + AWS Global Accelerator",
+            "CLB(Classic Load Balancer) + Route 53",
+            "ALB + S3 Transfer Acceleration"
+        ],
+        "answer": "NLB(Network Load Balancer) + AWS Global Accelerator",
+        "hint": "TCP/UDP 트래픽 처리 및 글로벌 고정 IP.",
+        "explanation": "NLB는 TCP/UDP 트래픽 처리에 적합하며, AWS Global Accelerator는 전 세계 엣지 로케이션을 통해 트래픽을 AWS 글로벌 네트워크로 라우팅하여 지연 시간을 줄이고 고정 IP를 제공합니다."
+    },
+    {
+        "level": 2,
+        "problem": "재해 복구(DR) 전략을 수립 중입니다. RTO(복구 시간 목표)와 RPO(복구 시점 목표)가 매우 낮아야(즉, 거의 실시간 복구) 합니다. 비용이 많이 들더라도 가장 빠른 복구를 보장하는 전략은 무엇입니까?",
+        "options": [
+            "Backup and Restore",
+            "Pilot Light",
+            "Warm Standby",
+            "Multi-Site Active/Active"
+        ],
+        "answer": "Multi-Site Active/Active",
+        "hint": "두 리전에서 동시에 트래픽을 처리합니다.",
+        "explanation": "Multi-Site Active/Active 전략은 두 개 이상의 리전에서 동시에 서비스를 운영하여 트래픽을 분산 처리하므로, 한 리전에 장애가 발생해도 즉시 다른 리전에서 처리가 가능하여 RTO/RPO가 거의 0에 가깝습니다."
+    },
+    {
+        "level": 2,
+        "problem": "AWS Organizations를 사용하여 여러 계정을 관리하고 있습니다. 특정 개발팀 계정에서 Redshift 클러스터를 생성하지 못하도록 제한하고 싶습니다. 어떤 정책을 적용해야 합니까?",
+        "options": [
+            "IAM User Policy",
+            "IAM Role Policy",
+            "Service Control Policy (SCP)",
+            "S3 Bucket Policy"
+        ],
+        "answer": "Service Control Policy (SCP)",
+        "hint": "조직(Organization) 수준의 최상위 권한 제어.",
+        "explanation": "SCP는 AWS Organizations의 조직 단위(OU)나 계정에 적용되어 사용 가능한 최대 권한을 정의합니다. SCP에서 Redshift를 거부하면 해당 계정의 루트 사용자나 관리자도 Redshift를 사용할 수 없습니다."
+    },
+    {
+        "level": 2,
+        "problem": "웹 서버가 프라이빗 서브넷에 배치되어 있습니다. 애플리케이션 로그를 CloudWatch Logs로 전송하려고 하는데 실패하고 있습니다. NAT Gateway는 설정되어 있지 않습니다. 인터넷 연결 없이 로그를 전송하려면 무엇이 필요합니까?",
+        "options": [
+            "Internet Gateway 연결",
+            "CloudWatch Logs 에이전트 재설치",
+            "CloudWatch Logs용 VPC Interface Endpoint 생성",
+            "보안 그룹에서 80번 포트 개방"
+        ],
+        "answer": "CloudWatch Logs용 VPC Interface Endpoint 생성",
+        "hint": "프라이빗 서브넷에서 AWS 서비스로 비공개 연결.",
+        "explanation": "인터넷 게이트웨이나 NAT 게이트웨이가 없는 프라이빗 서브넷에서 CloudWatch Logs API에 접근하려면 VPC 인터페이스 엔드포인트(PrivateLink)를 생성해야 합니다."
+    },
+    {
+        "level": 2,
+        "problem": "회사는 매년 1회 대규모 세일 이벤트를 진행합니다. 이 기간 동안 트래픽이 10배 급증할 것으로 예상됩니다. RDS 데이터베이스의 용량 부족을 방지하고 이벤트를 원활하게 처리하기 위한 가장 적절한 사전 조치는 무엇입니까?",
+        "options": [
+            "RDS Auto Scaling 설정",
+            "이벤트 기간 동안만 더 큰 인스턴스 타입으로 스케일 업(예약된 유지 관리 기간 활용)",
+            "RDS 스토리지 오토 스케일링 활성화",
+            "DynamoDB로 마이그레이션"
+        ],
+        "answer": "이벤트 기간 동안만 더 큰 인스턴스 타입으로 스케일 업(예약된 유지 관리 기간 활용)",
+        "hint": "예측 가능한 트래픽 급증입니다.",
+        "explanation": "RDS는 컴퓨팅 용량에 대한 오토 스케일링(서버리스 제외)을 지원하지 않습니다. 예측 가능한 대규모 이벤트라면 미리 더 큰 인스턴스 타입으로 변경(Scale Up)해두는 것이 안정적입니다."
+    },
+    {
+        "level": 2,
+        "problem": "S3에 저장된 데이터 중 30일이 지난 데이터는 S3 Standard-IA로 이동하고, 365일이 지난 데이터는 Glacier Deep Archive로 이동하려고 합니다. 이를 자동화하는 기능은 무엇입니까?",
+        "options": [
+            "S3 Versioning",
+            "S3 Lifecycle Policy (수명 주기 정책)",
+            "S3 Replication",
+            "S3 Object Lock"
+        ],
+        "answer": "S3 Lifecycle Policy (수명 주기 정책)",
+        "hint": "시간 경과에 따른 스토리지 클래스 변경.",
+        "explanation": "S3 수명 주기 정책을 사용하면 객체 생성 후 경과된 기간에 따라 스토리지 클래스를 자동으로 전환하거나 객체를 삭제하도록 규칙을 정의할 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "전 세계에 분산된 사용자들이 기가바이트(GB) 단위의 대용량 비디오 파일을 S3 버킷으로 업로드해야 합니다. 업로드 속도가 너무 느리다는 불만이 접수되었습니다. 가장 빠르고 비용 효율적으로 업로드 속도를 개선하는 방법은 무엇입니까?",
+        "options": [
+            "AWS Global Accelerator 활성화",
+            "S3 Transfer Acceleration 활성화",
+            "S3 멀티파트 업로드(Multipart Upload) 사용",
+            "AWS Direct Connect 연결"
+        ],
+        "answer": "S3 Transfer Acceleration 활성화",
+        "hint": "먼 거리에 있는 S3 버킷으로의 '업로드' 속도 가속화.",
+        "explanation": "S3 Transfer Acceleration은 엣지 로케이션을 활용하여 클라이언트와 S3 버킷 간의 장거리 데이터 전송 속도를 높입니다. (멀티파트 업로드는 필수지만, '가속화' 기능은 Transfer Acceleration이 담당합니다.)"
+    },
+    {
+        "level": 2,
+        "problem": "Auto Scaling 그룹(ASG)에 의해 EC2 인스턴스가 종료될 때, 종료 전에 로그 파일을 S3로 백업하고 분석 데이터를 추출하는 작업을 수행해야 합니다. 인스턴스가 즉시 종료되지 않도록 하고 작업을 완료할 시간을 벌려면 무엇을 설정해야 합니까?",
+        "options": [
+            "ASG Cooldown Period(휴지 기간) 설정",
+            "ASG Lifecycle Hook(수명 주기 후크) 추가",
+            "Termination Policy(종료 정책) 변경",
+            "EC2 인스턴스 종료 방지(Termination Protection) 활성화"
+        ],
+        "answer": "ASG Lifecycle Hook(수명 주기 후크) 추가",
+        "hint": "인스턴스 상태 변경(시작/종료) 시 일시 중지하여 사용자 지정 작업을 수행.",
+        "explanation": "수명 주기 후크(Lifecycle Hook)를 사용하면 인스턴스가 시작되거나 종료될 때 일시 중지 상태로 전환하여, 스크립트 실행이나 로그 백업 같은 사용자 지정 작업을 수행할 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "글로벌 금융 회사가 재해 복구(DR) 계획을 수립 중입니다. 기본 리전에 장애가 발생할 경우 1초 미만의 RPO(복구 시점 목표)와 1분 미만의 RTO(복구 시간 목표)로 다른 리전으로 장애 조치(Failover)되어야 합니다. 가장 적합한 데이터베이스 구성은 무엇입니까?",
+        "options": [
+            "Amazon RDS for MySQL with Cross-Region Read Replica",
+            "Amazon Aurora Global Database",
+            "Amazon DynamoDB Global Tables",
+            "Amazon Redshift Cross-Region Snapshot"
+        ],
+        "answer": "Amazon Aurora Global Database",
+        "hint": "관계형 DB이면서 리전 간 복제 지연이 1초 미만.",
+        "explanation": "Amazon Aurora Global Database는 리전 간 물리적 복제를 사용하여 일반적으로 1초 미만의 복제 지연 시간을 제공하며, 리전 장애 시 1분 이내에 다른 리전으로 승격(Failover)이 가능합니다."
+    },
+    {
+        "level": 2,
+        "problem": "IAM 정책을 작성하여 각 사용자가 S3 버킷 내의 자신의 홈 디렉터리(예: /home/user-name/)에만 액세스할 수 있도록 허용하려고 합니다. 사용자마다 별도의 정책을 만들지 않고 하나의 정책으로 이를 구현하려면 무엇을 사용해야 합니까?",
+        "options": [
+            "IAM 조건 키(Condition Key)와 정책 변수(${aws:username})",
+            "S3 버킷 정책의 NotPrincipal 요소",
+            "IAM 그룹 정책",
+            "ABAC(Attribute-Based Access Control)"
+        ],
+        "answer": "IAM 조건 키(Condition Key)와 정책 변수(${aws:username})",
+        "hint": "정책 내에서 사용자의 이름을 동적으로 참조.",
+        "explanation": "IAM 정책 변수(예: ${aws:username})를 사용하면, 요청하는 사용자의 이름과 일치하는 S3 접두사(폴더)에만 권한을 부여하는 동적 정책을 단 하나만 작성하여 모든 사용자에게 적용할 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "온프레미스 애플리케이션 서버가 저지연(Low Latency)으로 데이터에 액세스해야 하면서, 전체 데이터셋은 AWS S3에 내구성 있게 백업되어야 합니다. 로컬 스토리지 용량은 제한적입니다. 어떤 AWS Storage Gateway 유형을 사용해야 합니까?",
+        "options": [
+            "File Gateway",
+            "Volume Gateway - Stored Volumes",
+            "Volume Gateway - Cached Volumes",
+            "Tape Gateway"
+        ],
+        "answer": "Volume Gateway - Cached Volumes",
+        "hint": "자주 쓰는 데이터만 로컬에 캐시(Cache)하고 나머지는 S3에 보관.",
+        "explanation": "캐싱된 볼륨(Cached Volumes)은 자주 액세스하는 데이터만 로컬 스토리지에 보관하고, 전체 데이터는 S3에 저장하므로 로컬 스토리지 비용을 절감하면서 저지연 액세스를 제공합니다."
+    },
+    {
+        "level": 2,
+        "problem": "과학 연구소에서 고성능 컴퓨팅(HPC) 워크로드를 실행 중입니다. 수백 개의 EC2 인스턴스가 공유 파일 시스템에 동시에 액세스하여 방대한 데이터를 처리해야 합니다. 수밀리초 미만의 지연 시간과 높은 처리량이 필수적입니다. 가장 적합한 파일 시스템은 무엇입니까?",
+        "options": [
+            "Amazon EFS",
+            "Amazon FSx for Lustre",
+            "Amazon FSx for Windows File Server",
+            "Amazon S3"
+        ],
+        "answer": "Amazon FSx for Lustre",
+        "hint": "HPC 및 리눅스 기반 고성능 파일 처리에 최적화.",
+        "explanation": "Amazon FSx for Lustre는 고성능 컴퓨팅(HPC), 기계 학습, 미디어 처리 워크로드를 위한 완전 관리형 파일 시스템으로, S3와 연동되며 초고속 성능을 제공합니다."
+    },
+    {
+        "level": 2,
+        "problem": "은행 거래 시스템을 설계 중입니다. 거래 데이터는 반드시 입력된 순서대로 처리되어야 하며(Order Preservation), 중복 처리가 발생해서는 안 됩니다. 메시지 처리를 위해 어떤 서비스를 사용해야 합니까?",
+        "options": [
+            "Amazon SQS Standard Queue",
+            "Amazon SQS FIFO Queue",
+            "Amazon SNS",
+            "Amazon EventBridge"
+        ],
+        "answer": "Amazon SQS FIFO Queue",
+        "hint": "선입선출(First-In-First-Out) 및 딱 한 번 처리 보장.",
+        "explanation": "SQS FIFO(First-In-First-Out) 대기열은 메시지의 순서를 엄격하게 보존하고, 메시지가 정확히 한 번만 처리(Exactly-once processing)되도록 보장합니다."
+    },
+    {
+        "level": 2,
+        "problem": "VPC 내의 프라이빗 서브넷에서 실행되는 Lambda 함수가 인터넷에 있는 타사 API를 호출해야 합니다. Lambda 함수는 동일한 VPC 내의 RDS 데이터베이스에도 접근해야 합니다. 올바른 네트워크 구성은 무엇입니까?",
+        "options": [
+            "Lambda 함수에 퍼블릭 IP 할당",
+            "프라이빗 서브넷에 NAT Gateway를 구성하고 라우팅 테이블 업데이트",
+            "VPC 엔드포인트 사용",
+            "Lambda 함수를 퍼블릭 서브넷으로 이동"
+        ],
+        "answer": "프라이빗 서브넷에 NAT Gateway를 구성하고 라우팅 테이블 업데이트",
+        "hint": "VPC 내 리소스(RDS)와 인터넷(API) 모두 접근 필요.",
+        "explanation": "VPC에 연결된 Lambda는 프라이빗 IP만 갖습니다. RDS(내부) 접근은 문제없지만, 인터넷(외부 API)으로 나가려면 해당 프라이빗 서브넷의 라우팅 테이블이 퍼블릭 서브넷에 있는 NAT Gateway를 가리켜야 합니다."
+    },
+    {
+        "level": 2,
+        "problem": "컨테이너화된 마이크로서비스 애플리케이션을 배포하려고 합니다. 기본 인프라(EC2)를 관리하고 싶지 않으며, 각 파드(Pod)별로 리소스를 할당하고 비용을 지불하고 싶습니다. 가장 적합한 컴퓨팅 옵션은 무엇입니까?",
+        "options": [
+            "Amazon EKS on EC2",
+            "Amazon ECS on EC2",
+            "Amazon EKS on AWS Fargate",
+            "Amazon EC2 Auto Scaling"
+        ],
+        "answer": "Amazon EKS on AWS Fargate",
+        "hint": "쿠버네티스(Pod) + 서버리스(Fargate).",
+        "explanation": "Amazon EKS를 Fargate에서 실행하면 서버를 관리할 필요 없이 쿠버네티스 파드를 실행할 수 있으며, 파드 단위로 리소스를 격리하고 비용을 지불합니다."
+    },
+    {
+        "level": 2,
+        "problem": "RESTful API를 구축하여 모바일 앱 백엔드를 지원해야 합니다. 트래픽은 예측 불가능하며, 0에서 수만 건까지 급증할 수 있습니다. 유휴 상태일 때는 비용이 발생하지 않는 서버리스 아키텍처를 원합니다. 어떤 조합이 최적입니까?",
+        "options": [
+            "ALB + EC2 Auto Scaling",
+            "Amazon API Gateway + AWS Lambda",
+            "Amazon API Gateway + Amazon ECS",
+            "NLB + AWS Fargate"
+        ],
+        "answer": "Amazon API Gateway + AWS Lambda",
+        "hint": "완전한 서버리스 API 백엔드.",
+        "explanation": "API Gateway와 Lambda의 조합은 서버 관리 없이 무제한에 가까운 확장이 가능하며, 요청이 없을 때는 비용이 전혀 발생하지 않는 이상적인 서버리스 아키텍처입니다."
+    },
+    {
+        "level": 2,
+        "problem": "사용자가 Google, Facebook, Amazon 계정 등의 소셜 자격 증명을 사용하여 모바일 앱에 로그인할 수 있도록 하고 싶습니다. 로그인 후에는 AWS 리소스에 직접 접근할 수 있는 임시 권한을 부여해야 합니다. 어떤 서비스를 사용해야 합니까?",
+        "options": [
+            "AWS IAM Identity Center",
+            "Amazon Cognito User Pool",
+            "Amazon Cognito Identity Pool",
+            "AWS Directory Service"
+        ],
+        "answer": "Amazon Cognito Identity Pool",
+        "hint": "로그인(인증)은 User Pool, 권한 부여(인가)는 Identity Pool.",
+        "explanation": "Cognito Identity Pool(자격 증명 풀)은 소셜 로그인 등을 통해 인증된 사용자에게 임시 AWS 자격 증명(IAM 역할)을 부여하여 AWS 리소스에 직접 액세스할 수 있게 해줍니다."
+    },
+    {
+        "level": 2,
+        "problem": "S3에 저장된 대량의 CSV 데이터를 분석을 위해 정리하고, 변환하고, 형식을 변경(ETL)해야 합니다. 서버를 관리하지 않고 이 작업을 수행하려면 어떤 서비스를 사용해야 합니까?",
+        "options": [
+            "Amazon EMR",
+            "AWS Glue",
+            "Amazon Redshift",
+            "AWS Data Pipeline"
+        ],
+        "answer": "AWS Glue",
+        "hint": "서버리스 ETL(추출, 변환, 적재) 서비스.",
+        "explanation": "AWS Glue는 완전 관리형 서버리스 ETL 서비스로, 데이터를 분류, 정리, 보강하고 다양한 데이터 저장소 간에 이동할 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "S3 버킷에 있는 로그 데이터를 별도의 데이터베이스로 로드하지 않고, 표준 SQL 쿼리를 사용하여 즉시 분석하고 싶습니다. 가장 간편한 방법은 무엇입니까?",
+        "options": [
+            "Amazon Athena",
+            "Amazon Redshift Spectrum",
+            "Amazon QuickSight",
+            "Amazon OpenSearch Service"
+        ],
+        "answer": "Amazon Athena",
+        "hint": "S3 데이터에 직접 SQL 쿼리 실행.",
+        "explanation": "Amazon Athena는 S3에 있는 데이터를 별도의 서버나 데이터베이스 로딩 없이 표준 SQL을 사용하여 간편하게 분석할 수 있는 대화형 쿼리 서비스입니다."
+    },
+    {
+        "level": 2,
+        "problem": "웹 애플리케이션이 특정 국가의 IP 주소에서 들어오는 공격을 받고 있습니다. 해당 국가로부터의 접속을 원천 차단(Geo-blocking)하려면 어떤 서비스를 사용해야 합니까?",
+        "options": [
+            "Security Group",
+            "Network ACL",
+            "AWS WAF",
+            "AWS Shield Standard"
+        ],
+        "answer": "AWS WAF",
+        "hint": "웹 방화벽의 지리적 일치 조건 사용.",
+        "explanation": "AWS WAF(웹 애플리케이션 방화벽)의 지리적 일치(Geo Match) 조건을 사용하면 특정 국가에서 발생하는 웹 요청을 손쉽게 차단하거나 허용할 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "수십 개의 VPC와 온프레미스 네트워크를 서로 연결해야 합니다. VPC Peering을 사용하니 연결이 너무 복잡해졌습니다(Full Mesh 문제). 네트워크 구조를 단순화하고 중앙에서 관리하려면 무엇을 도입해야 합니까?",
+        "options": [
+            "AWS Transit Gateway",
+            "AWS Direct Connect Gateway",
+            "AWS VPN CloudHub",
+            "VPC Endpoint Service"
+        ],
+        "answer": "AWS Transit Gateway",
+        "hint": "클라우드 라우터, 허브 앤 스포크(Hub-and-Spoke) 토폴로지.",
+        "explanation": "AWS Transit Gateway는 중앙 허브 역할을 하여 여러 VPC와 온프레미스 네트워크를 단일 지점에서 연결함으로써 네트워크 복잡성을 획기적으로 줄여줍니다."
+    },
+    {
+        "level": 2,
+        "problem": "현재 암호화되지 않은 EBS 볼륨을 사용 중입니다. 규정 준수를 위해 이 볼륨을 암호화된 볼륨으로 변경해야 합니다. 가장 올바른 절차는 무엇입니까?",
+        "options": [
+            "볼륨 속성에서 '암호화' 체크박스 활성화",
+            "AWS KMS 키를 볼륨에 직접 연결",
+            "볼륨의 스냅샷 생성 -> 스냅샷 복사 시 암호화 활성화 -> 새 볼륨 생성",
+            "인스턴스를 중지하고 암호화 명령 실행"
+        ],
+        "answer": "볼륨의 스냅샷 생성 -> 스냅샷 복사 시 암호화 활성화 -> 새 볼륨 생성",
+        "hint": "기존 볼륨을 즉시 암호화할 순 없습니다. 복사 과정을 거쳐야 합니다.",
+        "explanation": "기존 EBS 볼륨을 직접 암호화할 수 없습니다. 스냅샷을 찍고, 그 스냅샷을 '복사(Copy)'할 때 암호화 옵션을 선택한 후, 암호화된 스냅샷으로 새 볼륨을 생성해야 합니다."
+    },
+    {
+        "level": 2,
+        "problem": "글로벌 서비스에서 사용자의 위치에 따라 가장 가까운 리전의 서버로 트래픽을 라우팅하여 지연 시간을 최소화하고 싶습니다. Route 53의 어떤 라우팅 정책을 사용해야 합니까?",
+        "options": [
+            "Geolocation Routing (지리적 위치 라우팅)",
+            "Geoproximity Routing (지리적 근접 라우팅)",
+            "Latency Routing (지연 시간 라우팅)",
+            "Weighted Routing (가중치 기반 라우팅)"
+        ],
+        "answer": "Latency Routing (지연 시간 라우팅)",
+        "hint": "물리적 거리가 아닌 '네트워크 속도(지연 시간)'가 기준입니다.",
+        "explanation": "가장 빠른 응답 속도를 제공하는 리전으로 연결하려면 '지연 시간 라우팅(Latency Routing)'을 사용해야 합니다. (지리적 위치 라우팅은 특정 국가/지역 사용자를 특정 리전으로 보낼 때 사용)"
+    },
+    {
+        "level": 2,
+        "problem": "마이크로서비스 아키텍처에서 여러 AWS 서비스(Lambda, ECS, SNS 등)를 조정하여 워크플로를 시각적으로 구성하고, 오류 처리 및 재시도 로직을 구현해야 합니다. 어떤 서비스가 적합합니까?",
+        "options": [
+            "AWS Step Functions",
+            "AWS Lambda",
+            "Amazon SWF (Simple Workflow Service)",
+            "AWS Batch"
+        ],
+        "answer": "AWS Step Functions",
+        "hint": "상태 머신(State Machine) 기반의 서버리스 오케스트레이션.",
+        "explanation": "AWS Step Functions는 시각적 워크플로를 사용하여 분산 애플리케이션 및 마이크로서비스의 구성 요소를 조정(Orchestration)하는 데 최적화된 서비스입니다."
+    },
+    {
+        "level": 2,
+        "problem": "데이터베이스 비밀번호를 90일마다 자동으로 변경(Rotation)하고 싶습니다. 애플리케이션 코드를 수정하지 않고 이를 구현하기 위해 가장 적합한 서비스는 무엇입니까?",
+        "options": [
+            "AWS Systems Manager Parameter Store",
+            "AWS Secrets Manager",
+            "AWS KMS",
+            "AWS IAM"
+        ],
+        "answer": "AWS Secrets Manager",
+        "hint": "기본적으로 Lambda를 이용한 자동 교체(Rotation) 기능을 제공합니다.",
+        "explanation": "AWS Secrets Manager는 RDS 등의 데이터베이스 자격 증명을 안전하게 저장하고, 수명 주기에 따라 자동으로 교체(Rotation)하는 기능을 내장하고 있습니다. (Parameter Store는 자동 교체 기능이 내장되어 있지 않음)"
+    },
+    {
+        "level": 2,
+        "problem": "온프레미스 스토리지 시스템에서 AWS S3로 수백 테라바이트(TB)의 데이터를 네트워크를 통해 지속적으로 전송해야 합니다. 전송 속도를 최적화하고 전송 일정을 예약하고 싶습니다. 어떤 서비스를 사용해야 합니까?",
+        "options": [
+            "AWS Snowball Edge",
+            "AWS DataSync",
+            "AWS Storage Gateway",
+            "S3 Transfer Acceleration"
+        ],
+        "answer": "AWS DataSync",
+        "hint": "데이터 동기화(Sync) 자동화 서비스.",
+        "explanation": "AWS DataSync는 온프레미스와 AWS 스토리지 서비스 간의 데이터 이동을 자동화하고 가속화하는 서비스로, 일회성 마이그레이션이나 지속적인 동기화에 적합합니다. (Snowball은 오프라인 물리 전송)"
+    },
+    {
+        "level": 2,
+        "problem": "AWS Systems Manager(SSM)를 사용하여 프라이빗 서브넷에 있는 EC2 인스턴스에 안전하게 접속하고 싶습니다. 22번 포트(SSH)를 열거나 Bastion Host를 사용하고 싶지 않습니다. 무엇을 사용해야 합니까?",
+        "options": [
+            "SSM Run Command",
+            "SSM Session Manager",
+            "SSM Patch Manager",
+            "EC2 Instance Connect"
+        ],
+        "answer": "SSM Session Manager",
+        "hint": "포트 개방 없이 브라우저나 CLI로 쉘 접속.",
+        "explanation": "SSM Session Manager를 사용하면 인바운드 포트를 열거나 배스천 호스트를 관리할 필요 없이, IAM 권한을 통해 안전하게 인스턴스에 쉘 액세스를 할 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "CloudFormation 스택을 생성한 후, 누군가 수동으로 EC2 인스턴스의 보안 그룹 설정을 변경했습니다. 인프라가 템플릿 정의와 달라진 것(Drift)을 감지하려면 어떻게 해야 합니까?",
+        "options": [
+            "CloudTrail 로그 분석",
+            "CloudFormation Drift Detection(드리프트 감지) 기능 사용",
+            "AWS Config 규칙 위반 확인",
+            "AWS Inspector 실행"
+        ],
+        "answer": "CloudFormation Drift Detection(드리프트 감지) 기능 사용",
+        "hint": "스택의 실제 구성과 템플릿의 차이를 확인.",
+        "explanation": "CloudFormation의 드리프트 감지 기능을 사용하면 스택의 현재 상태가 템플릿 정의와 얼마나 달라졌는지(구성이 변경되었는지)를 정확히 식별할 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "회사의 규정상 모든 EC2 인스턴스는 'Project'라는 태그가 필수적으로 있어야 합니다. 태그가 없는 인스턴스가 생성되는 것을 사전에 방지하거나, 생성 후 발견 시 알림을 받고 싶습니다. 가장 포괄적인 거버넌스 도구는 무엇입니까?",
+        "options": [
+            "AWS Config",
+            "AWS Organizations SCP (Service Control Policy)",
+            "Tag Editor",
+            "IAM Policy"
+        ],
+        "answer": "AWS Config",
+        "hint": "리소스 구성을 지속적으로 평가하고 규정 준수 여부를 확인.",
+        "explanation": "AWS Config는 리소스 구성을 모니터링하고 평가합니다. 'required-tags' 관리형 규칙을 사용하면 태그가 없는 리소스를 비준수(Non-compliant)로 표시하고 알림을 보내거나 자동 수정 작업을 트리거할 수 있습니다."
+    },
+    {
+        "level": 2,
+        "problem": "단일 EC2 인스턴스에 연결하여 최대 64,000 IOPS와 1,000MB/s의 처리량을 제공해야 하는 고성능 관계형 데이터베이스 워크로드가 있습니다. 어떤 EBS 볼륨 타입을 선택해야 합니까?",
+        "options": [
+            "General Purpose SSD (gp3)",
+            "Provisioned IOPS SSD (io2)",
+            "Throughput Optimized HDD (st1)",
+            "Cold HDD (sc1)"
+        ],
+        "answer": "Provisioned IOPS SSD (io2)",
+        "hint": "미션 크리티컬한 고성능 DB 워크로드.",
+        "explanation": "Provisioned IOPS SSD(io1, io2)는 지연 시간에 민감하고 높은 IOPS가 필요한 미션 크리티컬 데이터베이스 워크로드에 적합합니다. (gp3는 범용이며 최대 성능에 제한이 있을 수 있음)"
+    },
+    {
+        "level": 2,
+        "problem": "웹 애플리케이션의 세션 정보를 저장하기 위해 In-memory 데이터베이스를 도입하려 합니다. 데이터의 내구성보다는 초고속 응답 속도가 중요하며, 복잡한 데이터 구조(Sorted Sets, Lists 등)를 지원해야 합니다. 무엇을 선택해야 합니까?",
+        "options": [
+            "Amazon ElastiCache for Memcached",
+            "Amazon ElastiCache for Redis",
+            "Amazon DynamoDB",
+            "Amazon RDS"
+        ],
+        "answer": "Amazon ElastiCache for Redis",
+        "hint": "단순 키-값뿐만 아니라 다양한 자료구조 지원.",
+        "explanation": "ElastiCache for Redis는 1밀리초 미만의 지연 시간을 제공하며, Memcached와 달리 문자열, 해시, 리스트, 셋 등 복잡한 데이터 구조를 지원하고 지속성(Persistence) 옵션도 제공합니다."
+    }
+]
