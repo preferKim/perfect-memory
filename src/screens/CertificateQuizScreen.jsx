@@ -62,7 +62,41 @@ const CertificateQuizScreen = () => {
         try {
             let finalQuestions = [];
 
-            if (subjectId === 'all') {
+            // AWS Subjects (Local JSON)
+            if (typeof subjectId === 'string' && subjectId.startsWith('AWS_')) {
+                setTimeLeft(60 * 60); // 1 hour for AWS exams
+
+                try {
+                    const response = await fetch(`/words/certificate_${subjectId}.json`);
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch ${subjectId}`);
+                    }
+                    const data = await response.json();
+
+                    // Shuffle and take 20
+                    const shuffled = [...(data || [])].sort(() => 0.5 - Math.random());
+                    finalQuestions = shuffled.slice(0, 20);
+
+                    // Transform for current component state
+                    // Local JSON structure is flat, unlike Supabase 'content' field
+                    setQuestions(finalQuestions.map(q => ({
+                        ...q,
+                        id: q.id || Math.random().toString(36).substr(2, 9) // Ensure ID exists
+                    })));
+
+                    // Start Session (Virtual)
+                    setIsTimerRunning(true);
+                    setIsLoading(false);
+                    return; // Exit early for AWS
+
+                } catch (e) {
+                    console.error("Failed to load AWS questions:", e);
+                    // Fallback or error handling
+                }
+            }
+
+            // Original Logic for Info Proc Engineer
+            else if (subjectId === 'all') {
                 setTimeLeft(150 * 60); // 2.5 hours for full exam
 
                 // Select 20 random questions from each level (1-5)
@@ -112,7 +146,7 @@ const CertificateQuizScreen = () => {
                 console.warn('No questions found for subject:', subjectId);
             }
 
-            // Transform questions to match expected format
+            // Transform questions to match expected format (Supabase)
             const transformedQuestions = finalQuestions.map(q => ({
                 id: q.id, // Supabase ID for recordAnswer
                 level: q.level,

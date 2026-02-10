@@ -26,6 +26,7 @@ import DashboardScreen from './screens/DashboardScreen';
 
 import WrongAnswerScreen from './screens/WrongAnswerScreen';
 import CertificateSelectionScreen from './screens/CertificateSelectionScreen';
+import AwsSelectionScreen from './screens/AwsSelectionScreen';
 import CertificateQuizScreen from './screens/CertificateQuizScreen';
 
 // Playground components
@@ -62,6 +63,7 @@ function App() {
 
           {/* Certificate */}
           <Route path="/certificate" element={<CertificateSelectionScreen />} />
+          <Route path="/certificate/aws" element={<AwsSelectionScreen />} />
           <Route path="/certificate/quiz" element={<CertificateQuizScreen />} />
 
           {/* Math */}
