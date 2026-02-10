@@ -1,5 +1,5 @@
 
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '../supabaseClient';
 import { useAuth } from '../hooks/useAuth';
 
@@ -7,139 +7,272 @@ const PlayerContext = createContext();
 
 export const usePlayer = () => useContext(PlayerContext);
 
-// Function to generate LEVEL_THRESHOLDS based on the 2^N progression
-const generateLevelThresholds = (maxLevels = 15) => {
-  const thresholds = [];
-  let cumulativeXp = 0;
-  for (let level = 1; level <= maxLevels; level++) {
-    const xpForThisLevel = Math.pow(2, level); // XP needed to complete this level (e.g., Level 1 needs 2^1=2 XP)
-    cumulativeXp += xpForThisLevel;
-    thresholds.push(cumulativeXp);
-  }
-  return [...thresholds, Infinity]; // Add Infinity for the max level
+// 과목 목록 (통합 레벨 대상)
+const CORE_SUBJECTS = ['english', 'math', 'social', 'science', 'korean'];
+// 기타 과목 (통합 레벨에서 제외)
+const OTHER_SUBJECTS = ['certificate'];
+const ALL_SUBJECTS = [...CORE_SUBJECTS, ...OTHER_SUBJECTS];
+
+// 레벨업에 필요한 누적 XP 계산: N × (N-1) × 5
+// Level 1 -> 2: 10 XP, Level 2 -> 3: 30 XP 누적, etc.
+const calculateCumulativeXpForLevel = (level) => {
+  return level * (level - 1) * 5;
 };
 
-const LEVEL_THRESHOLDS = generateLevelThresholds();
+// XP로부터 레벨 계산
+const calculateLevelFromXp = (xp) => {
+  // 역산: level = (1 + sqrt(1 + xp/5)) / 2 (근사)
+  // 간단히 순차 탐색
+  let level = 1;
+  while (calculateCumulativeXpForLevel(level + 1) <= xp && level < 20) {
+    level++;
+  }
+  return level;
+};
+
+// 티어 계산 (핵심 과목의 최소 레벨 기반)
+const TIER_CONFIG = {
+  diamond: { minLevel: 20, label: '다이아몬드', emoji: '💎', color: 'cyan' },
+  platinum: { minLevel: 15, label: '플래티넘', emoji: '🏆', color: 'purple' },
+  gold: { minLevel: 10, label: '골드', emoji: '🥇', color: 'yellow' },
+  silver: { minLevel: 5, label: '실버', emoji: '🥈', color: 'gray' },
+  bronze: { minLevel: 1, label: '브론즈', emoji: '🥉', color: 'orange' },
+};
+
+const calculateTier = (subjectStats) => {
+  const coreLevels = CORE_SUBJECTS.map(s => subjectStats[s]?.level || 1);
+  const minLevel = Math.min(...coreLevels);
+
+  if (minLevel >= 20) return 'diamond';
+  if (minLevel >= 15) return 'platinum';
+  if (minLevel >= 10) return 'gold';
+  if (minLevel >= 5) return 'silver';
+  return 'bronze';
+};
+
+// 연속 학습 보너스 계산
+const STREAK_BONUSES = [
+  { days: 30, bonus: 0.5, label: '+50%' },
+  { days: 14, bonus: 0.3, label: '+30%' },
+  { days: 7, bonus: 0.2, label: '+20%' },
+  { days: 3, bonus: 0.1, label: '+10%' },
+];
+
+const getStreakBonus = (streakCount) => {
+  for (const tier of STREAK_BONUSES) {
+    if (streakCount >= tier.days) {
+      return tier;
+    }
+  }
+  return { days: 0, bonus: 0, label: '' };
+};
 
 export const PlayerProvider = ({ children }) => {
   const { user: currentUser } = useAuth();
-  const [level, setLevel] = useState(1);
-  const [xp, setXp] = useState(0);
+
+  // 과목별 통계
+  const [subjectStats, setSubjectStats] = useState(() => {
+    const initial = {};
+    ALL_SUBJECTS.forEach(s => {
+      initial[s] = { xp: 0, level: 1 };
+    });
+    return initial;
+  });
+
+  // 연속 학습
+  const [streakCount, setStreakCount] = useState(0);
+  const [lastStudyDate, setLastStudyDate] = useState(null);
+  const [longestStreak, setLongestStreak] = useState(0);
+
+  // 레벨업 알림
   const [justLeveledUp, setJustLeveledUp] = useState(false);
+  const [levelUpSubject, setLevelUpSubject] = useState(null);
+
+  // 약점 단어 (기존 유지)
   const [weakWords, setWeakWords] = useState(() => {
     const saved = localStorage.getItem('weakWords');
     return saved ? JSON.parse(saved) : {};
   });
 
+  // 티어 계산 (메모이제이션)
+  const tier = useMemo(() => calculateTier(subjectStats), [subjectStats]);
+  const tierConfig = TIER_CONFIG[tier];
+
+  // 다음 티어까지 필요한 레벨
+  const nextTierInfo = useMemo(() => {
+    const coreLevels = CORE_SUBJECTS.map(s => subjectStats[s]?.level || 1);
+    const minLevel = Math.min(...coreLevels);
+    const weakestSubject = CORE_SUBJECTS.find(s => subjectStats[s]?.level === minLevel);
+
+    const tierOrder = ['bronze', 'silver', 'gold', 'platinum', 'diamond'];
+    const currentTierIdx = tierOrder.indexOf(tier);
+    const nextTier = tierOrder[currentTierIdx + 1];
+
+    if (!nextTier) return null;
+
+    const nextTierMinLevel = TIER_CONFIG[nextTier].minLevel;
+    const levelsNeeded = nextTierMinLevel - minLevel;
+
+    return {
+      nextTier,
+      nextTierConfig: TIER_CONFIG[nextTier],
+      weakestSubject,
+      levelsNeeded,
+    };
+  }, [subjectStats, tier]);
+
+  // 연속 학습 보너스
+  const streakBonus = useMemo(() => getStreakBonus(streakCount), [streakCount]);
+
+  // 데이터 로드
   useEffect(() => {
-    const fetchAndSetPlayerStats = async () => {
-      if (!currentUser) { // Change to !currentUser
-        // Clear local state if no user
-        setXp(0);
-        setLevel(1);
+    const fetchPlayerStats = async () => {
+      if (!currentUser) {
+        // Reset to defaults
+        const initial = {};
+        ALL_SUBJECTS.forEach(s => {
+          initial[s] = { xp: 0, level: 1 };
+        });
+        setSubjectStats(initial);
+        setStreakCount(0);
+        setLastStudyDate(null);
         return;
       }
 
-      // First, try to fetch from Supabase
       const { data, error } = await supabase
         .from('profiles')
-        .select('xp, level')
-        .eq('user_id', currentUser.id) // Change to currentUser.id
+        .select('*')
+        .eq('user_id', currentUser.id)
         .single();
 
-      if (error && error.code !== 'PGRST116') { // PGRST116 means no rows found
-        console.error('Error fetching player stats from Supabase:', error);
-        // If Supabase fetch fails, reset to defaults
-        setXp(0);
-        setLevel(1);
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error fetching player stats:', error);
         return;
       }
 
       if (data) {
-        // If data from Supabase, use it
-        setXp(data.xp);
-        setLevel(data.level);
-      } else {
-        // If no data (new user), set initial values and save to Supabase
-        const initialXp = 0;
-        const initialLevel = 1;
-        setXp(initialXp);
-        setLevel(initialLevel);
-
-        const { error: insertError } = await supabase
-          .from('profiles')
-          .update({ xp: initialXp, level: initialLevel }) // Use update to insert if no profile exists
-          .eq('user_id', currentUser.id) // Change to currentUser.id
-          .single();
-
-        if (insertError) {
-          console.error('Error inserting initial player stats:', insertError);
-        }
+        const stats = {};
+        ALL_SUBJECTS.forEach(s => {
+          const xp = data[`${s}_xp`] || 0;
+          const level = data[`${s}_level`] || 1;
+          stats[s] = { xp, level };
+        });
+        setSubjectStats(stats);
+        setStreakCount(data.streak_count || 0);
+        setLastStudyDate(data.last_study_date);
+        setLongestStreak(data.longest_streak || 0);
       }
     };
 
-    fetchAndSetPlayerStats();
-  }, [currentUser]); // Change dependency to currentUser
+    fetchPlayerStats();
+  }, [currentUser]);
 
-  const addXp = async (amount) => {
-    setJustLeveledUp(false);
-    let newXp = xp + amount;
-    let newLevel = level;
+  // 연속 학습 체크 및 업데이트
+  const checkAndUpdateStreak = useCallback(async () => {
+    const today = new Date().toISOString().split('T')[0];
 
-    // Check for level up
-    // LEVEL_THRESHOLDS[newLevel - 1] is the XP needed to complete the current newLevel
-    while (newLevel <= LEVEL_THRESHOLDS.length && newXp >= LEVEL_THRESHOLDS[newLevel - 1]) {
-      if (LEVEL_THRESHOLDS[newLevel - 1] === Infinity) { // Max level reached
-        break;
-      }
-      newLevel++;
-      setJustLeveledUp(true);
+    if (lastStudyDate === today) {
+      // 오늘 이미 학습함
+      return;
     }
 
-    setXp(newXp);
-    setLevel(newLevel);
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+    let newStreak = 1;
+    if (lastStudyDate === yesterdayStr) {
+      // 어제 학습 -> 연속 유지
+      newStreak = streakCount + 1;
+    }
+
+    const newLongest = Math.max(longestStreak, newStreak);
+
+    setStreakCount(newStreak);
+    setLastStudyDate(today);
+    setLongestStreak(newLongest);
 
     if (currentUser) {
-      const { error } = await supabase
+      await supabase
         .from('profiles')
-        .update({ xp: newXp, level: newLevel })
+        .update({
+          streak_count: newStreak,
+          last_study_date: today,
+          longest_streak: newLongest,
+        })
         .eq('user_id', currentUser.id);
-      if (error) {
-        console.error('Error updating player stats in Supabase:', error);
-      }
     }
-  };
+  }, [currentUser, lastStudyDate, streakCount, longestStreak]);
 
-  const resetLevelUp = () => {
+  // XP 추가 (과목별)
+  const addXp = useCallback(async (subject, amount = 1) => {
+    if (!ALL_SUBJECTS.includes(subject)) {
+      console.warn(`Unknown subject: ${subject}`);
+      return;
+    }
+
+    // 연속 학습 체크
+    await checkAndUpdateStreak();
+
+    // 보너스 적용
+    const bonusMultiplier = 1 + streakBonus.bonus;
+    const finalAmount = Math.floor(amount * bonusMultiplier);
+
     setJustLeveledUp(false);
-  }
+    setLevelUpSubject(null);
 
-  const deductXp = async (amount) => {
-    setXp(prevXp => {
-      const newXp = Math.max(0, prevXp - amount);
-      // No level-down logic for now
-      return newXp;
+    setSubjectStats(prev => {
+      const currentStats = prev[subject];
+      const newXp = currentStats.xp + finalAmount;
+      const newLevel = calculateLevelFromXp(newXp);
+
+      if (newLevel > currentStats.level) {
+        setJustLeveledUp(true);
+        setLevelUpSubject(subject);
+      }
+
+      return {
+        ...prev,
+        [subject]: { xp: newXp, level: newLevel },
+      };
     });
 
+    // DB 업데이트
     if (currentUser) {
-      const { error } = await supabase
-        .from('profiles')
-        .update({ xp: xp - amount }) // Use current `xp` for Supabase update, as `setXp` is async
-        .eq('user_id', currentUser.id);
-      if (error) {
-        console.error('Error updating player XP in Supabase:', error);
-      }
-    }
-  };
+      const currentStats = subjectStats[subject];
+      const newXp = currentStats.xp + finalAmount;
+      const newLevel = calculateLevelFromXp(newXp);
+      const newTier = calculateTier({
+        ...subjectStats,
+        [subject]: { xp: newXp, level: newLevel },
+      });
 
-  const addWeakWord = (word) => {
+      await supabase
+        .from('profiles')
+        .update({
+          [`${subject}_xp`]: newXp,
+          [`${subject}_level`]: newLevel,
+          tier: newTier,
+        })
+        .eq('user_id', currentUser.id);
+    }
+  }, [currentUser, subjectStats, streakBonus, checkAndUpdateStreak]);
+
+  const resetLevelUp = useCallback(() => {
+    setJustLeveledUp(false);
+    setLevelUpSubject(null);
+  }, []);
+
+  // 약점 단어 관리 (기존 로직 유지)
+  const addWeakWord = useCallback((word) => {
     setWeakWords(prev => {
+      const key = word.english || word.term || word.question || JSON.stringify(word).slice(0, 50);
       const updated = { ...prev };
-      if (updated[word.english]) {
-        updated[word.english].count++;
-        updated[word.english].lastMissed = new Date().toISOString();
+      if (updated[key]) {
+        updated[key].count++;
+        updated[key].lastMissed = new Date().toISOString();
       } else {
-        updated[word.english] = {
+        updated[key] = {
           ...word,
           count: 1,
           lastMissed: new Date().toISOString(),
@@ -148,44 +281,92 @@ export const PlayerProvider = ({ children }) => {
       localStorage.setItem('weakWords', JSON.stringify(updated));
       return updated;
     });
-  };
+  }, []);
 
-  const removeWeakWord = (english) => {
+  const removeWeakWord = useCallback((key) => {
     setWeakWords(prev => {
       const updated = { ...prev };
-      delete updated[english];
+      delete updated[key];
       localStorage.setItem('weakWords', JSON.stringify(updated));
       return updated;
     });
-  };
+  }, []);
 
-  const getWeakWordsList = () => {
+  const getWeakWordsList = useCallback(() => {
     return Object.values(weakWords)
       .sort((a, b) => b.count - a.count)
-      .slice(0, 20); // Top 20 weak words
-  };
+      .slice(0, 20);
+  }, [weakWords]);
 
-  const clearWeakWords = () => {
+  const clearWeakWords = useCallback(() => {
     setWeakWords({});
     localStorage.removeItem('weakWords');
-  };
+  }, []);
+
+  // 과목별 현재 레벨 진행률 계산
+  const getSubjectProgress = useCallback((subject) => {
+    const stats = subjectStats[subject];
+    if (!stats) return { percent: 0, xpInLevel: 0, xpNeeded: 10 };
+
+    const currentLevelXp = calculateCumulativeXpForLevel(stats.level);
+    const nextLevelXp = calculateCumulativeXpForLevel(stats.level + 1);
+    const xpInLevel = stats.xp - currentLevelXp;
+    const xpNeeded = nextLevelXp - currentLevelXp;
+    const percent = xpNeeded > 0 ? (xpInLevel / xpNeeded) * 100 : 100;
+
+    return { percent, xpInLevel, xpNeeded };
+  }, [subjectStats]);
 
   const value = {
-    level,
-    xp,
-    xpToNextLevelCumulative: LEVEL_THRESHOLDS[level - 1] || Infinity, // Total XP required to reach the next level (e.g., Level 2 needs 2 XP total)
-    xpAtCurrentLevelStart: (level > 1 ? LEVEL_THRESHOLDS[level - 2] : 0) || 0, // Total XP accumulated at the start of the current level (e.g., Level 2 starts at 2 XP total)
-    xpGainedInCurrentLevel: xp - ((level > 1 ? LEVEL_THRESHOLDS[level - 2] : 0) || 0), // XP gained within the current level
-    xpRequiredForCurrentLevel: (LEVEL_THRESHOLDS[level - 1] || Infinity) - ((level > 1 ? LEVEL_THRESHOLDS[level - 2] : 0) || 0), // XP needed to complete the current level (e.g., for L1->L2, need 2 XP)
-    addXp,
-    deductXp,
+    // 과목별 통계
+    subjectStats,
+    getSubjectProgress,
+
+    // 티어
+    tier,
+    tierConfig,
+    nextTierInfo,
+    TIER_CONFIG,
+
+    // 연속 학습
+    streakCount,
+    streakBonus,
+    longestStreak,
+    lastStudyDate,
+
+    // 레벨업 알림
     justLeveledUp,
+    levelUpSubject,
     resetLevelUp,
+
+    // 핵심 함수
+    addXp,
+
+    // 약점 단어
     weakWords,
     addWeakWord,
     removeWeakWord,
     getWeakWordsList,
     clearWeakWords,
+
+    // 상수
+    CORE_SUBJECTS,
+    OTHER_SUBJECTS,
+    ALL_SUBJECTS,
+
+    // 레거시 호환성: 전체 레벨 및 XP (기존 UI 호환)
+    level: Math.max(...CORE_SUBJECTS.map(s => subjectStats[s]?.level || 1)),
+    xp: CORE_SUBJECTS.reduce((sum, s) => sum + (subjectStats[s]?.xp || 0), 0),
+    xpGainedInCurrentLevel: (() => {
+      const totalXp = CORE_SUBJECTS.reduce((sum, s) => sum + (subjectStats[s]?.xp || 0), 0);
+      const level = calculateLevelFromXp(totalXp);
+      return totalXp - calculateCumulativeXpForLevel(level);
+    })(),
+    xpRequiredForCurrentLevel: (() => {
+      const totalXp = CORE_SUBJECTS.reduce((sum, s) => sum + (subjectStats[s]?.xp || 0), 0);
+      const level = calculateLevelFromXp(totalXp);
+      return calculateCumulativeXpForLevel(level + 1) - calculateCumulativeXpForLevel(level);
+    })(),
   };
 
   return (

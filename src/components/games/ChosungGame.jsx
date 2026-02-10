@@ -2,9 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../Button';
 import { ArrowLeft, Star } from 'lucide-react';
+import { usePlayer } from '../../context/PlayerContext';
 
 const ChosungGame = () => {
     const navigate = useNavigate();
+    const { addXp } = usePlayer();
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [userInput, setUserInput] = useState('');
@@ -15,7 +17,7 @@ const ChosungGame = () => {
     const inputRef = useRef(null);
 
     const renderDifficulty = (level) => {
-        const totalStars = 3; // Max 3 stars
+        const totalStars = 3;
         let filledStars = Math.min(level, totalStars);
         return (
             <div className="flex">
@@ -24,13 +26,12 @@ const ChosungGame = () => {
                 ))}
             </div>
         );
-    }; // Added inputRef
+    };
 
     useEffect(() => {
-        // Fetch questions from the JSON file
         fetch('/words/korean_chosung_easy.json')
             .then(res => res.json())
-            .then(data => setQuestions(data.sort(() => 0.5 - Math.random()).slice(0, 10))); // Shuffle and take 10
+            .then(data => setQuestions(data.sort(() => 0.5 - Math.random()).slice(0, 10)));
     }, []);
 
     useEffect(() => {
@@ -38,11 +39,10 @@ const ChosungGame = () => {
             return;
         }
 
-        // Timer logic
         const timer = setInterval(() => {
             setTimeLeft(prevTime => {
                 if (prevTime <= 1) {
-                    handleNextQuestion(false); // Move to next question if time runs out
+                    handleNextQuestion(false);
                     return 15;
                 }
                 return prevTime - 1;
@@ -52,19 +52,18 @@ const ChosungGame = () => {
         return () => clearInterval(timer);
     }, [currentQuestionIndex, questions, feedback]);
 
-    // Added useEffect for auto-focus
-    // Added useEffect for auto-focus and maintain focus on hint
     useEffect(() => {
         if (inputRef.current) {
             inputRef.current.focus();
         }
-    }, [currentQuestionIndex, questions, showHint]); // Added showHint to dependencies
-    
+    }, [currentQuestionIndex, questions, showHint]);
+
     const handleNextQuestion = (isCorrect) => {
         if (isCorrect) {
             const newScore = score + 10 + timeLeft;
             setScore(newScore);
             setFeedback(`정답! 🎉 (+${10 + timeLeft}점)`);
+            addXp('korean', 1);
         } else {
             setFeedback(`시간 초과! 정답: ${questions[currentQuestionIndex].answer}`);
         }
@@ -75,10 +74,10 @@ const ChosungGame = () => {
                 setUserInput('');
                 setTimeLeft(15);
                 setFeedback('');
-                setShowHint(false); // Reset showHint for new question
+                setShowHint(false);
             } else {
                 const finalScore = isCorrect ? score + 10 + timeLeft : score;
-                navigate('/korean/chosung-result', { state: { score: finalScore } }); // End game
+                navigate('/korean/chosung-result', { state: { score: finalScore } });
             }
         }, 1500);
     };
@@ -122,17 +121,17 @@ const ChosungGame = () => {
             </div>
 
             {/* Scrollable Content Area */}
-            <div className="flex-grow overflow-y-auto pb-4"> 
+            <div className="flex-grow overflow-y-auto pb-4">
                 <div className="bg-black/10 p-2 rounded-lg mb-4 flex justify-around text-xs sm:text-sm text-gray-300">
-                    <span className="flex items-center"><Star size={14} className="mr-1.5 text-yellow-400"/>난이도: {renderDifficulty(currentQuestion.level)}</span>
+                    <span className="flex items-center"><Star size={14} className="mr-1.5 text-yellow-400" />난이도: {renderDifficulty(currentQuestion.level)}</span>
                     <span className="flex items-center">남은 시간: {timeLeft}초</span>
                     <span className="flex items-center">진행: {currentQuestionIndex + 1}/{questions.length}</span>
                 </div>
-                
+
                 <div className="glass-card p-8 rounded-lg mb-6 max-w-md mx-auto">
                     <p className="text-2xl font-semibold text-gray-300 mb-2">카테고리: {currentQuestion.category}</p>
                     <p className="text-5xl font-bold tracking-[.2em] mb-4">{currentQuestion.chosung}</p>
-                    
+
                     {!showHint && (
                         <Button onClick={() => setShowHint(true)} variant="flat" color="gray" className="mt-2 text-sm px-4 py-2">
                             힌트 보기 💡
@@ -142,8 +141,8 @@ const ChosungGame = () => {
                         <p className="text-lg text-primary-light mt-2">힌트: {currentQuestion.hint}</p>
                     )}
 
-                    {/* Input and Feedback Area moved here */}
-                    <div className="mt-6"> {/* Added margin top for spacing */}
+                    {/* Input and Feedback Area */}
+                    <div className="mt-6">
                         <form onSubmit={handleSubmit} className="flex gap-2 w-full">
                             <input
                                 type="text"
@@ -153,9 +152,9 @@ const ChosungGame = () => {
                                 ref={inputRef}
                                 disabled={feedback.startsWith('정답') || feedback.startsWith('시간 초과')}
                             />
-                            <Button 
-                                type="submit" 
-                                variant="threedee" 
+                            <Button
+                                type="submit"
+                                variant="threedee"
                                 color="primary"
                                 className="flex-shrink-0"
                                 disabled={feedback.startsWith('정답') || feedback.startsWith('시간 초과')}
@@ -163,11 +162,12 @@ const ChosungGame = () => {
                                 제출
                             </Button>
                         </form>
-                        
+
                         {feedback && <p className={`mt-4 text-xl font-bold ${feedback.includes('정답') ? 'text-green-400' : 'text-red-400'}`}>{feedback}</p>}
                     </div>
                 </div>
-            </div>        </div>
+            </div>
+        </div>
     );
 };
 

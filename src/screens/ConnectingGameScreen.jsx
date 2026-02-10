@@ -78,7 +78,7 @@ const ConnectingGameScreen = ({ words, lives, matchedPairs, onCheckAnswer, reset
         if (!node || !svgRef.current) return null;
         const svgRect = svgRef.current.getBoundingClientRect();
         const nodeRect = node.getBoundingClientRect();
-        
+
         const isLeft = id.startsWith('korean');
         const x = isLeft ? nodeRect.right - svgRect.left : nodeRect.left - svgRect.left;
         const y = nodeRect.top - svgRect.top + nodeRect.height / 2;
@@ -132,9 +132,12 @@ const ConnectingGameScreen = ({ words, lives, matchedPairs, onCheckAnswer, reset
                 <button onClick={resetGame} className="text-gray-300 hover:text-white p-2 rounded-full transition">
                     <ArrowLeft size={28} />
                 </button>
-                <div className="flex items-center gap-2 text-2xl font-bold text-white">
-                    <Clock size={28} />
-                    <span>{formatTime(time)}</span>
+                <div className="flex flex-col items-center">
+                    <div className="flex items-center gap-2 text-2xl font-bold text-white">
+                        <Clock size={28} />
+                        <span>{formatTime(time)}</span>
+                    </div>
+                    <span className="text-xs text-yellow-300 font-bold mt-1">완료 시 +5 XP</span>
                 </div>
                 <div className="flex items-center gap-2">
                     {Array.from({ length: 3 }).map((_, i) => (
@@ -147,9 +150,9 @@ const ConnectingGameScreen = ({ words, lives, matchedPairs, onCheckAnswer, reset
                 <div className="grid grid-cols-2 gap-x-12 gap-y-2">
                     <div className="space-y-2">
                         {leftColumn.map((item, index) => (
-                            <WordItem 
-                                key={`korean-${item.word.english}`} 
-                                node={item} 
+                            <WordItem
+                                key={`korean-${item.word.english}`}
+                                node={item}
                                 animationDelay={`${index * 50}ms`}
                                 matchedPairs={matchedPairs}
                                 selectedItem={selectedItem}
@@ -162,9 +165,9 @@ const ConnectingGameScreen = ({ words, lives, matchedPairs, onCheckAnswer, reset
                     </div>
                     <div className="space-y-2">
                         {rightColumn.map((item, index) => (
-                            <WordItem 
-                                key={`english-${item.word.english}`} 
-                                node={item} 
+                            <WordItem
+                                key={`english-${item.word.english}`}
+                                node={item}
                                 animationDelay={`${(leftColumn.length + index) * 50}ms`}
                                 matchedPairs={matchedPairs}
                                 selectedItem={selectedItem}
@@ -183,13 +186,13 @@ const ConnectingGameScreen = ({ words, lives, matchedPairs, onCheckAnswer, reset
                         const startPos = getNodePosition(`korean-${word.english}`);
                         const endPos = getNodePosition(`english-${word.english}`);
                         if (startPos && endPos) {
-                           return <line 
-                                key={`line-${word.english}`} 
-                                x1={startPos.x} y1={startPos.y} 
-                                x2={endPos.x} y2={endPos.y} 
-                                stroke="theme(colors.success.light)" 
-                                strokeWidth="5" 
-                                strokeLinecap="round" 
+                            return <line
+                                key={`line-${word.english}`}
+                                x1={startPos.x} y1={startPos.y}
+                                x2={endPos.x} y2={endPos.y}
+                                stroke="theme(colors.success.light)"
+                                strokeWidth="5"
+                                strokeLinecap="round"
                                 strokeDasharray="1000"
                                 className="animate-draw-line"
                             />

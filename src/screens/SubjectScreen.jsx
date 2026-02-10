@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BookOpen, Gamepad2, Target, Keyboard, Hash, Puzzle, Award } from 'lucide-react';
 import Button from '../components/Button';
 import HeaderSection from '../components/HeaderSection';
-
 
 const SubjectScreen = ({ onSignUp, onLogin, onLogout, user }) => {
     const navigate = useNavigate();

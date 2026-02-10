@@ -4,6 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 // Screen components
 import SubjectScreen from './screens/SubjectScreen';
 import EnglishSelectionScreen from './screens/EnglishSelectionScreen';
+import AlphabetStudyScreen from './screens/AlphabetStudyScreen';
 import KoreanSelectionScreen from './screens/KoreanSelectionScreen';
 import MathSelectionScreen from './screens/MathSelectionScreen';
 import SocialSelectionScreen from './screens/SocialSelectionScreen';
@@ -53,7 +54,9 @@ function App() {
           {/* Main Subjects */}
           <Route path="/" element={<SubjectScreen />} />
           <Route path="/english" element={<EnglishSelectionScreen />} />
+          <Route path="/english/alphabet" element={<AlphabetStudyScreen />} />
           <Route path="/math" element={<MathSelectionScreen />} />
+          <Route path="/math/:tab" element={<MathSelectionScreen />} />
           <Route path="/korean" element={<KoreanSelectionScreen />} />
           <Route path="/social" element={<SocialSelectionScreen />} />
           <Route path="/social/:difficulty" element={<SocialQuizScreen />} />

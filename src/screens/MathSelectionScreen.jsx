@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Calculator, Sigma, TrendingUp, Triangle, BarChart3, BookOpen, X as XIcon } from 'lucide-react';
 import HeaderSection from '../components/HeaderSection';
 import MathRenderer from '../components/MathRenderer';
@@ -104,7 +104,14 @@ const seungjeCurriculum = [
 
 const MathSelectionScreen = ({ user, onSignUp, onLogin, onLogout }) => {
     const navigate = useNavigate();
-    const [activeTab, setActiveTab] = useState('level');
+    const { tab } = useParams();
+    const activeTab = tab === 'seungje' ? 'seungje' : 'level';
+
+    useEffect(() => {
+        if (!tab) {
+            navigate('/math/level', { replace: true });
+        }
+    }, [tab, navigate]);
     const [availableStages, setAvailableStages] = useState(null);
     const [objectives, setObjectives] = useState({});
 
@@ -172,14 +179,14 @@ const MathSelectionScreen = ({ user, onSignUp, onLogin, onLogout }) => {
 
             <div className="mb-6 flex justify-center border-b border-white/10">
                 <button
-                    onClick={() => setActiveTab('level')}
+                    onClick={() => navigate('/math/level')}
                     className={`px-4 py-2 text-lg font-semibold transition-colors ${activeTab === 'level' ? 'text-primary-light border-b-2 border-primary-light' : 'text-gray-400 hover:text-white'
                         }`}
                 >
                     단계별 학습
                 </button>
                 <button
-                    onClick={() => setActiveTab('seungje')}
+                    onClick={() => navigate('/math/seungje')}
                     className={`px-4 py-2 text-lg font-semibold transition-colors ${activeTab === 'seungje' ? 'text-primary-light border-b-2 border-primary-light' : 'text-gray-400 hover:text-white'
                         }`}
                 >

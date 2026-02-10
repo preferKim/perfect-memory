@@ -3,20 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import Button from './Button';
 import { useAuth } from '../hooks/useAuth';
 import { usePlayer } from '../context/PlayerContext';
-import { X, BarChart3, ChevronRight, Gem, Star, Crown } from 'lucide-react';
-
-const LEVEL_ICONS = {
-    1: '🥚', 2: '🐣', 3: '🐤', 4: '🐥', 5: '🐦',
-    6: '🕊️', 7: '🦅', 8: '🦉', 9: '🐉',
-    10: <Gem size={20} className="text-blue-400" />,
-    11: <Star size={20} className="text-yellow-400" />,
-    15: <Crown size={20} className="text-red-400" />,
-    20: '👑',
-};
+import { X, BarChart3, ChevronRight } from 'lucide-react';
 
 const HeaderSection = () => {
     const navigate = useNavigate();
-    const { level, xpGainedInCurrentLevel, xpRequiredForCurrentLevel } = usePlayer();
+    const { tier, tierConfig, nextTierInfo, xp } = usePlayer();
     const { user, loading, signInWithOAuth, signOut } = useAuth();
     const [isAuthOpen, setIsAuthOpen] = useState(false);
 
@@ -97,14 +88,14 @@ const HeaderSection = () => {
                 >
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <div className="text-2xl">
-                                {typeof LEVEL_ICONS[level] === 'string' ? LEVEL_ICONS[level] : (LEVEL_ICONS[level] || '🥚')}
+                            <div className="text-3xl">
+                                {tierConfig?.emoji || '🥉'}
                             </div>
                             <div className="text-left">
                                 <p className="text-lg font-bold text-white">
                                     {user.user_metadata?.name || user.email?.split('@')[0] || '사용자'}
                                 </p>
-                                <p className="text-sm text-emerald-300">LV. {level}</p>
+                                <p className="text-sm text-emerald-300">{tierConfig?.label || '브론즈'}</p>
                             </div>
                         </div>
                         <div className="flex items-center gap-2 text-emerald-300 group-hover:text-white transition-colors">
@@ -113,15 +104,27 @@ const HeaderSection = () => {
                             <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
                         </div>
                     </div>
-                    <div className="mt-3 w-full bg-black/20 rounded-full h-2">
-                        <div
-                            className="bg-gradient-to-r from-emerald-400 to-teal-400 h-full rounded-full transition-all duration-500"
-                            style={{ width: `${xpRequiredForCurrentLevel > 0 ? (xpGainedInCurrentLevel / xpRequiredForCurrentLevel) * 100 : 100}%` }}
-                        />
+                    {nextTierInfo && (
+                        <>
+                            <div className="mt-3 w-full bg-black/20 rounded-full h-2">
+                                <div
+                                    className="bg-gradient-to-r from-emerald-400 to-teal-400 h-full rounded-full transition-all duration-500"
+                                    style={{ width: `${nextTierInfo.levelsNeeded > 0 ? Math.max(0, 100 - (nextTierInfo.levelsNeeded * 25)) : 100}%` }}
+                                />
+                            </div>
+                            <p className="mt-1 text-xs text-gray-400">
+                                {nextTierInfo.nextTier
+                                    ? `${nextTierInfo.nextTierConfig?.label}까지 최소 레벨 ${nextTierInfo.levelsNeeded} 상승 필요`
+                                    : '최고 등급 달성! 🎉'
+                                }
+                            </p>
+                        </>
+                    )}
+                    <div className="mt-2 flex justify-end">
+                        <p className="text-sm font-bold text-yellow-400 bg-black/40 px-3 py-1 rounded-full border border-yellow-400/30">
+                            ✨ 총 XP: {(xp || 0).toLocaleString()}
+                        </p>
                     </div>
-                    <p className="mt-1 text-xs text-gray-400">
-                        {xpGainedInCurrentLevel.toLocaleString()} / {xpRequiredForCurrentLevel.toLocaleString()} XP
-                    </p>
                 </button>
             )}
         </>

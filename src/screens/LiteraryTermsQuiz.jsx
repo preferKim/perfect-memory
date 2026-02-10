@@ -2,12 +2,14 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, BookOpen } from 'lucide-react';
 import Button from '../components/Button';
+import { usePlayer } from '../context/PlayerContext';
 import { useAuth } from '../hooks/useAuth';
 import { useLearningProgress } from '../hooks/useLearningProgress';
 
 const LiteraryTermsQuiz = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
+    const { addXp } = usePlayer();
     const { recordAnswer, startSession, endSession } = useLearningProgress(user?.id);
     const sessionRef = useRef(null);
     const nextButtonRef = useRef(null);
@@ -97,6 +99,7 @@ const LiteraryTermsQuiz = () => {
         if (isCorrect) {
             setScore(prev => prev + 10);
             setFeedbackText('정답입니다! 🎉');
+            addXp('korean', 1);
         } else {
             setFeedbackText('오답입니다 😥');
         }

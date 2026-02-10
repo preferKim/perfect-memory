@@ -4,10 +4,12 @@ import { ArrowLeft, Lightbulb, BookOpen, CheckCircle, XCircle } from 'lucide-rea
 import Button from '../Button';
 import { useAuth } from '../../hooks/useAuth';
 import { useLearningProgress } from '../../hooks/useLearningProgress';
+import { usePlayer } from '../../context/PlayerContext';
 
 const GrammarQuiz = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
+    const { addXp } = usePlayer();
     const { startSession, endSession, recordAnswer } = useLearningProgress(user?.id);
     const sessionRef = useRef(null);
 
@@ -71,6 +73,7 @@ const GrammarQuiz = () => {
         if (isCorrect) {
             setScore(prev => prev + 1);
             setFeedback('correct');
+            addXp('korean', 1);
         } else {
             setFeedback('incorrect');
         }

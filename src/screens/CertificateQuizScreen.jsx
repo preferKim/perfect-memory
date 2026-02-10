@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, Check, X, Clock } from 'lucide-react';
+import { ArrowLeft, Check, X, Clock, Star } from 'lucide-react';
 import { usePlayer } from '../context/PlayerContext';
 import { useAuth } from '../hooks/useAuth';
 import { useLearningProgress } from '../hooks/useLearningProgress';
@@ -11,7 +11,7 @@ const CertificateQuizScreen = () => {
     const location = useLocation();
     const { addXp } = usePlayer();
     const { user } = useAuth();
-    const { recordAnswer, startSession, endSession } = useLearningProgress(user?.id);
+    const { recordAnswer, startSession, endSession, toggleFavorite, isFavorite } = useLearningProgress(user?.id);
     const { subjectId } = location.state || { subjectId: 1 };
 
     const [questions, setQuestions] = useState([]);
@@ -154,7 +154,9 @@ const CertificateQuizScreen = () => {
                 options: q.content.options,
                 answer: q.content.answer,
                 hint: q.content.hint,
-                explanation: q.content.explanation
+                explanation: q.content.explanation,
+                // Add _wordId for consistancy with other screens if needed, or use id
+                _wordId: q.id
             }));
 
             setQuestions(transformedQuestions);
@@ -193,6 +195,7 @@ const CertificateQuizScreen = () => {
 
         if (isCorrect) {
             setScore(score + 1);
+            addXp('certificate', 1);
         } else {
             setWrongAnswers(wrongAnswers + 1);
         }
@@ -232,7 +235,7 @@ const CertificateQuizScreen = () => {
                 wrongCount: wrongAnswers,
                 score: score * 5
             });
-            addXp(score * 10);
+            // XP already awarded per correct answer
         }
     };
 
@@ -301,12 +304,28 @@ const CertificateQuizScreen = () => {
             </div>
 
             {/* Question Card */}
-            <div className="glass-card p-6 sm:p-8 rounded-2xl shadow-lg mb-6 w-full">
+            <div className="glass-card p-6 sm:p-8 rounded-2xl shadow-lg mb-6 w-full relative">
+                {user?.id && (
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (currentQuestion._wordId) {
+                                toggleFavorite(currentQuestion._wordId);
+                            }
+                        }}
+                        className="absolute top-4 right-4 p-2 hover:scale-110 transition active:scale-95"
+                    >
+                        <Star
+                            size={24}
+                            className={isFavorite(currentQuestion._wordId) ? "fill-yellow-400 text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" : "text-gray-600 hover:text-gray-400"}
+                        />
+                    </button>
+                )}
                 <div className="mb-2">
                     <span className="inline-block px-2 py-1 rounded bg-white/10 text-xs text-gray-300 mb-2">
                         {subjectId === 'all' ? `${currentQuestion.level}과목` : `${subjectId}과목`}
                     </span>
-                    <h2 className="text-xl sm:text-2xl font-bold text-white leading-relaxed">
+                    <h2 className="text-xl sm:text-2xl font-bold text-white leading-relaxed pr-8">
                         {currentQuestion.problem}
                     </h2>
                 </div>

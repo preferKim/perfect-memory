@@ -2,9 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, CheckCircle, XCircle, HelpCircle, Star, BookOpen, Lightbulb } from 'lucide-react';
 import Button from '../Button';
+import { usePlayer } from '../../context/PlayerContext';
 
 const SpellingGame = () => {
     const navigate = useNavigate();
+    const { addXp } = usePlayer();
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [score, setScore] = useState(0);
@@ -58,11 +60,12 @@ const SpellingGame = () => {
         if (option === currentQuestion.answer) {
             setScore(prev => prev + 1);
             setFeedback('correct');
+            addXp('korean', 1);
         } else {
             setFeedback('wrong');
         }
     };
-    
+
     const handleNextQuestion = () => {
         if (currentQuestionIndex < questions.length - 1) {
             setCurrentQuestionIndex(prev => prev + 1);
@@ -72,7 +75,7 @@ const SpellingGame = () => {
             setGameOver(true);
         }
     };
-    
+
     if (questions.length === 0) {
         return (
             <div className="glass-card p-6 sm:p-12 text-center">
@@ -80,7 +83,7 @@ const SpellingGame = () => {
             </div>
         );
     }
-    
+
     const currentQuestion = questions[currentQuestionIndex];
 
     const renderDifficulty = (level) => {
@@ -127,8 +130,8 @@ const SpellingGame = () => {
                 {!gameOver ? (
                     <div className="w-full">
                         <div className="bg-black/10 p-2 rounded-lg mb-4 flex justify-around text-xs sm:text-sm text-gray-300">
-                           {currentQuestion.category && <span className="flex items-center"><HelpCircle size={14} className="mr-1.5"/>유형: {currentQuestion.category}</span>}
-                           {currentQuestion.difficulty && <span className="flex items-center"><Star size={14} className="mr-1.5"/>난이도: {renderDifficulty(currentQuestion.difficulty)}</span>}
+                            {currentQuestion.category && <span className="flex items-center"><HelpCircle size={14} className="mr-1.5" />유형: {currentQuestion.category}</span>}
+                            {currentQuestion.difficulty && <span className="flex items-center"><Star size={14} className="mr-1.5" />난이도: {renderDifficulty(currentQuestion.difficulty)}</span>}
                         </div>
 
                         <div className="bg-black/20 p-8 rounded-2xl mb-6 min-h-[120px] flex items-center justify-center relative border-2 border-white/10">
@@ -161,16 +164,16 @@ const SpellingGame = () => {
                                 );
                             })}
                         </div>
-                        
+
                         {feedback && (
-                             <div className="w-full" ref={explanationRef}>
+                            <div className="w-full" ref={explanationRef}>
                                 <div className="bg-black/20 p-4 rounded-xl mb-4 text-left border border-white/10">
-                                    <h3 className="font-bold text-lg text-blue-300 flex items-center mb-2"><BookOpen size={18} className="mr-2"/>해설</h3>
+                                    <h3 className="font-bold text-lg text-blue-300 flex items-center mb-2"><BookOpen size={18} className="mr-2" />해설</h3>
                                     <p className="text-gray-200">{currentQuestion.explanation || "해설 정보가 없습니다."}</p>
                                 </div>
                                 {currentQuestion.tip && (
                                     <div className="bg-yellow-900/30 p-4 rounded-xl text-left border border-yellow-500/30">
-                                        <h3 className="font-bold text-lg text-yellow-300 flex items-center mb-2"><Lightbulb size={18} className="mr-2"/>암기 팁!</h3>
+                                        <h3 className="font-bold text-lg text-yellow-300 flex items-center mb-2"><Lightbulb size={18} className="mr-2" />암기 팁!</h3>
                                         <p className="text-yellow-200">{currentQuestion.tip}</p>
                                     </div>
                                 )}

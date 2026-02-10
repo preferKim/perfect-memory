@@ -1,12 +1,15 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Brain, Trash2, Play, BookOpen, Calculator, Globe, FlaskConical, Target, Award, Calendar } from 'lucide-react';
+import { ArrowLeft, Brain, Trash2, Play, BookOpen, Calculator, Globe, FlaskConical, Target, Award, Calendar, Star } from 'lucide-react';
 import { usePlayer } from '../context/PlayerContext';
 import { useLearningProgress } from '../hooks/useLearningProgress';
 import { useAuth } from '../hooks/useAuth';
+import { supabase } from '../supabaseClient';
 import Button from '../components/Button';
 import PageTransition from '../components/PageTransition';
+import SubjectLevels from '../components/SubjectLevels';
+import DailyChallenge from '../components/DailyChallenge';
 import {
     LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ComposedChart
 } from 'recharts';
@@ -24,13 +27,17 @@ const SUBJECT_CONFIG = {
 const DashboardScreen = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
-    const { getWeakWords, removeWeakWord, progress, fetchProgress, fetchGameSessions } = useLearningProgress(user?.id);
+    const { subjectStats: playerSubjectStats } = usePlayer();
+    const { getWeakWords, removeWeakWord, progress, fetchProgress, fetchGameSessions, getFavoriteWords, toggleFavorite } = useLearningProgress(user?.id);
+    const [favoriteList, setFavoriteList] = useState([]);
+    const [loadingFavorites, setLoadingFavorites] = useState(true);
 
     const [weakWordsList, setWeakWordsList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedSubject, setSelectedSubject] = useState('all');
     const [sessions, setSessions] = useState([]);
-    const [graphMode, setGraphMode] = useState('daily'); // 'daily' or 'weekly'
+    const [graphMode, setGraphMode] = useState('daily');
+    const [courseTotals, setCourseTotals] = useState({}); // 과목별 총 문제 수
 
     // 초기 데이터 로딩
     useEffect(() => {
@@ -44,8 +51,36 @@ const DashboardScreen = () => {
             const sessionData = await fetchGameSessions(100);
             setSessions(sessionData || []);
 
+            // courses 테이블에서 과목별 total_items 합산
+            try {
+                const { data: courses } = await supabase
+                    .from('courses')
+                    .select('course_code, total_items');
+
+                if (courses) {
+                    const totals = {};
+                    Object.keys(SUBJECT_CONFIG).forEach(s => totals[s] = 0);
+
+                    courses.forEach(course => {
+                        const subject = Object.keys(SUBJECT_CONFIG).find(s =>
+                            course.course_code?.startsWith(s)
+                        );
+                        if (subject && course.total_items) {
+                            totals[subject] += course.total_items;
+                        }
+                    });
+                    setCourseTotals(totals);
+                }
+            } catch (err) {
+                console.error('Failed to fetch course totals:', err);
+            }
+
             const words = await getWeakWords(50);
             setWeakWordsList(words || []);
+
+            const favs = await getFavoriteWords(50);
+            setFavoriteList(favs || []);
+            setLoadingFavorites(false);
             setLoading(false);
         };
         loadData();
@@ -175,14 +210,15 @@ const DashboardScreen = () => {
         const config = SUBJECT_CONFIG[subjectKey];
         const Icon = config.icon;
 
-        // 정답률 (Accuracy)
+        // 정답률 (Accuracy) - 기존 progress 데이터 사용
         const accuracy = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
 
-        // 진도율 (Progress)
-        // 전체 아이템 수가 0이면 진도율 0
-        const progressPercent = stats.totalItems > 0
-            ? Math.round((stats.mastered / stats.totalItems) * 100)
-            : 0;
+        // 총 문제 수 (courses 테이블의 total_item 합산)
+        const totalItems = courseTotals[subjectKey] || 0;
+
+        // 진도율: XP 기반 (1 XP = 1 정답 = 1 문제 완료로 가정)
+        const xp = playerSubjectStats[subjectKey]?.xp || 0;
+        const progressPercent = totalItems > 0 ? Math.min(100, Math.round((xp / totalItems) * 100)) : 0;
 
         return (
             <div className={`glass-card p-4 flex flex-col items-center justify-between border-b-4 border-${config.color}`}>
@@ -194,11 +230,11 @@ const DashboardScreen = () => {
                 </div>
                 <div className="flex flex-col items-center mb-1">
                     <div className="text-3xl font-bold text-white">{progressPercent}%</div>
-                    <span className="text-[10px] text-gray-400">진도율</span>
+                    <span className="text-[10px] text-gray-400">진도율 ({xp}/{totalItems})</span>
                 </div>
                 <div className="w-full flex justify-between text-[10px] text-gray-400 mt-2 px-1 border-t border-white/10 pt-2">
                     <span>정답률 {accuracy}%</span>
-                    <span>총 {stats.total}문제</span>
+                    <span>총 {totalItems}문제</span>
                 </div>
             </div>
         );
@@ -235,6 +271,12 @@ const DashboardScreen = () => {
                             <SubjectCard key={key} subjectKey={key} stats={subjectStats[key]} />
                         ))}
                     </div>
+                </div>
+
+                {/* Subject Levels & Daily Challenge - New Gamification Section */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+                    <SubjectLevels />
+                    <DailyChallenge />
                 </div>
 
                 {/* Learning Curve Graph */}
@@ -288,6 +330,80 @@ const DashboardScreen = () => {
                             </div>
                         )}
                     </div>
+                </motion.div>
+
+                {/* Favorites Section */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.15 }}
+                    className="glass-card p-6 mb-6"
+                >
+                    <div className="flex items-center justify-between mb-4">
+                        <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                            <Star size={20} className="text-yellow-400 fill-yellow-400" />
+                            즐겨찾기 ({favoriteList.length})
+                        </h2>
+                    </div>
+
+                    {loadingFavorites ? (
+                        <div className="text-center py-8 text-gray-400">로딩 중...</div>
+                    ) : favoriteList.length === 0 ? (
+                        <div className="text-center py-8 text-gray-500">
+                            즐겨찾기한 단어가 없습니다.
+                        </div>
+                    ) : (
+                        <>
+                            <div className="space-y-2 mb-4 max-h-60 overflow-y-auto">
+                                {favoriteList.map((word, index) => {
+                                    const display = getDisplayText(word);
+                                    let courseCode = word._courseCode || '';
+                                    let subjectKey = Object.keys(SUBJECT_CONFIG).find(s => courseCode.startsWith(s)) || 'english';
+                                    const config = SUBJECT_CONFIG[subjectKey] || SUBJECT_CONFIG.english;
+
+                                    return (
+                                        <div
+                                            key={word._wordId || index}
+                                            className="bg-white/5 rounded-lg p-3 flex items-center justify-between hover:bg-white/10 transition cursor-pointer"
+                                            onClick={() => navigate('/wrong-answer', { state: { customWords: [word], subject: subjectKey } })}
+                                        >
+                                            <div className="flex items-center gap-3 overflow-hidden">
+                                                <div className={`p-1.5 rounded bg-${config.color}/10 text-${config.color}-light shrink-0`}>
+                                                    {config.emoji}
+                                                </div>
+                                                <div className="min-w-0">
+                                                    <div className="text-sm font-bold text-white truncate">{display.main}</div>
+                                                    <div className="text-xs text-gray-400 truncate">{display.sub}</div>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center gap-2 shrink-0">
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        toggleFavorite(word._wordId); // hook will handle logic
+                                                        setFavoriteList(prev => prev.filter(w => w._wordId !== word._wordId));
+                                                    }}
+                                                    className="text-yellow-400 hover:text-yellow-300 p-1"
+                                                >
+                                                    <Star size={16} className="fill-yellow-400" />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            <Button
+                                onClick={() => navigate('/wrong-answer', { state: { customWords: favoriteList } })}
+                                variant="threedee"
+                                color="warning" // Yellow-ish for favorites
+                                className="w-full text-sm py-2"
+                            >
+                                <Play size={16} className="mr-2 inline" />
+                                즐겨찾기 학습 시작 ({favoriteList.length})
+                            </Button>
+                        </>
+                    )}
                 </motion.div>
 
                 {/* Weak Words Section (Keep existing logic mostly) */}

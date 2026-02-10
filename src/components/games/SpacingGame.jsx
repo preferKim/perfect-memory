@@ -2,9 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, HelpCircle, Star, BookOpen, Lightbulb, CheckCircle, XCircle } from 'lucide-react';
 import Button from '../Button';
+import { usePlayer } from '../../context/PlayerContext';
 
 const SpacingGame = () => {
     const navigate = useNavigate();
+    const { addXp } = usePlayer();
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [score, setScore] = useState(0);
@@ -85,6 +87,7 @@ const SpacingGame = () => {
         if (userAnswer === correctAnswer) {
             setScore(prev => prev + 1);
             setFeedback('correct');
+            addXp('korean', 1);
         } else {
             setFeedback('wrong');
         }
@@ -106,7 +109,7 @@ const SpacingGame = () => {
             </div>
         );
     }
-    
+
     const currentQuestion = questions[currentQuestionIndex];
 
     const renderDifficulty = (level) => {
@@ -115,7 +118,7 @@ const SpacingGame = () => {
         if (level === '초급') filledStars = 1;
         else if (level === '중급') filledStars = 3;
         else if (level === '고급') filledStars = 5;
-        
+
         return (
             <div className="flex">
                 {[...Array(totalStars)].map((_, i) => (
@@ -128,15 +131,15 @@ const SpacingGame = () => {
     const renderInteractiveQuestion = () => {
         const question = currentQuestion.question;
         const chars = question.split('');
-    
+
         return (
             <div className="flex flex-wrap items-center justify-center p-4 leading-loose">
                 {chars.map((char, index) => (
                     <React.Fragment key={index}>
                         <span className="text-2xl sm:text-3xl text-white font-medium select-none">{char}</span>
                         {index < chars.length - 1 && (
-                            <span 
-                                className={`h-10 inline-block cursor-pointer align-bottom ${spacings[index] ? 'w-5' : 'w-1'}`} 
+                            <span
+                                className={`h-10 inline-block cursor-pointer align-bottom ${spacings[index] ? 'w-5' : 'w-1'}`}
                                 onClick={() => toggleSpace(index)}
                             >
                                 {spacings[index] ? '\u00A0' : ''}
@@ -147,7 +150,7 @@ const SpacingGame = () => {
             </div>
         );
     };
-    
+
     return (
         <div className="glass-card p-4 sm:p-8 text-center relative flex flex-col items-center max-w-2xl mx-auto">
             <div className="w-full">
@@ -164,14 +167,14 @@ const SpacingGame = () => {
                         <p className="text-xl text-primary-light font-semibold">점수: {score}</p>
                     </div>
                 </div>
-            
+
                 {!gameOver ? (
                     <div className="w-full">
                         <div className="bg-black/10 p-2 rounded-lg mb-4 flex justify-around text-xs sm:text-sm text-gray-300">
-                           {currentQuestion.category && <span className="flex items-center"><HelpCircle size={14} className="mr-1.5"/>유형: {currentQuestion.category}</span>}
-                           {currentQuestion.difficulty && <span className="flex items-center"><Star size={14} className="mr-1.5"/>난이도: {renderDifficulty(currentQuestion.difficulty)}</span>}
+                            {currentQuestion.category && <span className="flex items-center"><HelpCircle size={14} className="mr-1.5" />유형: {currentQuestion.category}</span>}
+                            {currentQuestion.difficulty && <span className="flex items-center"><Star size={14} className="mr-1.5" />난이도: {renderDifficulty(currentQuestion.difficulty)}</span>}
                         </div>
-                        
+
                         <p className="text-white/80 text-base mb-2">글자 사이를 클릭하여 띄어쓰기를 조절하세요.</p>
                         <div className={`bg-black/20 p-2 rounded-2xl mb-6 min-h-[120px] flex items-center justify-center relative border-2 transition-colors ${feedback === 'correct' ? 'border-green-500' : feedback === 'wrong' ? 'border-red-500' : 'border-white/10'}`}>
                             {!feedback ? (
@@ -186,7 +189,7 @@ const SpacingGame = () => {
                                 </div>
                             )}
                         </div>
-                        
+
                         {!feedback ? (
                             <form onSubmit={handleSubmit} className="flex flex-col items-center gap-4">
                                 <Button type="submit" variant="threedee" color="primary">
@@ -194,7 +197,7 @@ const SpacingGame = () => {
                                 </Button>
                             </form>
                         ) : (
-                             <div className="w-full animate-fade-in" ref={explanationRef}>
+                            <div className="w-full animate-fade-in" ref={explanationRef}>
                                 {feedback === 'wrong' && (
                                     <div className="bg-red-900/40 p-4 rounded-xl mb-4 text-left border border-red-500/50">
                                         <h3 className="font-bold text-lg text-red-300 mb-2">제출한 답</h3>
@@ -204,12 +207,12 @@ const SpacingGame = () => {
                                     </div>
                                 )}
                                 <div className="bg-black/20 p-4 rounded-xl mb-4 text-left border border-white/10">
-                                    <h3 className="font-bold text-lg text-blue-300 flex items-center mb-2"><BookOpen size={18} className="mr-2"/>해설</h3>
+                                    <h3 className="font-bold text-lg text-blue-300 flex items-center mb-2"><BookOpen size={18} className="mr-2" />해설</h3>
                                     <p className="text-gray-200">{currentQuestion.explanation || "해설 정보가 없습니다."}</p>
                                 </div>
                                 {currentQuestion.tip && (
                                     <div className="bg-yellow-900/30 p-4 rounded-xl text-left border border-yellow-500/30">
-                                        <h3 className="font-bold text-lg text-yellow-300 flex items-center mb-2"><Lightbulb size={18} className="mr-2"/>암기 팁!</h3>
+                                        <h3 className="font-bold text-lg text-yellow-300 flex items-center mb-2"><Lightbulb size={18} className="mr-2" />암기 팁!</h3>
                                         <p className="text-yellow-200">{currentQuestion.tip}</p>
                                     </div>
                                 )}

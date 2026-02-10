@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, Check, X } from 'lucide-react';
+import { ArrowLeft, Check, X, Star } from 'lucide-react';
 import MathRenderer from '../components/MathRenderer';
 import { usePlayer } from '../context/PlayerContext';
 import { useAuth } from '../hooks/useAuth';
@@ -12,7 +12,7 @@ const MathGameScreen = () => {
   const location = useLocation();
   const { addXp } = usePlayer();
   const { user } = useAuth();
-  const { recordAnswer, startSession, endSession } = useLearningProgress(user?.id);
+  const { recordAnswer, startSession, endSession, toggleFavorite, isFavorite } = useLearningProgress(user?.id);
   const { getQuestions } = useLearningContent();
   const { difficulty, topicLevel } = location.state || { difficulty: 'easy', topicLevel: 1 };
 
@@ -43,17 +43,16 @@ const MathGameScreen = () => {
 
         let courseCode;
         if (selectedDifficulty === 'jsj50day') {
-          const paddedLevel = String(selectedTopicLevel).padStart(2, '0');
-          courseCode = `math_seungje_${paddedLevel}`;
+          courseCode = `math_jsj50day_${selectedTopicLevel}`;
         } else {
-          // 단계별 학습: math_level_{단계}_{난이도}
+          // 단계별 학습: math_{난이도}_{단계}
           // fallback 'easy' -> 'elementary' 처리
           let diff = selectedDifficulty;
           if (diff === 'easy') diff = 'elementary';
           if (diff === 'medium') diff = 'middle';
           if (diff === 'hard') diff = 'high';
 
-          courseCode = `math_level_${selectedTopicLevel}_${diff}`;
+          courseCode = `math_${diff}_${selectedTopicLevel}`;
         }
 
         console.log('Starting session for:', courseCode);
@@ -63,14 +62,7 @@ const MathGameScreen = () => {
     initSession();
   }, [user?.id, questions.length, difficulty, topicLevel, gameFinished, startSession]);
 
-  // Handle XP gain on game finish
-  const xpAddedRef = useRef(false);
-  useEffect(() => {
-    if (gameFinished && user && score > 0 && !xpAddedRef.current) {
-      xpAddedRef.current = true;
-      addXp(score * 5);
-    }
-  }, [gameFinished, user, score]);
+  // XP is now awarded per correct answer in handleAnswerSelect
 
   // Define loadQuestions function outside of useEffect to be callable by restartGame
   const loadQuestions = async () => {
@@ -157,6 +149,7 @@ const MathGameScreen = () => {
 
     if (isCorrect) {
       setScore(score + 1);
+      addXp('math', 1);
     } else {
       setWrongAnswers(wrongAnswers + 1);
     }
@@ -210,7 +203,7 @@ const MathGameScreen = () => {
             선택하신 난이도와 주제에 해당하는 문제가 없습니다.
           </p>
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => difficulty === 'jsj50day' ? navigate('/math/seungje') : navigate(-1)}
             className="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition-colors"
           >
             돌아가기
@@ -240,7 +233,7 @@ const MathGameScreen = () => {
           </p>
           <div className="flex gap-4">
             <button
-              onClick={() => navigate(-1)}
+              onClick={() => difficulty === 'jsj50day' ? navigate('/math/seungje') : navigate(-1)}
               className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-lg transition-colors"
             >
               과목 선택으로
@@ -287,7 +280,7 @@ const MathGameScreen = () => {
       <div className="w-full max-w-3xl">
         {/* Header */}
         <div className="relative flex items-center justify-between mb-4 self-stretch">
-          <button onClick={() => navigate(-1)} className="p-2 rounded-full hover:bg-white/10 transition-colors">
+          <button onClick={() => difficulty === 'jsj50day' ? navigate('/math/seungje') : navigate(-1)} className="p-2 rounded-full hover:bg-white/10 transition-colors">
             <ArrowLeft size={20} className="text-gray-300" />
           </button>
           <div className="text-lg font-bold text-white flex items-center gap-4">
@@ -306,11 +299,27 @@ const MathGameScreen = () => {
         </div>
 
         {/* Question Card */}
-        <div className="glass-card p-6 sm:p-8 rounded-2xl shadow-lg mb-3">
+        <div className="glass-card p-6 sm:p-8 rounded-2xl shadow-lg mb-3 relative">
+          {user?.id && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (currentQuestion._wordId) {
+                  toggleFavorite(currentQuestion._wordId);
+                }
+              }}
+              className="absolute top-4 right-4 p-2 hover:scale-110 transition active:scale-95"
+            >
+              <Star
+                size={24}
+                className={isFavorite(currentQuestion._wordId) ? "fill-yellow-400 text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" : "text-gray-600 hover:text-gray-400"}
+              />
+            </button>
+          )}
           <p className="text-sm text-gray-300 mb-2">문제 {currentQuestionIndex + 1}/{questions.length}</p>
           {/* Problem text */}
           <div className="mb-2">
-            <p className="text-xl sm:text-2xl font-medium text-white leading-relaxed">
+            <p className="text-xl sm:text-2xl font-medium text-white leading-relaxed pr-8">
               <MathRenderer text={currentQuestion.problem} />
             </p>
           </div>

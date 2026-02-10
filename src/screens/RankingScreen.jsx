@@ -10,7 +10,7 @@ const formatTime = (seconds) => {
 };
 
 const RankingScreen = ({
-    rankings,
+    rankings = [],
     onRestart,
     gameMode = 'speed',
     score = 0,
@@ -96,7 +96,7 @@ const RankingScreen = ({
                     </>
                 )}
             </p>
-    
+
             <div className="rounded-xl bg-black/10 p-6 space-y-4 text-left border border-white/10">
                 <div className="flex justify-between items-center text-lg">
                     <span className="font-bold text-gray-200 flex items-center gap-2"><Heart className="text-danger-light" /> 남은 목숨:</span>
@@ -111,7 +111,7 @@ const RankingScreen = ({
     );
 
     const renderContent = () => {
-        switch(gameMode) {
+        switch (gameMode) {
             case 'speed':
                 return renderSpeedModeResult();
             case 'connect':

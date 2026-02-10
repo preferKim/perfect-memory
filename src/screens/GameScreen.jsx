@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useReducer } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { CheckCircle, XCircle, Clock, Volume2, Play, Pause, ArrowLeft } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, Volume2, Play, Pause, ArrowLeft, Star } from 'lucide-react';
 import { usePlayer } from '../context/PlayerContext';
 import PlayerStats from '../components/PlayerStats';
 import PauseMenu from '../components/PauseMenu';
@@ -92,7 +92,7 @@ const GameScreen = () => {
 
     // Supabase 학습 훅
     const { getQuestions } = useLearningContent();
-    const { startSession, endSession, recordAnswer } = useLearningProgress(user?.id);
+    const { startSession, endSession, recordAnswer, toggleFavorite, isFavorite } = useLearningProgress(user?.id);
     const sessionRef = useRef(null);
 
     useEffect(() => {
@@ -171,7 +171,12 @@ const GameScreen = () => {
         if (status === 'playing') {
             if (gameMode === 'normal' && timeLeft === 0) handleTimeout();
             else if (gameMode === 'speed' && speedRunTimeLeft === 0) dispatch({ type: 'FINISH_GAME' });
-            else if (gameMode === 'connect' && (lives <= 0 || (connectWords.length && matchedPairs.length === connectWords.length))) dispatch({ type: 'FINISH_GAME' });
+            else if (gameMode === 'connect' && (lives <= 0 || (connectWords.length && matchedPairs.length === connectWords.length))) {
+                if (lives > 0 && matchedPairs.length === connectWords.length) {
+                    addXp('english', 5);
+                }
+                dispatch({ type: 'FINISH_GAME' });
+            }
         }
     }, [status, gameMode, timeLeft, speedRunTimeLeft, lives, matchedPairs.length, connectWords.length]);
 
@@ -247,7 +252,7 @@ const GameScreen = () => {
         dispatch({ type: 'CHECK_ANSWER', payload: { isCorrect } });
 
         if (isCorrect) {
-            addXp(difficulty === 'easy' ? 1 : difficulty === 'medium' ? 2 : 3);
+            addXp('english', 1);
         } else {
             // Track weak word on wrong answer
             if (currentWord) {
@@ -312,7 +317,21 @@ const GameScreen = () => {
         }
         return <RankingScreen onRestart={handleRestart} gameMode={gameMode} score={score} wrongAnswers={wrongAnswers} total={total} lives={lives} time={gameMode === 'connect' ? connectTime : speedRunTimeLeft} />;
     }
-    if (gameMode === 'connect') return <ConnectingGameScreen words={connectWords} lives={lives} onCheckAnswer={(w1, w2) => dispatch({ type: 'CHECK_CONNECT_ANSWER', payload: { word1: w1, word2: w2 } })} matchedPairs={matchedPairs} resetGame={togglePause} time={connectTime} />;
+    if (gameMode === 'connect') {
+        return (
+            <div className="relative w-full min-h-screen">
+                {isPaused && <PauseMenu onResume={togglePause} onRestart={handleRestart} onExit={() => navigate('/english')} />}
+                <ConnectingGameScreen
+                    words={connectWords}
+                    lives={lives}
+                    onCheckAnswer={(w1, w2) => dispatch({ type: 'CHECK_CONNECT_ANSWER', payload: { word1: w1, word2: w2 } })}
+                    matchedPairs={matchedPairs}
+                    resetGame={togglePause}
+                    time={connectTime}
+                />
+            </div>
+        );
+    }
 
     const currentWord = words[currentIndex] || {};
     const accuracy = total > 0 ? Math.round((score / total) * 100) : 0;
@@ -325,7 +344,25 @@ const GameScreen = () => {
             <div className="glass-card px-8 pt-8 pb-4 text-center relative">
                 <button onClick={togglePause} className="absolute left-4 top-4 text-gray-300 hover:text-white transition p-2" title="일시정지" aria-label="일시정지"><ArrowLeft size={24} /></button>
                 <div className="flex items-center justify-center gap-3 mb-1">
-                    <div className="text-5xl font-bold text-white">{currentWord.english}</div>
+                    <div className="text-5xl font-bold text-white relative">
+                        {currentWord.english}
+                        {user?.id && (
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (currentWord._wordId) {
+                                        toggleFavorite(currentWord._wordId);
+                                    }
+                                }}
+                                className="absolute -right-12 top-1/2 -translate-y-1/2 p-2 hover:scale-110 transition active:scale-95"
+                            >
+                                <Star
+                                    size={32}
+                                    className={isFavorite(currentWord._wordId) ? "fill-yellow-400 text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" : "text-gray-600 hover:text-gray-400"}
+                                />
+                            </button>
+                        )}
+                    </div>
                     {gameMode !== 'speed' && <button onClick={() => speakWord(currentWord.english, 1)} className="p-3 bg-white/10 hover:bg-white/20 rounded-full transition" aria-label="발음 듣기 (Space 키)"><Volume2 size={28} className="text-primary-light" /></button>}
                 </div>
                 {currentWord.pronunciation && <div className="text-2xl text-primary-light font-mono tracking-wider mb-2">{currentWord.pronunciation}</div>}

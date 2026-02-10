@@ -9,7 +9,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useLearningProgress } from '../hooks/useLearningProgress';
 
 /**
- * 통합 오답노트 학습 화면
+ * 통합 집중학습 화면
  * - 모든 과목을 4지선다 형식으로 통합
  * - 과목별 데이터 정규화
  */
@@ -183,14 +183,7 @@ const WrongAnswerScreen = () => {
         }
     }, [isAnswered]);
 
-    // 게임 종료 시 XP (한 번만 실행)
-    const xpAddedRef = useRef(false);
-    useEffect(() => {
-        if (gameFinished && score > 0 && !xpAddedRef.current) {
-            xpAddedRef.current = true;
-            addXp(score * 5);
-        }
-    }, [gameFinished, score]);
+    // XP is now awarded per correct answer in handleAnswerSelect
 
     const handleAnswerSelect = async (option) => {
         if (isAnswered) return;
@@ -203,6 +196,15 @@ const WrongAnswerScreen = () => {
 
         if (isCorrect) {
             setScore(s => s + 1);
+            // Determine subject from course code or type
+            let xpSubject = 'english';
+            const courseCode = customWords[currentIndex]?._courseCode || '';
+            if (courseCode.startsWith('math')) xpSubject = 'math';
+            else if (courseCode.startsWith('social')) xpSubject = 'social';
+            else if (courseCode.startsWith('science')) xpSubject = 'science';
+            else if (courseCode.startsWith('korean')) xpSubject = 'korean';
+            else if (courseCode.startsWith('certificate')) xpSubject = 'certificate';
+            addXp(xpSubject, 1);
         } else {
             setWrongAnswers(w => w + 1);
         }
@@ -264,7 +266,7 @@ const WrongAnswerScreen = () => {
                     <div className="text-6xl mb-4">
                         {accuracy >= 80 ? '🎉' : accuracy >= 50 ? '👍' : '💪'}
                     </div>
-                    <h2 className="text-3xl font-bold text-white mb-4">오답노트 학습 완료!</h2>
+                    <h2 className="text-3xl font-bold text-white mb-4">집중 학습 완료!</h2>
                     <div className="grid grid-cols-2 gap-4 mb-6">
                         <div className="bg-green-500/20 rounded-xl p-4">
                             <div className="text-3xl font-bold text-green-400">{score}</div>
@@ -305,7 +307,7 @@ const WrongAnswerScreen = () => {
                     </button>
                     <div className="text-lg font-bold text-white flex items-center gap-4">
                         <Brain size={20} className="text-danger-light" />
-                        <span>오답노트 학습</span>
+                        <span>집중 학습</span>
                         <div className="flex items-center gap-2 text-sm bg-black/20 px-3 py-1 rounded-lg">
                             <span className="text-green-400">O: {score}</span>
                             <span className="text-red-400">X: {wrongAnswers}</span>
