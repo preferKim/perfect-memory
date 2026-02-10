@@ -258,5 +258,395 @@
         "answer": "AWS Trusted Advisor",
         "hint": "신뢰할 수 있는 조언자(Advisor) 역할을 합니다.",
         "explanation": "AWS Trusted Advisor는 비용 최적화, 성능, 보안, 내결함성, 서비스 한도 등 5가지 카테고리에 대해 모범 사례를 기반으로 점검하고 권장 사항을 제공합니다."
+    },
+    {
+        "level": 1,
+        "problem": "AWS 인프라를 코드로 관리(Infrastructure as Code)하여 리소스를 자동으로 프로비저닝하고 배포할 수 있게 해주는 서비스는 무엇입니까?",
+        "options": [
+            "AWS CodeDeploy",
+            "AWS CloudFormation",
+            "Amazon Machine Image (AMI)",
+            "AWS Elastic Beanstalk"
+        ],
+        "answer": "AWS CloudFormation",
+        "hint": "템플릿 파일을 사용하여 스택을 생성합니다.",
+        "explanation": "AWS CloudFormation은 인프라 리소스를 JSON이나 YAML 형식의 코드로 모델링하고 프로비저닝할 수 있는 IaC 서비스입니다."
+    },
+    {
+        "level": 1,
+        "problem": "개발자가 기본 인프라(서버, OS 등)를 관리하지 않고 애플리케이션 코드만 업로드하면 배포, 용량 프로비저닝, 로드 밸런싱 등을 자동으로 처리해주는 PaaS 서비스는 무엇입니까?",
+        "options": [
+            "Amazon EC2",
+            "AWS Lambda",
+            "AWS Elastic Beanstalk",
+            "Amazon ECS"
+        ],
+        "answer": "AWS Elastic Beanstalk",
+        "hint": "콩나무(Beanstalk)가 자라듯 애플리케이션을 쉽게 배포합니다.",
+        "explanation": "Elastic Beanstalk는 애플리케이션을 간편하게 배포하고 관리할 수 있는 서비스로, 인프라 관리를 AWS에 맡기고 개발에 집중할 수 있게 해줍니다."
+    },
+    {
+        "level": 1,
+        "problem": "서로 다른 VPC(Virtual Private Cloud) 간에 트래픽을 라우팅하여 마치 동일한 네트워크에 있는 것처럼 통신하게 해주는 기능은 무엇입니까?",
+        "options": [
+            "VPC Peering",
+            "NAT Gateway",
+            "Internet Gateway",
+            "VPN Connection"
+        ],
+        "answer": "VPC Peering",
+        "hint": "두 VPC를 연결(Peer)합니다.",
+        "explanation": "VPC Peering은 두 VPC 간의 비공개 연결을 생성하여, 프라이빗 IP 주소를 사용하여 트래픽을 안전하게 전송할 수 있게 합니다."
+    },
+    {
+        "level": 1,
+        "problem": "관계형 데이터베이스 엔진 중 하나로, MySQL 및 PostgreSQL과 호환되며 상용 데이터베이스 수준의 성능과 가용성을 제공하는 AWS 자체 개발 데이터베이스는 무엇입니까?",
+        "options": [
+            "Amazon DynamoDB",
+            "Amazon Aurora",
+            "Amazon Redshift",
+            "Amazon Neptune"
+        ],
+        "answer": "Amazon Aurora",
+        "hint": "새벽의 여신(Aurora) 이름입니다.",
+        "explanation": "Amazon Aurora는 MySQL 및 PostgreSQL과 호환되는 완전 관리형 관계형 데이터베이스로, 기존 RDS보다 높은 성능과 내구성을 제공합니다."
+    },
+    {
+        "level": 1,
+        "problem": "페타바이트 규모의 데이터를 데이터 웨어하우징(Data Warehousing)하여 복잡한 분석 쿼리를 빠르게 실행할 수 있는 서비스는 무엇입니까?",
+        "options": [
+            "Amazon RDS",
+            "Amazon ElastiCache",
+            "Amazon Redshift",
+            "Amazon Kinesis"
+        ],
+        "answer": "Amazon Redshift",
+        "hint": "대규모 데이터 분석(OLAP)에 최적화되어 있습니다.",
+        "explanation": "Amazon Redshift는 클라우드에서 가장 널리 사용되는 데이터 웨어하우스 서비스로, 대량의 정형 데이터를 분석하는 데 사용됩니다."
+    },
+    {
+        "level": 1,
+        "problem": "밀리초(ms) 단위의 지연 시간이 요구되는 애플리케이션을 위해 키-값(Key-Value) 데이터 모델을 사용하는 완전 관리형 NoSQL 데이터베이스는 무엇입니까?",
+        "options": [
+            "Amazon RDS",
+            "Amazon DynamoDB",
+            "Amazon DocumentDB",
+            "Amazon Neptune"
+        ],
+        "answer": "Amazon DynamoDB",
+        "hint": "규모에 관계없이 빠르고 유연한 NoSQL DB입니다.",
+        "explanation": "DynamoDB는 서버리스 키-값 NoSQL 데이터베이스로, 일관된 한 자릿수 밀리초 성능을 제공합니다."
+    },
+    {
+        "level": 1,
+        "problem": "온프레미스 데이터 센터와 AWS 클라우드 간에 전용 네트워크 연결(전용선)을 제공하여 인터넷을 거치지 않고 안정적인 통신을 가능하게 하는 서비스는 무엇입니까?",
+        "options": [
+            "AWS VPN",
+            "AWS Direct Connect",
+            "Amazon Route 53",
+            "VPC Endpoint"
+        ],
+        "answer": "AWS Direct Connect",
+        "hint": "직접(Direct) 연결합니다.",
+        "explanation": "AWS Direct Connect는 인터넷을 우회하여 온프레미스와 AWS 간의 전용 물리적 네트워크 연결을 제공합니다."
+    },
+    {
+        "level": 1,
+        "problem": "AWS의 도메인 이름 시스템(DNS) 웹 서비스로, 도메인 등록 및 트래픽 라우팅을 관리하는 것은 무엇입니까?",
+        "options": [
+            "Amazon CloudFront",
+            "Amazon Route 53",
+            "AWS Global Accelerator",
+            "Elastic Load Balancing"
+        ],
+        "answer": "Amazon Route 53",
+        "hint": "DNS 포트 번호인 53번을 떠올리세요.",
+        "explanation": "Amazon Route 53은 가용성이 높고 확장 가능한 클라우드 DNS 웹 서비스입니다."
+    },
+    {
+        "level": 1,
+        "problem": "애플리케이션의 구성 요소 간에 메시지를 전송하여 시스템을 분리(Decoupling)하고 비동기 처리를 가능하게 하는 메시지 대기열 서비스는 무엇입니까?",
+        "options": [
+            "Amazon SNS (Simple Notification Service)",
+            "Amazon SQS (Simple Queue Service)",
+            "Amazon SES (Simple Email Service)",
+            "AWS Step Functions"
+        ],
+        "answer": "Amazon SQS (Simple Queue Service)",
+        "hint": "큐(Queue)에 메시지를 저장합니다.",
+        "explanation": "SQS는 마이크로서비스, 분산 시스템 및 서버리스 애플리케이션을 쉽게 분리하고 확장할 수 있게 해주는 완전 관리형 메시지 대기열 서비스입니다."
+    },
+    {
+        "level": 1,
+        "problem": "대규모 데이터를 AWS 클라우드로 물리적으로 이동시키기 위해 사용하는 튼튼한 휴대용 스토리지 장치 제품군은 무엇입니까?",
+        "options": [
+            "AWS Storage Gateway",
+            "AWS DataSync",
+            "AWS Snow Family",
+            "AWS Database Migration Service"
+        ],
+        "answer": "AWS Snow Family",
+        "hint": "눈(Snow)처럼 하얀 장비 박스(Snowball, Snowmobile 등)를 사용합니다.",
+        "explanation": "AWS Snow Family(Snowball, Snowcone, Snowmobile)는 인터넷으로 전송하기 어려운 대용량 데이터를 물리적 장치를 통해 AWS로 이전하는 솔루션입니다."
+    },
+    {
+        "level": 1,
+        "problem": "AWS 계정 내 리소스에 태그(Tag)를 지정하여 특정 프로젝트나 부서별로 비용을 분류하고 추적하는 데 사용하는 기능은 무엇입니까?",
+        "options": [
+            "Cost Allocation Tags",
+            "AWS Organizations",
+            "AWS Budgets",
+            "Cost Explorer"
+        ],
+        "answer": "Cost Allocation Tags",
+        "hint": "비용 할당(Allocation)을 위한 태그입니다.",
+        "explanation": "비용 할당 태그(Cost Allocation Tags)를 활성화하면 비용 탐색기 등에서 태그별로 분류된 비용 보고서를 생성할 수 있습니다."
+    },
+    {
+        "level": 1,
+        "problem": "AWS Support 플랜 중, 24x7 기술 지원(전화, 이메일, 채팅)과 1시간 이내 응답(프로덕션 시스템 중단 시)을 제공하는 최소 단계의 플랜은 무엇입니까?",
+        "options": [
+            "Basic Support",
+            "Developer Support",
+            "Business Support",
+            "Enterprise Support"
+        ],
+        "answer": "Business Support",
+        "hint": "개발용이 아닌 실제 비즈니스 운영 환경에 적합합니다.",
+        "explanation": "Business Support 플랜부터 24시간 연중무휴 전화, 채팅, 이메일 액세스가 가능하며 프로덕션 시스템 중단 시 1시간 이내 응답을 보장합니다. (Developer는 업무 시간 내 이메일만 가능)"
+    },
+    {
+        "level": 1,
+        "problem": "S3 버킷에 저장된 민감한 데이터(예: 개인정보 PII)를 기계 학습을 통해 자동으로 검색하고 분류하여 보호하는 보안 서비스는 무엇입니까?",
+        "options": [
+            "Amazon GuardDuty",
+            "Amazon Macie",
+            "AWS Inspector",
+            "AWS Shield"
+        ],
+        "answer": "Amazon Macie",
+        "hint": "S3 데이터 보안 및 개인정보 보호에 특화되어 있습니다.",
+        "explanation": "Amazon Macie는 기계 학습을 사용하여 S3에 저장된 민감한 데이터를 자동으로 식별하고 경고하는 완전 관리형 데이터 보안 서비스입니다."
+    },
+    {
+        "level": 1,
+        "problem": "AWS 규정 준수 보고서(ISO, PCI, SOC 등)와 계약서에 온디맨드로 액세스하고 다운로드할 수 있는 서비스는 무엇입니까?",
+        "options": [
+            "AWS Artifact",
+            "AWS Audit Manager",
+            "AWS Security Hub",
+            "AWS Compliance Center"
+        ],
+        "answer": "AWS Artifact",
+        "hint": "유물(Artifact)처럼 중요한 문서를 보관합니다.",
+        "explanation": "AWS Artifact는 AWS의 규정 준수 보고서 및 온라인 계약에 대한 중앙 집중식 리소스를 제공합니다."
+    },
+    {
+        "level": 1,
+        "problem": "인스턴스 수준의 방화벽 역할을 하며, 인바운드 및 아웃바운드 트래픽을 제어하는 보안 기능은 무엇입니까?",
+        "options": [
+            "Network ACL (NACL)",
+            "Security Group",
+            "AWS WAF",
+            "Route Table"
+        ],
+        "answer": "Security Group",
+        "hint": "EC2 인스턴스와 연결되며 상태 저장(Stateful) 방식입니다.",
+        "explanation": "보안 그룹(Security Group)은 인스턴스에 대한 트래픽을 제어하는 가상 방화벽으로, 상태 저장(Stateful) 특성을 가집니다. (NACL은 서브넷 수준, Stateless)"
+    },
+    {
+        "level": 1,
+        "problem": "서브넷 수준에서 트래픽을 제어하는 상태 비저장(Stateless) 방화벽은 무엇입니까?",
+        "options": [
+            "Security Group",
+            "Network ACL (NACL)",
+            "VPC Endpoint",
+            "Internet Gateway"
+        ],
+        "answer": "Network ACL (NACL)",
+        "hint": "번호가 매겨진 규칙 목록을 사용하여 서브넷을 보호합니다.",
+        "explanation": "네트워크 ACL(NACL)은 서브넷 수준에서 인바운드 및 아웃바운드 트래픽을 제어하는 선택적 보안 계층으로, 상태 비저장(Stateless)입니다."
+    },
+    {
+        "level": 1,
+        "problem": "AWS Marketplace에 대한 설명으로 옳은 것은 무엇입니까?",
+        "options": [
+            "AWS가 직접 개발한 소프트웨어만 판매한다.",
+            "타사 공급업체의 소프트웨어를 검색, 구매 및 즉시 배포할 수 있는 디지털 카탈로그이다.",
+            "물리적 하드웨어 장비만 구매할 수 있다.",
+            "무료 소프트웨어만 제공된다."
+        ],
+        "answer": "타사 공급업체의 소프트웨어를 검색, 구매 및 즉시 배포할 수 있는 디지털 카탈로그이다.",
+        "hint": "앱스토어와 유사한 개념입니다.",
+        "explanation": "AWS Marketplace는 독립 소프트웨어 벤더(ISV)의 소프트웨어를 쉽게 찾고, 구매하고, AWS에 바로 배포할 수 있는 온라인 상점입니다."
+    },
+    {
+        "level": 1,
+        "problem": "기존 온프레미스 환경과 비교할 때 클라우드 컴퓨팅의 TCO(총 소유 비용) 절감 효과를 추정해주는 도구는 무엇입니까?",
+        "options": [
+            "AWS Pricing Calculator",
+            "AWS Cost Explorer",
+            "AWS Migration Evaluator (formerly TCO Calculator)",
+            "AWS Budgets"
+        ],
+        "answer": "AWS Migration Evaluator (formerly TCO Calculator)",
+        "hint": "마이그레이션 전 비용 비교 평가를 수행합니다.",
+        "explanation": "AWS Migration Evaluator(구 TCO 계산기)는 온프레미스 환경과 AWS 클라우드 환경의 비용을 비교하여 사업 타당성 분석을 돕습니다."
+    },
+    {
+        "level": 1,
+        "problem": "AWS 계정의 루트 사용자(Root User)를 보호하기 위한 가장 중요한 보안 모범 사례는 무엇입니까?",
+        "options": [
+            "복잡한 비밀번호 설정만 한다.",
+            "액세스 키를 생성하여 공유한다.",
+            "다중 요소 인증(MFA)을 활성화한다.",
+            "일상적인 작업에 루트 사용자를 사용한다."
+        ],
+        "answer": "다중 요소 인증(MFA)을 활성화한다.",
+        "hint": "비밀번호 외에 추가적인 인증 수단을 둡니다.",
+        "explanation": "루트 사용자는 모든 권한을 가지므로 MFA(Multi-Factor Authentication)를 설정하여 보안을 강화해야 하며, 일상적인 작업에는 사용하지 않는 것이 좋습니다."
+    },
+    {
+        "level": 1,
+        "problem": "웹 애플리케이션에 대한 일반적인 웹 공격(SQL 인젝션, XSS 등)을 차단하는 방화벽 서비스는 무엇입니까?",
+        "options": [
+            "AWS Shield",
+            "AWS WAF (Web Application Firewall)",
+            "Security Group",
+            "NACL"
+        ],
+        "answer": "AWS WAF (Web Application Firewall)",
+        "hint": "애플리케이션 계층(Layer 7)에서 동작합니다.",
+        "explanation": "AWS WAF는 웹 트래픽을 모니터링하고 악성 요청을 차단하여 웹 애플리케이션을 보호합니다."
+    },
+    {
+        "level": 1,
+        "problem": "다음 중 AWS의 글로벌 인프라 요소가 아닌 것은 무엇입니까?",
+        "options": [
+            "리전 (Region)",
+            "가용 영역 (Availability Zone)",
+            "엣지 로케이션 (Edge Location)",
+            "VPC (Virtual Private Cloud)"
+        ],
+        "answer": "VPC (Virtual Private Cloud)",
+        "hint": "물리적인 위치 단위가 아닌 논리적인 네트워크 격리 단위입니다.",
+        "explanation": "리전, 가용 영역, 엣지 로케이션은 AWS의 물리적 인프라 위치를 나타내지만, VPC는 사용자가 정의하는 논리적인 가상 네트워크입니다."
+    },
+    {
+        "level": 1,
+        "problem": "도커(Docker) 컨테이너를 실행하고 관리하기 위한 AWS의 완전 관리형 컨테이너 오케스트레이션 서비스는 무엇입니까?",
+        "options": [
+            "Amazon ECS (Elastic Container Service)",
+            "Amazon EC2",
+            "AWS Lambda",
+            "Amazon S3"
+        ],
+        "answer": "Amazon ECS (Elastic Container Service)",
+        "hint": "Kubernetes가 아닌 AWS 자체 컨테이너 서비스입니다.",
+        "explanation": "Amazon ECS는 확장성이 뛰어나고 빠른 컨테이너 관리 서비스로, 도커 컨테이너를 쉽게 실행, 중지 및 관리할 수 있습니다."
+    },
+    {
+        "level": 1,
+        "problem": "서버리스 컴퓨팅인 Lambda와 컨테이너 서비스인 ECS 등에서 기본 서버 인프라를 전혀 관리하지 않고 컨테이너를 실행할 수 있게 해주는 '컴퓨팅 엔진'은 무엇입니까?",
+        "options": [
+            "AWS Fargate",
+            "Amazon EKS",
+            "Amazon EC2",
+            "AWS Outposts"
+        ],
+        "answer": "AWS Fargate",
+        "hint": "컨테이너를 위한 서버리스 엔진입니다.",
+        "explanation": "AWS Fargate는 ECS 및 EKS와 함께 작동하는 서버리스 컴퓨팅 엔진으로, 서버를 프로비저닝하거나 관리할 필요 없이 컨테이너를 실행합니다."
+    },
+    {
+        "level": 1,
+        "problem": "S3 버킷의 객체를 실수로 삭제하거나 덮어쓰는 것을 방지하기 위한 기능은 무엇입니까?",
+        "options": [
+            "S3 Versioning",
+            "S3 Lifecycle Policy",
+            "S3 Transfer Acceleration",
+            "S3 Replication"
+        ],
+        "answer": "S3 Versioning",
+        "hint": "여러 버전의 객체를 유지합니다.",
+        "explanation": "버전 관리(Versioning)를 활성화하면 동일한 객체의 여러 변형을 보존하여 실수로 인한 삭제나 덮어쓰기로부터 복구할 수 있습니다."
+    },
+    {
+        "level": 1,
+        "problem": "AWS 리소스 사용량 및 비용을 시각화하고, 향후 비용을 예측(Forecasting)할 수 있는 도구는 무엇입니까?",
+        "options": [
+            "AWS Cost Explorer",
+            "AWS Pricing Calculator",
+            "AWS Budgets",
+            "Cost and Usage Report"
+        ],
+        "answer": "AWS Cost Explorer",
+        "hint": "그래프를 통해 비용을 탐색하고 분석합니다.",
+        "explanation": "AWS Cost Explorer는 비용 및 사용량 데이터를 시각화하고 분석하며, 과거 데이터를 기반으로 향후 비용을 예측하는 기능을 제공합니다."
+    },
+    {
+        "level": 1,
+        "problem": "데이터 암호화에 사용되는 암호화 키를 쉽게 생성하고 관리하는 서비스는 무엇입니까?",
+        "options": [
+            "AWS KMS (Key Management Service)",
+            "AWS Certificate Manager",
+            "AWS Secrets Manager",
+            "AWS IAM"
+        ],
+        "answer": "AWS KMS (Key Management Service)",
+        "hint": "키(Key)를 관리합니다.",
+        "explanation": "AWS KMS는 데이터 암호화에 사용되는 암호화 키를 생성하고 제어하는 관리형 서비스입니다."
+    },
+    {
+        "level": 1,
+        "problem": "데이터베이스 자격 증명(ID/PW), API 키 등의 비밀 정보를 코드에 하드코딩하지 않고 안전하게 저장 및 교체(Rotation)하는 서비스는 무엇입니까?",
+        "options": [
+            "AWS Secrets Manager",
+            "AWS Systems Manager Parameter Store",
+            "AWS IAM",
+            "Amazon Cognito"
+        ],
+        "answer": "AWS Secrets Manager",
+        "hint": "비밀(Secret)을 관리하며 자동 교체 기능이 핵심입니다.",
+        "explanation": "AWS Secrets Manager는 데이터베이스 자격 증명 등을 안전하게 저장하고, 수명 주기에 따라 자동으로 비밀번호를 교체(Rotation)할 수 있습니다."
+    },
+    {
+        "level": 1,
+        "problem": "기계 학습 모델을 구축, 훈련 및 배포할 수 있도록 지원하는 완전 관리형 서비스는 무엇입니까?",
+        "options": [
+            "Amazon SageMaker",
+            "Amazon Polly",
+            "Amazon Rekognition",
+            "Amazon Lex"
+        ],
+        "answer": "Amazon SageMaker",
+        "hint": "데이터 과학자와 개발자를 위한 통합 ML 서비스입니다.",
+        "explanation": "Amazon SageMaker는 기계 학습 모델을 빠르게 구축, 훈련 및 배포할 수 있는 모든 기능을 제공합니다."
+    },
+    {
+        "level": 1,
+        "problem": "이미지 및 비디오 분석을 위한 딥러닝 기반 AI 서비스는 무엇입니까?",
+        "options": [
+            "Amazon Rekognition",
+            "Amazon Transcribe",
+            "Amazon Textract",
+            "Amazon Comprehend"
+        ],
+        "answer": "Amazon Rekognition",
+        "hint": "인식(Recognition)이라는 단어와 비슷합니다.",
+        "explanation": "Amazon Rekognition은 이미지와 비디오에서 객체, 사람, 텍스트, 장면 등을 식별하는 시각 분석 서비스입니다."
+    },
+    {
+        "level": 1,
+        "problem": "가상 사설 서버(VPS) 서비스로, 간단한 워크로드나 웹사이트를 저렴하고 쉽게 구축하려는 사용자에게 적합한 서비스는 무엇입니까?",
+        "options": [
+            "Amazon Lightsail",
+            "Amazon EC2",
+            "AWS Fargate",
+            "AWS Outposts"
+        ],
+        "answer": "Amazon Lightsail",
+        "hint": "가벼운(Light) 항해(Sail)처럼 쉽고 간편합니다.",
+        "explanation": "Amazon Lightsail은 필요한 모든 기능(컴퓨팅, 스토리지, 네트워킹)이 포함된 사용하기 쉬운 VPS 서비스로, 초보자나 소규모 프로젝트에 적합합니다."
     }
 ]

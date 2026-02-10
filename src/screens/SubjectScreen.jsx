@@ -3,18 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { BookOpen, Gamepad2, Target, Keyboard, Hash, Puzzle, Award } from 'lucide-react';
 import Button from '../components/Button';
 import HeaderSection from '../components/HeaderSection';
-import OnboardingModal from '../components/OnboardingModal';
+
 
 const SubjectScreen = ({ onSignUp, onLogin, onLogout, user }) => {
     const navigate = useNavigate();
-    const [showOnboarding, setShowOnboarding] = useState(false);
-
-    useEffect(() => {
-        const hasSeenTutorial = localStorage.getItem('hasSeenTutorial');
-        if (!hasSeenTutorial) {
-            setShowOnboarding(true);
-        }
-    }, []);
 
     const handleSubjectClick = (subject) => {
         if (subject.startsWith('playground-')) {
@@ -29,7 +21,6 @@ const SubjectScreen = ({ onSignUp, onLogin, onLogout, user }) => {
 
     return (
         <>
-            {showOnboarding && <OnboardingModal onClose={() => setShowOnboarding(false)} />}
             <div className="glass-card p-6 sm:p-8 text-center relative max-w-4xl mx-auto">
                 <HeaderSection
                     onSignUp={onSignUp}
