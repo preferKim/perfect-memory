@@ -39,6 +39,7 @@ import PuzzleGame from './components/games/PuzzleGame';
 // General components
 import ShareButton from './components/ShareButton';
 import LevelUpNotification from './components/LevelUpNotification';
+import ReloadPrompt from './components/ReloadPrompt';
 
 
 // NOTE: This is a major refactor. The original App.jsx was a single large component
@@ -98,6 +99,7 @@ function App() {
       </div>
       <ShareButton />
       <LevelUpNotification />
+      <ReloadPrompt />
     </div>
   );
 }
