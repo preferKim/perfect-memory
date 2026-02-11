@@ -61,43 +61,44 @@ const CertificateQuizScreen = () => {
         setIsLoading(true);
         try {
             let finalQuestions = [];
+            let sessionCourseCode = '';
 
-            // AWS Subjects (Local JSON)
+            // AWS Course Mapping
+            const awsCourseMap = {
+                'AWS_CLF-C02': 'certificate_AWS_1',
+                'AWS_SAA-C03': 'certificate_AWS_2',
+                'AWS_DVA-C02': 'certificate_AWS_3',
+                'AWS_SOA-C02': 'certificate_AWS_4'
+            };
+
+            // 1. AWS Subjects (From Supabase)
             if (typeof subjectId === 'string' && subjectId.startsWith('AWS_')) {
                 setTimeLeft(60 * 60); // 1 hour for AWS exams
+                const courseCode = awsCourseMap[subjectId];
+                sessionCourseCode = courseCode;
 
-                try {
-                    const response = await fetch(`/words/certificate_${subjectId}.json`);
-                    if (!response.ok) {
-                        throw new Error(`Failed to fetch ${subjectId}`);
-                    }
-                    const data = await response.json();
-
-                    // Shuffle and take 20
-                    const shuffled = [...(data || [])].sort(() => 0.5 - Math.random());
-                    finalQuestions = shuffled.slice(0, 20);
-
-                    // Transform for current component state
-                    // Local JSON structure is flat, unlike Supabase 'content' field
-                    setQuestions(finalQuestions.map(q => ({
-                        ...q,
-                        id: q.id || Math.random().toString(36).substr(2, 9) // Ensure ID exists
-                    })));
-
-                    // Start Session (Virtual)
-                    setIsTimerRunning(true);
-                    setIsLoading(false);
-                    return; // Exit early for AWS
-
-                } catch (e) {
-                    console.error("Failed to load AWS questions:", e);
-                    // Fallback or error handling
+                if (!courseCode) {
+                    console.error('Unknown AWS subject ID:', subjectId);
+                    return;
                 }
+
+                const { data: subjectQuestions, error } = await supabase
+                    .from('words')
+                    .select('*')
+                    .eq('course_code', courseCode)
+                    .eq('is_active', true);
+
+                if (error) throw error;
+
+                // Shuffle and take 20
+                const shuffled = [...(subjectQuestions || [])].sort(() => 0.5 - Math.random());
+                finalQuestions = shuffled.slice(0, 20);
             }
 
-            // Original Logic for Info Proc Engineer
+            // 2. Original Logic for Info Proc Engineer (Full Exam)
             else if (subjectId === 'all') {
                 setTimeLeft(150 * 60); // 2.5 hours for full exam
+                sessionCourseCode = 'certificate_EIP_all';
 
                 // Select 20 random questions from each level (1-5)
                 const levels = [1, 2, 3, 4, 5];
@@ -121,8 +122,12 @@ const CertificateQuizScreen = () => {
                     const selected = shuffled.slice(0, 20);
                     finalQuestions = [...finalQuestions, ...selected];
                 }
-            } else {
+            }
+
+            // 3. Single Subject (Info Proc Engineer)
+            else {
                 const courseCode = `certificate_EIP_${subjectId}`;
+                sessionCourseCode = courseCode;
                 setTimeLeft(30 * 60); // 30 minutes for single subject
 
                 // Fetch questions for single subject
@@ -163,8 +168,7 @@ const CertificateQuizScreen = () => {
 
             // Start Session
             if (user?.id) {
-                const courseCode = subjectId === 'all' ? 'certificate_EIP_all' : `certificate_EIP_${subjectId}`;
-                sessionRef.current = await startSession(courseCode, 'quiz');
+                sessionRef.current = await startSession(sessionCourseCode, 'quiz');
             }
             setIsTimerRunning(true);
 
@@ -317,7 +321,9 @@ const CertificateQuizScreen = () => {
                     >
                         <Star
                             size={24}
-                            className={isFavorite(currentQuestion._wordId) ? "fill-yellow-400 text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" : "text-gray-600 hover:text-gray-400"}
+                            className={isFavorite(currentQuestion._wordId)
+                                ? "fill-yellow-400 text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]"
+                                : "text-gray-400 hover:text-yellow-400 transition-colors"}
                         />
                     </button>
                 )}

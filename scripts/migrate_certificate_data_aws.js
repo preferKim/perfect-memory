@@ -68,11 +68,10 @@ const BATCH_SIZE = 50; // 한 번에 처리할 문제 수
 
 // 과목별 코스 코드 매핑
 const COURSE_CODE_MAP = {
-    1: 'certificate_level_1',
-    2: 'certificate_level_2',
-    3: 'certificate_level_3',
-    4: 'certificate_level_4',
-    5: 'certificate_level_5'
+    1: 'certificate_AWS_1',
+    2: 'certificate_AWS_2',
+    3: 'certificate_AWS_3',
+    4: 'certificate_AWS_4'
 };
 
 /**
@@ -80,7 +79,7 @@ const COURSE_CODE_MAP = {
  */
 async function loadQuestions() {
     try {
-        const filePath = path.join(__dirname, '../public/words/certificate_EIP.json');
+        const filePath = path.join(__dirname, '../public/words/certificate_AWS.json');
         const fileContent = await fs.readFile(filePath, 'utf-8');
         const questions = JSON.parse(fileContent);
 
@@ -228,7 +227,7 @@ async function migrate() {
 
         if (DRY_RUN) {
             console.log('ℹ️  DRY RUN 모드였습니다. 실제 데이터는 삽입되지 않았습니다.');
-            console.log('   실제 마이그레이션을 실행하려면: node scripts/migrate_certificate_data.js\n');
+            console.log('   실제 마이그레이션을 실행하려면: node scripts/migrate_certificate_data_AWS.js\n');
         } else {
             console.log('✅ 실제 마이그레이션이 완료되었습니다!\n');
         }
