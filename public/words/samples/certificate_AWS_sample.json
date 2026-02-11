@@ -1,0 +1,54 @@
+[
+    {
+        "level": 1,
+        "problem": "AWS 클라우드 컴퓨팅의 이점 중 하나로, 사용자가 고정 비용(자본 지출)을 가변 비용(운영 비용)으로 대체할 수 있게 해주는 것은 무엇입니까?",
+        "options": [
+            "높은 가용성 (High Availability)",
+            "종량제 요금 (Pay-as-you-go pricing)",
+            "글로벌 확장 (Global Reach)",
+            "민첩성 (Agility)"
+        ],
+        "answer": "종량제 요금 (Pay-as-you-go pricing)",
+        "hint": "CapEx(자본 지출)를 OpEx(운영 지출)로 전환하는 것과 관련이 있습니다.",
+        "explanation": "AWS의 종량제 요금 모델을 사용하면 데이터 센터 구축에 필요한 초기 막대한 자본 비용 대신, 사용한 만큼만 지불하는 가변 비용으로 운영할 수 있습니다."
+    },
+    {
+        "level": 1,
+        "problem": "완전 관리형 관계형 데이터베이스 서비스로, MySQL, PostgreSQL, Oracle 등을 지원하는 서비스는 무엇입니까?",
+        "options": [
+            "Amazon DynamoDB",
+            "Amazon Redshift",
+            "Amazon RDS (Relational Database Service)",
+            "Amazon ElastiCache"
+        ],
+        "answer": "Amazon RDS (Relational Database Service)",
+        "hint": "SQL 쿼리를 사용하는 전통적인 데이터베이스 엔진을 관리해줍니다.",
+        "explanation": "RDS는 관계형 데이터베이스를 클라우드에서 쉽게 설정, 운영 및 확장할 수 있게 해주는 서비스입니다. DynamoDB는 NoSQL 데이터베이스입니다."
+    },
+    {
+        "level": 2,
+        "problem": "회사는 프라이빗 서브넷에 있는 EC2 인스턴스들이 인터넷에서 보안 패치를 다운로드할 수 있도록 허용해야 합니다. 하지만 외부 인터넷에서 해당 인스턴스로 직접 접속하는 것은 차단해야 합니다. 어떤 아키텍처 구성요소를 사용해야 합니까?",
+        "options": [
+            "Internet Gateway",
+            "NAT Gateway",
+            "Egress-Only Internet Gateway",
+            "VPC Peering"
+        ],
+        "answer": "NAT Gateway",
+        "hint": "프라이빗 인스턴스가 아웃바운드 트래픽만 보낼 수 있게 해야 합니다.",
+        "explanation": "NAT Gateway는 프라이빗 서브넷의 인스턴스가 인터넷에 연결할 수 있게 해주지만, 인터넷에서 인스턴스로의 직접 연결은 차단합니다."
+    },
+    {
+        "level": 2,
+        "problem": "EC2 인스턴스에서 실행되는 애플리케이션이 S3 버킷에 접근하려고 합니다. 액세스 키와 비밀 키를 소스 코드에 저장하지 않고 권한을 부여하는 가장 안전한 방법은 무엇입니까?",
+        "options": [
+            "IAM 사용자를 생성하고 키를 발급받아 환경 변수로 저장",
+            "S3 버킷 정책에서 해당 EC2의 IP 주소 허용",
+            "IAM 역할을 생성하여 EC2 인스턴스에 연결(Instance Profile)",
+            "AWS 자격 증명 파일을 인스턴스에 업로드"
+        ],
+        "answer": "IAM 역할을 생성하여 EC2 인스턴스에 연결(Instance Profile)",
+        "hint": "자격 증명을 장기 저장하지 않고 임시 자격 증명을 사용합니다.",
+        "explanation": "IAM 역할을 EC2 인스턴스 프로파일에 할당하면, 애플리케이션은 AWS SDK를 통해 자동으로 임시 보안 자격 증명을 받아 S3에 안전하게 접근할 수 있습니다."
+    }
+]

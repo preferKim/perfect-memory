@@ -1,0 +1,67 @@
+[
+    {
+        "level": 1,
+        "problem": "GoF(Gang of Four)의 디자인 패턴 중 생성(Creational) 패턴에 해당하지 않는 것은?",
+        "options": [
+            "Abstract Factory",
+            "Builder",
+            "Adapter",
+            "Singleton"
+        ],
+        "answer": "Adapter",
+        "hint": "Adapter 패턴은 구조(Structural) 패턴에 속합니다.",
+        "explanation": "Abstract Factory, Builder, Singleton은 생성 패턴이며, Adapter는 클래스나 객체를 조합해 더 큰 구조를 만드는 구조 패턴입니다."
+    },
+    {
+        "level": 2,
+        "problem": "데이터베이스에서 특정 테이블의 모든 레코드를 조회하는 SQL 명령어는?",
+        "options": [
+            "INSERT INTO table_name",
+            "SELECT * FROM table_name",
+            "UPDATE table_name SET",
+            "DELETE FROM table_name"
+        ],
+        "answer": "SELECT * FROM table_name",
+        "hint": "데이터를 '선택'하여 가져오는 명령어입니다.",
+        "explanation": "SELECT * FROM table_name은 해당 테이블의 모든 열과 행을 조회하는 SQL 문입니다."
+    },
+    {
+        "level": 3,
+        "problem": "TCP/IP 프로토콜 중 전송 계층에 해당하는 것은?",
+        "options": [
+            "HTTP",
+            "TCP",
+            "IP",
+            "ARP"
+        ],
+        "answer": "TCP",
+        "hint": "연결 지향적이고 신뢰성 있는 데이터 전송을 보장합니다.",
+        "explanation": "TCP는 전송 계층 프로토콜로, 연결 지향적이며 데이터의 신뢰성 있는 전달을 보장합니다."
+    },
+    {
+        "level": 4,
+        "problem": "소프트웨어 테스트에서 블랙박스 테스트 기법이 아닌 것은?",
+        "options": [
+            "동치 분할",
+            "경계값 분석",
+            "원인-결과 그래프",
+            "조건/판단 커버리지"
+        ],
+        "answer": "조건/판단 커버리지",
+        "hint": "블랙박스 테스트는 내부 구조를 모르는 상태에서 수행합니다.",
+        "explanation": "조건/판단 커버리지는 화이트박스 테스트 기법입니다. 코드의 내부 구조를 기반으로 테스트합니다."
+    },
+    {
+        "level": 5,
+        "problem": "정보보안의 3대 요소(CIA Triad)에 해당하지 않는 것은?",
+        "options": [
+            "기밀성(Confidentiality)",
+            "무결성(Integrity)",
+            "가용성(Availability)",
+            "확장성(Scalability)"
+        ],
+        "answer": "확장성(Scalability)",
+        "hint": "정보보안의 핵심 세 가지 원칙입니다.",
+        "explanation": "CIA Triad는 기밀성, 무결성, 가용성으로 구성되며, 확장성은 포함되지 않습니다."
+    }
+]
