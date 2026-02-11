@@ -16,19 +16,19 @@ import KoreanGrammarScreen from './screens/KoreanGrammarScreen';
 import GrammarQuiz from './components/games/GrammarQuiz';
 import LiteraryTermsScreen from './screens/LiteraryTermsScreen';
 import LiteraryTermsQuiz from './screens/LiteraryTermsQuiz';
-import SocialQuizScreen from './screens/SocialQuizScreen';
-import ScienceQuizScreen from './screens/ScienceQuizScreen';
+import SocialQuizPage from './screens/SocialQuizPage';
+import ScienceQuizPage from './screens/ScienceQuizPage';
 import SpellingGame from './components/games/SpellingGame';
 import SpacingGame from './components/games/SpacingGame';
 import ChosungGame from './components/games/ChosungGame';
 import ChosungResultScreen from './screens/ChosungResultScreen';
-import MathGameScreen from './screens/MathGameScreen';
+import MathQuizPage from './screens/MathQuizPage';
 import DashboardScreen from './screens/DashboardScreen';
 
 import WrongAnswerScreen from './screens/WrongAnswerScreen';
 import CertificateSelectionScreen from './screens/CertificateSelectionScreen';
 import AwsSelectionScreen from './screens/AwsSelectionScreen';
-import CertificateQuizScreen from './screens/CertificateQuizScreen';
+import CertificateQuizPage from './screens/CertificateQuizPage';
 
 // Playground components
 import ClickerGame from './screens/playground/ClickerGame';
@@ -60,19 +60,19 @@ function App() {
           <Route path="/math/:tab" element={<MathSelectionScreen />} />
           <Route path="/korean" element={<KoreanSelectionScreen />} />
           <Route path="/social" element={<SocialSelectionScreen />} />
-          <Route path="/social/:difficulty" element={<SocialQuizScreen />} />
+          <Route path="/social/:difficulty" element={<SocialQuizPage />} />
           <Route path="/science" element={<ScienceSelectionScreen />} />
 
-          <Route path="/science/:difficulty" element={<ScienceQuizScreen />} />
+          <Route path="/science/:difficulty" element={<ScienceQuizPage />} />
 
           {/* Certificate */}
           <Route path="/certificate" element={<CertificateSelectionScreen />} />
           <Route path="/certificate/aws" element={<AwsSelectionScreen />} />
-          <Route path="/certificate/quiz" element={<CertificateQuizScreen />} />
+          <Route path="/certificate/quiz" element={<CertificateQuizPage />} />
 
           {/* Math */}
           <Route path="/math/jsj50day/:lectureId" element={<ObjectiveScreen />} />
-          <Route path="/math/game" element={<MathGameScreen />} />
+          <Route path="/math/game" element={<MathQuizPage />} />
 
           {/* Korean */}
           <Route path="/korean/grammar" element={<KoreanGrammarScreen />} />
