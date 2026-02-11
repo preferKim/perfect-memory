@@ -102,7 +102,7 @@ const CertificateQuizScreen = () => {
                 // Select 20 random questions from each level (1-5)
                 const levels = [1, 2, 3, 4, 5];
                 for (const level of levels) {
-                    const courseCode = `certificate_level_${level}`;
+                    const courseCode = `certificate_EIP_${level}`;
 
                     // Fetch all questions for this level
                     const { data: levelQuestions, error } = await supabase
@@ -122,7 +122,7 @@ const CertificateQuizScreen = () => {
                     finalQuestions = [...finalQuestions, ...selected];
                 }
             } else {
-                const courseCode = `certificate_level_${subjectId}`;
+                const courseCode = `certificate_EIP_${subjectId}`;
                 setTimeLeft(30 * 60); // 30 minutes for single subject
 
                 // Fetch questions for single subject
@@ -163,7 +163,7 @@ const CertificateQuizScreen = () => {
 
             // Start Session
             if (user?.id) {
-                const courseCode = subjectId === 'all' ? 'certificate_all' : `certificate_level_${subjectId}`;
+                const courseCode = subjectId === 'all' ? 'certificate_EIP_all' : `certificate_EIP_${subjectId}`;
                 sessionRef.current = await startSession(courseCode, 'quiz');
             }
             setIsTimerRunning(true);

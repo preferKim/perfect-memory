@@ -68,11 +68,11 @@ const BATCH_SIZE = 50; // 한 번에 처리할 문제 수
 
 // 과목별 코스 코드 매핑
 const COURSE_CODE_MAP = {
-    1: 'certificate_EIP_1',
-    2: 'certificate_EIP_2',
-    3: 'certificate_EIP_3',
-    4: 'certificate_EIP_4',
-    5: 'certificate_EIP_5'
+    1: 'certificate_level_1',
+    2: 'certificate_level_2',
+    3: 'certificate_level_3',
+    4: 'certificate_level_4',
+    5: 'certificate_level_5'
 };
 
 /**
