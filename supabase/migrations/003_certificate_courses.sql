@@ -21,3 +21,12 @@ SELECT course_code, course_name, total_items
 FROM courses 
 WHERE subject = 'certificate' 
 ORDER BY display_order;
+
+-- AWS 과목별 코스 등록
+INSERT INTO courses (subject, course_code, course_name, category, difficulty, total_items, display_order) VALUES
+-- 과목별 코스 (각 50문제)
+('certificate', 'certificate_AWS_1', 'CLF-C02', 'level', 'easy', 50, 1),
+('certificate', 'certificate_AWS_2', 'SAA-C03', 'level', 'medium', 50, 2),
+('certificate', 'certificate_AWS_3', 'DVA-C02','level', 'medium', 50, 3),
+('certificate', 'certificate_AWS_4', 'SOA-C02', 'level', 'medium', 50, 4)
+ON CONFLICT (course_code) DO NOTHING;
