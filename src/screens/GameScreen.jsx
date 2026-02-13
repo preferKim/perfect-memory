@@ -343,25 +343,27 @@ const GameScreen = () => {
             <PlayerStats />
             <div className="glass-card px-8 pt-8 pb-4 text-center relative">
                 <button onClick={togglePause} className="absolute left-4 top-4 text-gray-300 hover:text-white transition p-2" title="일시정지" aria-label="일시정지"><ArrowLeft size={24} /></button>
+                {user?.id && (
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (currentWord._wordId) {
+                                toggleFavorite(currentWord._wordId);
+                            }
+                        }}
+                        className="absolute right-4 top-4 text-gray-300 hover:text-white transition p-2 hover:scale-110 active:scale-95"
+                        title="즐겨찾기"
+                        aria-label="즐겨찾기"
+                    >
+                        <Star
+                            size={28}
+                            className={isFavorite(currentWord._wordId) ? "fill-yellow-400 text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" : "text-gray-400 hover:text-gray-200"}
+                        />
+                    </button>
+                )}
                 <div className="flex items-center justify-center gap-3 mb-1">
                     <div className="text-5xl font-bold text-white relative">
                         {currentWord.english}
-                        {user?.id && (
-                            <button
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    if (currentWord._wordId) {
-                                        toggleFavorite(currentWord._wordId);
-                                    }
-                                }}
-                                className="absolute -right-12 top-1/2 -translate-y-1/2 p-2 hover:scale-110 transition active:scale-95"
-                            >
-                                <Star
-                                    size={32}
-                                    className={isFavorite(currentWord._wordId) ? "fill-yellow-400 text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" : "text-gray-600 hover:text-gray-400"}
-                                />
-                            </button>
-                        )}
                     </div>
                     {gameMode !== 'speed' && <button onClick={() => speakWord(currentWord.english, 1)} className="p-3 bg-white/10 hover:bg-white/20 rounded-full transition" aria-label="발음 듣기 (Space 키)"><Volume2 size={28} className="text-primary-light" /></button>}
                 </div>
@@ -398,7 +400,7 @@ const GameScreen = () => {
                     )}
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 
