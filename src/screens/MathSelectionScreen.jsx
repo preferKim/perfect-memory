@@ -148,6 +148,23 @@ const MathSelectionScreen = ({ user, onSignUp, onLogin, onLogout }) => {
         }
     }, [activeTab]);
 
+    // Mock Exam State
+    const [startRange, setStartRange] = useState(1);
+    const [endRange, setEndRange] = useState(45);
+
+    const handleMockExamStart = () => {
+        if (startRange > endRange) {
+            alert('시작 강의가 종료 강의보다 클 수 없습니다.');
+            return;
+        }
+        navigate('/math/game', {
+            state: {
+                difficulty: 'jsj50day_mock',
+                range: { start: startRange, end: endRange }
+            }
+        });
+    };
+
     const handleTopicSelect = (topicId, difficulty) => {
         if (activeTab === 'level') {
             navigate('/math/game', { state: { topicLevel: topicId, difficulty } });
@@ -236,20 +253,59 @@ const MathSelectionScreen = ({ user, onSignUp, onLogin, onLogout }) => {
             )}
 
             {activeTab === 'seungje' && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-left">
-                    {seungjeCurriculum.map((item) => (
+                <>
+                    {/* 정승제 50일 수학 모의고사 UI: activeTab === 'seungje' 일 때 상단에 표시 */}
+                    <div className="mb-8 p-6 bg-white/5 rounded-xl border border-white/10">
+                        <h3 className="text-xl font-bold text-white mb-4 flex items-center justify-center gap-2">
+                            <BookOpen size={24} className="text-primary-light" />
+                            정승제 50일 수학 모의고사
+                        </h3>
+                        <div className="flex items-center justify-center gap-2 mb-6">
+                            <span className="text-gray-300 font-bold mr-2">범위:</span>
+                            <select
+                                value={startRange}
+                                onChange={(e) => setStartRange(Number(e.target.value))}
+                                className="bg-black/40 border border-white/20 rounded px-3 py-2 text-white"
+                            >
+                                {seungjeCurriculum.map((lecture, idx) => (
+                                    <option key={lecture.id} value={idx + 1}>{idx + 1}강</option>
+                                ))}
+                            </select>
+                            <span className="text-gray-400">~</span>
+                            <select
+                                value={endRange}
+                                onChange={(e) => setEndRange(Number(e.target.value))}
+                                className="bg-black/40 border border-white/20 rounded px-3 py-2 text-white"
+                            >
+                                {seungjeCurriculum.map((lecture, idx) => (
+                                    <option key={lecture.id} value={idx + 1}>{idx + 1}강</option>
+                                ))}
+                            </select>
+                        </div>
+
                         <button
-                            key={item.id}
-                            onClick={() => handleTopicSelect(item.id)}
-                            className="w-full text-left p-4 rounded-lg bg-black/20 hover:bg-white/20 border border-white/10 hover:border-white/30 transition-all group"
+                            onClick={handleMockExamStart}
+                            className="bg-primary hover:bg-primary-dark text-white font-bold py-3 px-8 rounded-lg transition-colors w-full sm:w-auto"
                         >
-                            <div className="flex items-center gap-3">
-                                <BookOpen size={20} className="text-primary-light shrink-0" />
-                                <span className="text-gray-300 group-hover:text-white font-medium">{item.title}</span>
-                            </div>
+                            모의고사 시작 (20문제)
                         </button>
-                    ))}
-                </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-left">
+                        {seungjeCurriculum.map((item) => (
+                            <button
+                                key={item.id}
+                                onClick={() => handleTopicSelect(item.id)}
+                                className="w-full text-left p-4 rounded-lg bg-black/20 hover:bg-white/20 border border-white/10 hover:border-white/30 transition-all group"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <BookOpen size={20} className="text-primary-light shrink-0" />
+                                    <span className="text-gray-300 group-hover:text-white font-medium">{item.title}</span>
+                                </div>
+                            </button>
+                        ))}
+                    </div>
+                </>
             )}
         </div>
     );
